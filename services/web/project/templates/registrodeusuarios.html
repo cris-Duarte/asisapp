@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Registro de Usuarios
+{% endblock %}
+{% block body %}
+
+{% if not s_usuarios %}
+  <div class="card border-light mb-4">
+    <div class="card-header">
+      Formulario de Registro de Usuario
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+          {% if not up %}
+            <input class="form-control" type="text" placeholder="Nombre" id="fnombre" data-form="nombre" onfocus="this.value=''" required>
+          {% else %}
+            <input class="form-control" type="text" placeholder="Nombre" id="fnombre" data-form="nombre" required value='{{ up.nombre }}'>
+          {% endif %}
+        </div>
+        <div class="form-group">
+        {% if not up %}
+          <input class="form-control" type="text" placeholder="Apellido" id="fapellido" data-form="apellido" onfocus="this.value=''" required>
+        {% else %}
+          <input class="form-control" type="text" placeholder="Apellido" id="fapellido" data-form="apellido" value='{{ up.apellido }}' required>
+        {% endif %}
+        </div>
+        <div class="form-group">
+        {% if not up %}
+          <input class="form-control" type="text" placeholder="Número de CI" id="fci" data-form="ci" onfocus="this.value=''" required>
+        {% else %}
+          <input class="form-control" type="text" placeholder="Número de CI" id="fci" data-form="ci" value='{{ up.ci }}' required>
+        {% endif %}
+        </div>
+        <div class="form-group">
+        {% if not up %}
+          <input class="form-control" type="email" placeholder="Correo Electrónico" id="femail" data-form="email" onfocus="this.value=''" required>
+        {% else %}
+          <input class="form-control" type="email" placeholder="Correo Electrónico" id="femail" data-form="email" value='{{ up.email }}' required>
+        {% endif %}
+        </div>
+        <div class="form-group">
+        {% if not up %}
+          <select class="form-control" id="ftipo" data-form="tipo">
+              {% for tipo in tipo_usuario %}
+                  <option value="{{ tipo.id }}">{{ tipo.descripcion }}</option>
+              {% endfor %}
+          </select>
+        {% else %}
+          <select class="form-control" id="ftipo" data-form="tipo">
+              {% for tipo in tipo_usuario %}
+                {% if tipo.id == up.tipo %}
+                  <option value="{{ tipo.id }}" selected>{{ tipo.descripcion }}</option>
+                {% else %}
+                  <option value="{{ tipo.id }}">{{ tipo.descripcion }}</option>
+                {% endif %}
+              {% endfor %}
+          </select>
+        {% endif %}
+        </div>
+
+        <div class="form-group">
+        {% if not up %}
+          <input class="form-control" type="password" placeholder="Contraseña" id="fc" data-form="con" onfocus="this.value=''" required>
+        {% else %}
+          <input class="form-control" type="password" placeholder="Contraseña" id="fc" data-form="con"  value='{{ up.con }}' required>
+        {% endif %}
+        </div>
+        {% if not up %}
+          <button onclick="form1(null)" class="btn btn-primary">Enviar</button>
+        {% else %}
+          <button onclick="form1({{ up.id }})" class="btn btn-primary">Guardar Modificación</button>
+        {% endif %}
+      </div>
+    </div>
+  <div id="mensaje">
+
+{% endif %}
+
+    <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre y Apellido</th>
+        <th scope="col">Ci</th>
+        <th scope="col">Tipo de usuario</th>
+        <th scope="col">Modificar/Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usuario in usuarios %}
+        <tr>
+          <th scope="row">{{ usuario.id }}</th>
+          <td>{{ usuario.nombre }} {{usuario.apellido}}</td>
+          <td>{{ usuario.ci }}</td>
+          <td>{{ usuario.tipo }}</td>
+          <td>
+            <button type="button" class="btn btn-primary" onclick='modificar({{usuario.id}})'>Modificar</button>
+            <button type="button" class="btn btn-danger" onclick='eliminar({{usuario.id}})''>Eliminar</button>
+          </td>
+        </tr>
+      {% else %}
+      <td> No hay usuarios </td>
+      {% endfor %}
+    </tbody>
+    </table>
+
+  {% if not s_usuarios %}
+    </div>
+  {% endif %}
+  {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "layoutV1.html" %}
+
+{% block title %}
+  Panel Central
+{% endblock %}
+{% block body %}
+
+{% if current_user.is_authenticated %}
+  <h2>Hi {{ current_user.nombre }}!</h2>
+{% endif %}
+  <h2>{{ u.apellido }}</h2>
+  <h2>{{ u.tipo }}</h2>
+
+{% endblock %}
