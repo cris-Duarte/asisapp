@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+  $('#loginModal').modal('show');
   feather.replace()
 });
 

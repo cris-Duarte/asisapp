@@ -1,34 +1,48 @@
-{% extends "layout.html" %}
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='script.js')}}"></script>
+
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='style_V1.css')}}">
+{% endblock %}
+
+{% block html_attribs %} lang="es"{% endblock %}
+
 
 {% block title %}
   Entrar
 {% endblock %}
-{% block body %}
 
-<!-- Sacado de: https://bootsnipp.com/snippets/dldxB -->
-
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <i data-feather="users"></i>
+{% block content %}
+<div id="loginModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h5 class="modal-title">Sistema de Control de Asistencia</h5>
+      </div>
+      <div class="modal-body">
+        <p>Ingrese su correo electrónico y contraseña</p>
+        <form class="form-group" action="{{ url_for('dashboard')}}" method="post">
+            <input type="text" name="correo" class="form-control" id="correo" placeholder="Correo Electrónico">
+            <input type="text" name="c" class="form-control" placeholder="Contraseña">
+            <br>
+            <!-- IDEA: <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>  -->
+            <input type="submit" class="btn btn-primary" value="Ingresar">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="">¿Olvidó su contraseña?, contacte con el administrador</a>
+      </div>
     </div>
-
-    <!-- Login Form -->
-    <form  action="{{ url_for('dashboard') }}" method="post">
-      <input type="text" name="correo" class="fadeIn second" name="login" placeholder="Correo Electrónico">
-      <input type="text" name="c" class="fadeIn third" name="login" placeholder="Contraseña">
-      <input type="submit"  value="Ingresar" class="fadeIn fourth">
-    </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
-    </div>
-
   </div>
 </div>
-</div>
+
 {% endblock %}

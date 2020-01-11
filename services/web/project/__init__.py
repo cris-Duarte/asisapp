@@ -1,14 +1,16 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 from flask_login import LoginManager,login_user,logout_user,login_required,current_user
+from flask_bootstrap import Bootstrap
+
 
 app = Flask(__name__)
-
-app.config['SECRET_KEY'] = "\x8c\xac\xabm\x8d\x9f\xc6\xd4.a@\xc8\x1bj5\x92"
-
+Bootstrap(app)
+app.secret_key = b'\x9f\xa5\xb3\xaa\xfa\x8f\xdc\xe4;\xdbf_\x9a\xd2\x1dP'
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = "ingresar"
 
 
 @app.route("/")
@@ -24,20 +26,28 @@ def ingresar():
 def load_user(id):
     return Usuario.query.get(id)
 
-@app.route("/dashboard", methods=['POST'])
-@login_required
+@app.route("/dashboard", methods=['POST','GET'])
 def dashboard():
     email = request.form.get("correo")
     c = request.form.get('c')
     u = Usuario.query.filter(and_(Usuario.email == email, Usuario.con == c)).first()
-    if not u:
+    if not u or u is None:
         return render_template("dashboard.html",mensaje="Error de acceso: Correo Electrónico o Contraseña incorrectos")
     else:
-        user = load_user(u.id)
-        return render_template("dashboard.html",u=user)
+        load_user(u.id)
+        return render_template("dashboard.html")
 
 
+@app.route("/salir")
+@login_required
+def salir():
+    logout_user()
+    return render_template("index.html")
 
+
+@app.route("/estado")
+def estado():
+    return render_template("estado.html")
 
 
 
@@ -70,7 +80,7 @@ class Usuario(db.Model):
     tipo = db.Column(db.Integer, db.ForeignKey("tipo_usuario.id"), nullable=False)
 
     def is_authenticated(self):
-	       return True
+	    return True
 
     def is_active(self):
     	return True
