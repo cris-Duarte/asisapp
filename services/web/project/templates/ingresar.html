@@ -30,9 +30,9 @@
       </div>
       <div class="modal-body">
         <p>Ingrese su correo electrónico y contraseña</p>
-        <form class="form-group" action="{{ url_for('dashboard')}}" method="post">
-            <input type="text" name="correo" class="form-control" id="correo" placeholder="Correo Electrónico">
-            <input type="text" name="c" class="form-control" placeholder="Contraseña">
+        <form class="form-group" action="{{ url_for('login')}}" method="post">
+            <input type="text" name="correo" class="form-control" id="correo" placeholder="Correo Electrónico" required>
+            <input type="password" name="c" class="form-control" placeholder="Contraseña" required>
             <br>
             <!-- IDEA: <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>  -->
             <input type="submit" class="btn btn-primary" value="Ingresar">

@@ -22,9 +22,17 @@
 
 {% if current_user.is_authenticated %}
   <h2>Hi {{ current_user.nombre }}!</h2>
-{% endif %}
+
   <h2>{{ current_user.apellido }}</h2>
   <h2>{{ current_user.tipo }}</h2>
 
   <a href="{{ url_for('salir') }}">Salir</a>
+
+{% else %}
+<div class="alert alert-warning" role="alert">
+   Por favor vaya a <a href="{{ url_for('ingresar')}}">el panel de ingreso</a> para poder entrar
+</div>
+
+{% endif %}
+
 {% endblock %}
