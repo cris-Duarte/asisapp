@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-  $('#loginModal').modal('show');
-  feather.replace()
+  const request = new XMLHttpRequest();
+  request.open('POST', '/perfil');
+  request.onload = () => {
+      document.getElementById('body').innerHTML = request.response;
+  };
+  request.send();
+  return false;
+
 });
 
 

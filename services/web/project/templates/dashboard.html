@@ -21,18 +21,46 @@
 {% block content %}
 
 {% if current_user.is_authenticated %}
-  <h2>Hi {{ current_user.nombre }}!</h2>
 
-  <h2>{{ current_user.apellido }}</h2>
-  <h2>{{ current_user.tipo }}</h2>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Gestión de Asistencia</a>
+    </div>
 
-  <a href="{{ url_for('salir') }}">Salir</a>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="#" data-toggle="pill">Perfil</a></li>
+        <li role="presentation"><a href="#" data-toggle="pill">Mis Clases</a></li>
+        <li role="presentation" class="dropdown">
+        <li role="presentation"><a href="#" data-toggle="pill">Consultas</a></li>
+        <li role="presentation"><a href="#" data-toggle="pill">Materias</a></li>
+        <li role="presentation"><a href="#" data-toggle="pill">Usuarios</a></li>
+        <li role="presentation"><a href="{{ url_for('salir') }}">Cerrar Sesión</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div id="body">
+
+</div>
+
 
 {% else %}
+
 <div class="alert alert-warning" role="alert">
    Por favor vaya a <a href="{{ url_for('ingresar')}}">el panel de ingreso</a> para poder entrar
 </div>
 
 {% endif %}
-
 {% endblock %}

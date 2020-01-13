@@ -47,12 +47,15 @@ def login():
         login_user(u,remember=True, duration=None, force=False, fresh=True)
         return redirect(url_for('dashboard'), code=303)
 
+@app.route("/perfil", methods=['POST'])
+@login_required
+def perfil():
+    return render_template("perfil.html")
 
 @app.route("/salir")
-@login_required
 def salir():
     logout_user()
-    return redirect(url_for('ingresar'), code=303)
+    return redirect(url_for('ingresar'))
 
 
 @app.route("/estado", methods=['POST','GET'])
@@ -76,6 +79,24 @@ class TipoUsuario(db.Model):
 
     def __init__(self, descripcion):
         self.descripcion = descripcion
+
+class Materia(db.Model):
+    __tablename__ = "materias"
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100),nullable=False)
+    codigo = db.Column(db.String(20),nullable=False)
+    curso = db.Column(db.Integer,nullable=False)
+    seccion = db.Column(db.String(10),nullable=False)
+    carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"), nullable=False)
+    docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
+
+
+
+class Carrera(db.Model):
+    __tablename__ = "carreras"
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(30), nullable=False)
+    responsable = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
 
 
 class Usuario(db.Model):

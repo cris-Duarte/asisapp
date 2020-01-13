@@ -1,5 +1,5 @@
 from flask.cli import FlaskGroup
-from project import app, db, Usuario, TipoUsuario
+from project import app, db, Usuario, TipoUsuario, Carrera, Materia
 
 cli = FlaskGroup(app)
 
