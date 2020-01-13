@@ -1,0 +1,191 @@
+{% if not s_materias %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">Formulario de Registro de Materias</div>
+  <div class="panel-body">
+
+        <div class="form-group">
+          {% if not mup %}
+            <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre" onfocus="this.value=''" required>
+          {% else %}
+            <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre" data-form="nombre" required value='{{ up.nombre }}'>
+          {% endif %}
+        </div>
+        <div class="form-group">
+        {% if not mup %}
+          <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo" onfocus="this.value=''" required>
+        {% else %}
+          <input class="form-control" type="text" placeholder="Código de la Materia" id="mcogigo" value='{{ up.codigo }}' required>
+        {% endif %}
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon3">Curso</span>
+          {% if not mup %}
+            <select class="form-control" id="mcurso">
+                <option value="1">Primero</option>
+                <option value="2">Segundo</option>
+                <option value="3">Tercero</option>
+                <option value="4">Cuarto</option>
+                <option value="5">Quinto</option>
+                <option value="6">Sexto</option>
+            </select>
+          {% else %}
+            <select class="form-control" id="mcurso">
+              {% if 1 == mup.curso %}
+                <option value=1 selected>Primero</option>
+              {% else %}
+                <option value=1>Primero</option>
+              {% endif %}
+              {% if 2 == mup.curso %}
+                <option value=2 selected>Segundo</option>
+              {% else %}
+                <option value=2>Segundo</option>
+              {% endif %}
+              {% if 3 == mup.curso %}
+                <option value=3 selected>Tercero</option>
+              {% else %}
+                <option value=3>Tercero</option>
+              {% endif %}
+              {% if 4 == mup.curso %}
+                <option value=4 selected>Cuarto</option>
+              {% else %}
+                <option value=4>Cuarto</option>
+              {% endif %}
+              {% if 5 == mup.curso %}
+                <option value=5 selected>Quinto</option>
+              {% else %}
+                <option value=5>Quinto</option>
+              {% endif %}
+              {% if 6 == mup.curso %}
+                <option value=6 selected>Sexto</option>
+              {% else %}
+                <option value=6>Sexto</option>
+              {% endif %}
+            </select>
+          {% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon4">Sección</span>
+          {% if not mup %}
+            <select class="form-control" id="mseccion">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </select>
+          {% else %}
+            <select class="form-control" id="mseccion">
+              {% if 'A' == mup.seccion %}
+                <option value="A" selected>A</option>
+              {% else %}
+                <option value="A">A</option>
+              {% endif %}
+              {% if 'B' == mup.seccion %}
+                <option value="B" selected>B</option>
+              {% else %}
+                <option value="B">B</option>
+              {% endif %}
+              {% if 'C' == mup.seccion %}
+                <option value="C" selected>C</option>
+              {% else %}
+                <option value="C">C</option>
+              {% endif %}
+              {% if 'D' == mup.seccion %}
+                <option value="D" selected>D</option>
+              {% else %}
+                <option value="D">D</option>
+              {% endif %}
+            </select>
+          {% endif %}
+          </div>
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon3">Carreras</span>
+        {% if not mup %}
+          <select class="form-control" id="mcarrera" data-form="tipo">
+              {% for carrera in carreras %}
+                  <option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+              {% endfor %}
+          </select>
+        {% else %}
+          <select class="form-control" id="mcarrera" data-form="tipo">
+              {% for carrera in carreras %}
+                {% if carrera.id == mup.carrera %}
+                  <option value="{{ carrera.id }}" selected>{{ carrera.nombre }}</option>
+                {% else %}
+                  <option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+                {% endif %}
+              {% endfor %}
+          </select>
+        {% endif %}
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon3">Docente</span>
+        {% if not mup %}
+          <select class="form-control" id="mdocente">
+              {% for usuario in usuarios %}
+                  <option value="{{ usuario.id }}">{{ usuario.nombre }} {{ usuario.apellido }}</option>
+              {% endfor %}
+          </select>
+        {% else %}
+          <select class="form-control" id="mdocente" data-form="tipo">
+              {% for usuario in usuarios %}
+                {% if usuario.id == mup.docente %}
+                  <option value="{{ usuario.id }}" selected>{{ usuario.nombre }} {{ usuario.apellido }}</option>
+                {% else %}
+                  <option value="{{ carrera.id }}">{{ usuario.nombre }} {{ usuario.apellido }}</option>
+                {% endif %}
+              {% endfor %}
+          </select>
+        {% endif %}
+        </div>
+        {% if not mup %}
+          <button onclick="form1(null)" class="btn btn-primary">Enviar</button>
+        {% else %}
+          <button onclick="form1({{ mup.id }})" class="btn btn-primary">Guardar Modificación</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div id="mensaje">
+
+{% endif %}
+
+    <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Materia/th>
+        <th scope="col">Código</th>
+        <th scope="col">Curso y Carrera</th>
+        <th scope="col">Docente</th>
+        <th scope="col">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for materia in materias %}
+        <tr>
+          <th scope="row">{{ materia.id }}</th>
+          <td>{{ materia.nombre }}</td>
+          <td>{{ materia.codigo }}</td>
+          <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carrera }}</td>
+          <td>{{ materia.docente }}</td>
+          <td>
+            <button type="button" class="btn btn-primary" onclick='modificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-danger" onclick='eliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+          </td>
+        </tr>
+      {% else %}
+      <td> No hay usuarios </td>
+      {% endfor %}
+    </tbody>
+    </table>
+
+  {% if not s_materias %}
+    </div>
+  {% endif %}

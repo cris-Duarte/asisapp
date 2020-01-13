@@ -52,6 +52,38 @@ def login():
 def perfil():
     return render_template("perfil.html")
 
+@app.route("/materias", methods=['POST'])
+@login_required
+def materias():
+
+    s_materias = False
+    up = False
+    if request.form.get('alta'):
+        m = Materia(nombre=request.form.get('mnombre'), c=request.form.get('mcodigo'), curso=int(request.form.get('mcurso')), seccion=request.form.get('mseccion'), carrera=request.form.get('mcarrera'), docente=int(request.form.get('mdocente'), activo = True))
+        db.session.add(m)
+        db.session.commit()
+        s_materias = True
+    if request.form.get('baja'):
+        m = Materia.query.get(int(request.form.get('mid')))
+        m.activo = False
+        db.session.commit()
+        s_materias = True
+    if request.form.get('modificacion'):
+        m = Materia.query.get(int(request.form.get('mid')))
+    if request.form.get('a_modificar') != None:
+        u = Materia.query.get(request.form.get('a_modificar'))
+        m.nombre = request.form.get('mnombre')
+        m.codido = request.form.get('mcodigo')
+        m.curso = int(request.form.get('mcurso'))
+        m.seccion = request.form.get('mseccion')
+        m.carrera = int(request.form.get('mcarrera'))
+        m.docente = int(request.form.get('mdocente'))
+        db.session.commit()
+
+    materias = Materia.query.all()
+    usuarios = Usuario.query.filter_by(activo=True).all()
+    return render_template("materias.html", materias=materias, usuarios=usuarios, s_materias=s_materias, up=up)
+
 @app.route("/salir")
 def salir():
     logout_user()
@@ -89,6 +121,7 @@ class Materia(db.Model):
     seccion = db.Column(db.String(10),nullable=False)
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"), nullable=False)
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
+    activo  = db.Column(db.Boolean(), default=True, nullable=False)
 
 
 
@@ -96,7 +129,7 @@ class Carrera(db.Model):
     __tablename__ = "carreras"
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(30), nullable=False)
-    responsable = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
+    responsable = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=True)
 
 
 class Usuario(db.Model):

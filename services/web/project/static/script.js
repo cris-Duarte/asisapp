@@ -9,7 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
+var materias = function() {
+  const request = new XMLHttpRequest();
+  request.open('POST', '/materias');
+  request.onload = () => {
+      document.getElementById('body').innerHTML = request.response;
+  };
+  request.send();
+  return false;
+};
 
 var form1 = function(id) {
     const request = new XMLHttpRequest();
