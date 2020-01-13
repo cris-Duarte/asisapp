@@ -19,30 +19,35 @@ var materias = function() {
   return false;
 };
 
-var form1 = function(id) {
+var malta = function(id) {
     const request = new XMLHttpRequest();
     const data = new FormData();
-    data.append('nombre', document.getElementById('fnombre').value);
-    data.append('apellido', document.getElementById('fapellido').value);
-    data.append('ci', document.getElementById('fci').value);
-    data.append('email', document.getElementById('femail').value);
-    data.append('con', document.getElementById('fc').value);
+    data.append('mnombre', document.getElementById('mnombre').value);
+    data.append('mcodigo', document.getElementById('mcodigo').value);
+    let e = document.getElementById('mcurso');
+    data.append('mcurso', e.options[e.selectedIndex].value);
 
-    let e = document.getElementById('ftipo');
+    let f = document.getElementById('mseccion');
+    data.append('mseccion', f.options[f.selectedIndex].value);
 
-    data.append('tipo', e.options[e.selectedIndex].value);
+    let g = document.getElementById('mcarrera');
+    data.append('mcarrera', g.options[g.selectedIndex].value);
+
+    let h = document.getElementById('mdocente');
+    data.append('mdocente', h.options[h.selectedIndex].value);
+
     if (id == null){
       data.append('alta',true);
     } else {
       data.append('a_modificar',id);
     }
-    request.open('POST', '/');
+    request.open('POST', '/materias');
     request.onload = () => {
       if (id != null){
         document.getElementById('body').innerHTML = request.response;
 
       } else {
-        document.getElementById('mensaje').innerHTML = request.response;
+        document.getElementById('tablaconsulta').innerHTML = request.response;
       }
     };
     request.send(data);
@@ -58,7 +63,7 @@ var eliminar = function(id) {
   request.open('POST', '/');
 
   request.onload = () => {
-    document.getElementById('mensaje').innerHTML = request.response;
+    document.getElementById('tablaconsulta').innerHTML = request.response;
   };
   request.send(data);
 
@@ -66,7 +71,7 @@ var eliminar = function(id) {
 
 };
 
-var modificar = function(id) {
+var mmodificar = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('modificacion', true);
@@ -74,7 +79,7 @@ var modificar = function(id) {
   request.open('POST', '/');
 
   request.onload = () => {
-    document.getElementById('body').innerHTML = request.response;
+    document.getElementById('mensaje').innerHTML = request.response;
   };
   request.send(data);
 

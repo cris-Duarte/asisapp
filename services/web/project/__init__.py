@@ -55,11 +55,10 @@ def perfil():
 @app.route("/materias", methods=['POST'])
 @login_required
 def materias():
-
     s_materias = False
     up = False
     if request.form.get('alta'):
-        m = Materia(nombre=request.form.get('mnombre'), c=request.form.get('mcodigo'), curso=int(request.form.get('mcurso')), seccion=request.form.get('mseccion'), carrera=request.form.get('mcarrera'), docente=int(request.form.get('mdocente'), activo = True))
+        m = Materia(nombre=request.form.get('mnombre'), codigo=request.form.get('mcodigo'), curso=int(request.form.get('mcurso')), seccion=request.form.get('mseccion'), carrera=int(request.form.get('mcarrera')), docente=int(request.form.get('mdocente')), activo = True)
         db.session.add(m)
         db.session.commit()
         s_materias = True
@@ -81,8 +80,9 @@ def materias():
         db.session.commit()
 
     carreras = Carrera.query.all()
+    materias = Materia.query.all()
     usuarios = Usuario.query.filter_by(activo=True).all()
-    return render_template("materias.html", carreras=carreras, usuarios=usuarios, s_materias=s_materias, up=up)
+    return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
 
 @app.route("/salir")
 def salir():

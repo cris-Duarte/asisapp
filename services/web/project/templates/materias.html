@@ -137,14 +137,17 @@
         {% endif %}
         </div>
         {% if not mup %}
-          <button onclick="form1(null)" class="btn btn-primary">Enviar</button>
+          <button onclick="malta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar</button>
         {% else %}
-          <button onclick="form1({{ mup.id }})" class="btn btn-primary">Guardar Modificación</button>
+          <button onclick="malta({{ mup.id }})" class="btn btn-primary"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Guardar Modificación</button>
         {% endif %}
       </div>
     </div>
   </div>
   <div id="mensaje">
+
+  </div>
+  <div id="tablaconsulta">
 
 {% endif %}
 
@@ -177,7 +180,4 @@
       {% endfor %}
     </tbody>
     </table>
-
-  {% if not s_materias %}
     </div>
-  {% endif %}
