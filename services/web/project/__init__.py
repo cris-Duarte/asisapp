@@ -80,9 +80,9 @@ def materias():
         m.docente = int(request.form.get('mdocente'))
         db.session.commit()
 
-    materias = Materia.query.all()
+    carreras = Carrera.query.all()
     usuarios = Usuario.query.filter_by(activo=True).all()
-    return render_template("materias.html", materias=materias, usuarios=usuarios, s_materias=s_materias, up=up)
+    return render_template("materias.html", carreras=carreras, usuarios=usuarios, s_materias=s_materias, up=up)
 
 @app.route("/salir")
 def salir():
