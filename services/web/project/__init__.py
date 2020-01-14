@@ -67,8 +67,6 @@ def materias():
         m.activo = False
         db.session.commit()
         s_materias = True
-    if request.form.get('modificacion'):
-        m = Materia.query.get(int(request.form.get('mid')))
     if request.form.get('a_modificar') != None:
         u = Materia.query.get(request.form.get('a_modificar'))
         m.nombre = request.form.get('mnombre')
@@ -79,10 +77,16 @@ def materias():
         m.docente = int(request.form.get('mdocente'))
         db.session.commit()
 
-    carreras = Carrera.query.all()
-    materias = Materia.query.all()
-    usuarios = Usuario.query.filter_by(activo=True).all()
-    return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
+    if request.form.get('modificacion'):
+        m = Materia.query.get(int(request.form.get('mid')))
+        carreras = Carrera.query.all()
+        usuarios = Usuario.query.filter_by(activo=True).all()
+        return render_template("materias.html", carreras=carreras, usuarios=usuarios,m=m,modMateria=True,s_materias=False)
+    else:
+        carreras = Carrera.query.all()
+        materias = Materia.query.all()
+        usuarios = Usuario.query.filter_by(activo=True).all()
+        return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
 
 @app.route("/salir")
 def salir():

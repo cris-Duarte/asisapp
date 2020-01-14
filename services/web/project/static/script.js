@@ -71,15 +71,20 @@ var eliminar = function(id) {
 
 };
 
+var cerrarModModal = function() {
+  $('#modModal').modal('hide');
+};
+
 var mmodificar = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('modificacion', true);
-  data.append('id',id);
-  request.open('POST', '/');
+  data.append('mid',id);
+  request.open('POST', '/materias');
 
   request.onload = () => {
     document.getElementById('mensaje').innerHTML = request.response;
+    $('#modModal').modal('show');
   };
   request.send(data);
 
