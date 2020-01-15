@@ -55,12 +55,39 @@ var malta = function(id) {
     return false;
 
 };
-var eliminar = function(id) {
+var mmod = function(id) {
+    const request = new XMLHttpRequest();
+    const data = new FormData();
+    data.append('mnombre', document.getElementById('mmnombre').value);
+    data.append('mcodigo', document.getElementById('mmcodigo').value);
+    let e = document.getElementById('mmcurso');
+    data.append('mcurso', e.options[e.selectedIndex].value);
+
+    let f = document.getElementById('mmseccion');
+    data.append('mseccion', f.options[f.selectedIndex].value);
+
+    let g = document.getElementById('mmcarrera');
+    data.append('mcarrera', g.options[g.selectedIndex].value);
+
+    let h = document.getElementById('mmdocente');
+    data.append('mdocente', h.options[h.selectedIndex].value);
+    data.append('a_modificar',id);
+    request.open('POST', '/materias');
+    request.onload = () => {
+    document.getElementById('tablaconsulta').innerHTML = request.response;
+    $('#modModal').modal('hide');
+    };
+    request.send(data);
+
+    return false;
+
+};
+var meliminar = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
-  data.append('baja', true);
-  data.append('id',id);
-  request.open('POST', '/');
+  data.append('mbaja', true);
+  data.append('mid',id);
+  request.open('POST', '/materias');
 
   request.onload = () => {
     document.getElementById('tablaconsulta').innerHTML = request.response;

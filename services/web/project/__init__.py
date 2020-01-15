@@ -62,13 +62,13 @@ def materias():
         db.session.add(m)
         db.session.commit()
         s_materias = True
-    if request.form.get('baja'):
+    if request.form.get('mbaja'):
         m = Materia.query.get(int(request.form.get('mid')))
         m.activo = False
         db.session.commit()
         s_materias = True
     if request.form.get('a_modificar') != None:
-        u = Materia.query.get(request.form.get('a_modificar'))
+        m = Materia.query.get(request.form.get('a_modificar'))
         m.nombre = request.form.get('mnombre')
         m.codido = request.form.get('mcodigo')
         m.curso = int(request.form.get('mcurso'))
@@ -76,6 +76,7 @@ def materias():
         m.carrera = int(request.form.get('mcarrera'))
         m.docente = int(request.form.get('mdocente'))
         db.session.commit()
+        s_materias = True
 
     if request.form.get('modificacion'):
         m = Materia.query.get(int(request.form.get('mid')))
@@ -84,7 +85,7 @@ def materias():
         return render_template("materias.html", carreras=carreras, usuarios=usuarios,m=m,modMateria=True,s_materias=False)
     else:
         carreras = Carrera.query.all()
-        materias = Materia.query.all()
+        materias = Materia.query.filter_by(activo=True).all()
         usuarios = Usuario.query.filter_by(activo=True).all()
         return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
 

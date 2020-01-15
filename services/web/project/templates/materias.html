@@ -92,11 +92,11 @@
         <div class="panel panel-default">
           <div class="panel-heading">Formulario de Modificación de Materias</div>
             <div class="panel-body">
-                <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre" data-form="nombre" required value='{{ m.nombre }}'>
-                <input class="form-control" type="text" placeholder="Código de la Materia" id="mcogigo" value='{{ m.codigo }}' required>
+                <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mmnombre" data-form="nombre" required value='{{ m.nombre }}'>
+                <input class="form-control" type="text" placeholder="Código de la Materia" id="mmcodigo" value='{{ m.codigo }}' required>
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon3">Curso</span>
-                <select class="form-control" id="mcurso">
+                <select class="form-control" id="mmcurso">
                   {% if 1 == m.curso %}
                     <option value=1 selected>Primero</option>
                   {% else %}
@@ -131,7 +131,7 @@
               </div>
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon4">Sección</span>
-                <select class="form-control" id="mseccion">
+                <select class="form-control" id="mmseccion">
                   {% if 'A' == m.seccion %}
                     <option value="A" selected>A</option>
                   {% else %}
@@ -157,7 +157,7 @@
 
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon3">Carreras</span>
-                  <select class="form-control" id="mcarrera" data-form="tipo">
+                  <select class="form-control" id="mmcarrera" data-form="tipo">
                       {% for carrera in carreras %}
                         {% if carrera.id == m.carrera %}
                           <option value="{{ carrera.id }}" selected>{{ carrera.nombre }}</option>
@@ -170,7 +170,7 @@
 
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon3">Docente</span>
-                  <select class="form-control" id="mdocente" data-form="tipo">
+                  <select class="form-control" id="mmdocente" data-form="tipo">
                       {% for usuario in usuarios %}
                         {% if usuario.id == m.docente %}
                           <option value="{{ usuario.id }}" selected>{{ usuario.nombre }} {{ usuario.apellido }}</option>
@@ -180,7 +180,7 @@
                       {% endfor %}
                   </select>
                 </div>
-                  <button onclick="malta({{ m.id }})" class="btn btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Modificación</button>
+                  <button onclick="mmod({{ m.id }})" class="btn btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Modificación</button>
                   <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cancelar</button>
               </div>
             </div>
