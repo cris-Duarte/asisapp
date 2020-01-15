@@ -98,6 +98,23 @@ var meliminar = function(id) {
 
 };
 
+var minfo = function(id) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('minfo', true);
+  data.append('mid',id);
+  request.open('POST', '/miscelaneos');
+
+  request.onload = () => {
+    document.getElementById('mensaje').innerHTML = request.response;
+    $('#minfoModal').modal('show');
+  };
+  request.send(data);
+
+  return false;
+
+};
+
 var cerrarModModal = function() {
   $('#modModal').modal('hide');
 };

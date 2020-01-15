@@ -70,7 +70,7 @@ def materias():
     if request.form.get('a_modificar') != None:
         m = Materia.query.get(request.form.get('a_modificar'))
         m.nombre = request.form.get('mnombre')
-        m.codido = request.form.get('mcodigo')
+        m.codigo = request.form.get('mcodigo')
         m.curso = int(request.form.get('mcurso'))
         m.seccion = request.form.get('mseccion')
         m.carrera = int(request.form.get('mcarrera'))
@@ -88,6 +88,13 @@ def materias():
         materias = Materia.query.filter_by(activo=True).all()
         usuarios = Usuario.query.filter_by(activo=True).all()
         return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
+
+@app.route("/miscelaneos", methods=['POST'])
+@login_required
+def miscelaneos():
+    if request.form.get('minfo'):
+        m = Materia.query.get(int(request.form.get('mid')))
+        return render_template("miscelaneos.html", m=m, minfo=True)
 
 @app.route("/salir")
 def salir():
@@ -134,6 +141,7 @@ class Horario(db.Model):
     dia = db.Column(db.String(10), nullable=False)
     desde = db.Column(db.String(10), nullable=False)
     hasta = db.Column(db.String(10), nullable=False)
+    sala = db.Column(db.String(10), nullable=False)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
 
 class Carrera(db.Model):

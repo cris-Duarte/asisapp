@@ -60,7 +60,6 @@
           <th scope="col">Materia</th>
           <th scope="col">Código</th>
           <th scope="col">Curso y Carrera</th>
-          <th scope="col">Docente</th>
           <th scope="col">Acción</th>
         </tr>
       </thead>
@@ -70,9 +69,7 @@
             <th scope="row">{{ materia.id }}</th>
             <td>{{ materia.nombre }}</td>
             <td>{{ materia.codigo }}</td>
-            <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carrera }}</td>
-            <td>{{ materia.docente }}</td>
-            <td>
+            <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carrera }}</td>            <td>
               <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
               <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
               <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
@@ -85,7 +82,7 @@
       </table>
       </div>
 
-      
+
 
 {% else %}
 <div id="modModal" class="modal" tabindex="-1" role="dialog" >
