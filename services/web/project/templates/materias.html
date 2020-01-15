@@ -73,6 +73,7 @@
             <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carrera }}</td>
             <td>{{ materia.docente }}</td>
             <td>
+              <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
               <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
               <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
             </td>
@@ -83,6 +84,9 @@
       </tbody>
       </table>
       </div>
+
+      
+
 {% else %}
 <div id="modModal" class="modal" tabindex="-1" role="dialog" >
     <div class="modal-content">
@@ -154,6 +158,8 @@
                   {% endif %}
                 </select>
               </div>
+
+
 
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon3">Carreras</span>

@@ -128,7 +128,13 @@ class Materia(db.Model):
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
 
-
+class Horario(db.Model):
+    __tablename__ = "horarios"
+    id = db.Column(db.Integer, primary_key=True)
+    dia = db.Column(db.String(10), nullable=False)
+    desde = db.Column(db.String(10), nullable=False)
+    hasta = db.Column(db.String(10), nullable=False)
+    materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
 
 class Carrera(db.Model):
     __tablename__ = "carreras"
