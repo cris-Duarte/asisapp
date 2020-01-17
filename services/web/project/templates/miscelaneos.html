@@ -18,13 +18,23 @@
               <td><h4>Docente:</h4></td><td><h4><span class="label label-primary">{{ m.docente }}</h4></td>
             </tr>
           </table>
+          <div id="mhorario">
+            <h4>Horario:</h4>
+        <ul>
+          {% for horario in horarios %}
+            <li>Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }}, dsde el {{ horario.inicio }} hasta {{ horario.fin }} </li>
+          {% else %}
+            <li>No hay horarios aún.</li>
+          {% endfor %}
+        </ul>
+        </div>
         </div>
 
         <div class="panel panel-primary panel-interno">
           <div class="panel-heading">Administración de Horarios de {{  m.nombre }}</div>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
-              <select class="form-control" id="mcarrera">
+              <select class="form-control" id="hdia">
                 <option value="Lunes">Lunes</option>
                 <option value="Martes">Martes</option>
                 <option value="Miercoles">Miercoles</option>
@@ -36,23 +46,23 @@
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Fechas de Clases</span>
               <span class="input-group-addon" id="basic-addon3">Desde:</span>
-              <input class="form-control" type="date" name="fecha">
+              <input class="form-control" type="date" id="hfechad">
               <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-              <input class="form-control" type="date" name="fecha">
+              <input class="form-control" type="date" id="hfechah">
             </div>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
-              <span class="input-group-addon" id="basic-addon3">Desde:</span>
-              <input class="form-control" type="time" name="fecha">
+              <span class="input-group-addon" name="hhorad">Desde:</span>
+              <input class="form-control" type="time" id="hhorad">
               <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-              <input class="form-control" type="time" name="fecha">
+              <input class="form-control" type="time" id="hhorah">
             </div>
             <div class="input-group">
-              <span class="input-group-addon" id="basic-addon3">Sala</span>
-              <input type="text" name="" value="">
+              <span class="input-group-addon" id="sala">Sala</span>
+              <input type="text" id="hsala" value="">
             </div>
 
-            <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar</button>
+            <button onclick="addHorario({{m.id}})" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar</button>
           </div>
         <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar</button>
 
@@ -60,6 +70,13 @@
   </div>
 </div>
 
-
-
+{% elif s_horarios %}
+  <h4>Horario:</h4>
+  <ul>
+  {% for horario in horarios %}
+  <li>Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }}, dsde el {{ horario.inicio }} hasta {{ horario.fin }} </li>
+  {% else %}
+  <li>No hay horarios aún.</li>
+  {% endfor %}
+  </ul>
 {% endif %}

@@ -134,3 +134,24 @@ var mmodificar = function(id) {
 
   return false;
 };
+
+var addHorario = function(mhid) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('mhid',mhid);
+  let e = document.getElementById('hdia');
+  data.append('hdia', e.options[e.selectedIndex].value);
+  data.append('hfechad', document.getElementById('hfechad').value);
+  data.append('hfechah', document.getElementById('hfechah').value);
+  data.append('hhorad', document.getElementById('hhorad').value);
+  data.append('hhorah', document.getElementById('hhorah').value);
+  data.append('hsala', document.getElementById('hsala').value);
+  data.append('halta',true);
+  request.open('POST', '/miscelaneos');
+  request.onload = () => {
+    document.getElementById('mhorario').innerHTML = request.response;
+  };
+  request.send(data);
+
+  return false;
+};

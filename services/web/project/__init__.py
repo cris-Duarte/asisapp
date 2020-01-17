@@ -94,7 +94,14 @@ def materias():
 def miscelaneos():
     if request.form.get('minfo'):
         m = Materia.query.get(int(request.form.get('mid')))
-        return render_template("miscelaneos.html", m=m, minfo=True)
+        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
+        return render_template("miscelaneos.html", m=m, horarios=horarios, minfo=True)
+    if request.form.get('halta'):
+        h = Horario(dia=request.form.get('hdia'), desde=request.form.get('hhorad'), hasta=request.form.get('hhorah'), inicio=request.form.get('hfechad'), fin=request.form.get('hfechah'), sala=request.form.get('hsala'), materia=int(request.form.get('mhid')), activo=True)
+        db.session.add(h)
+        db.session.commit()
+        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mhid')))
+        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
 
 @app.route("/salir")
 def salir():
