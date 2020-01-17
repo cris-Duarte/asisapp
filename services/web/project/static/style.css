@@ -1,8 +1,10 @@
 body {
   margin: 10px;
 }
-
-input, a, button {
+.panel-interno{
+  padding: .50rem;
+}
+a {
   margin-top: .40rem;
   margin-bottom: .40rem;
 
@@ -25,4 +27,8 @@ svg {
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
+}
+
+.panel-heading {
+  text-align: center;
 }

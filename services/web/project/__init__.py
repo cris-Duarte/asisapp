@@ -58,7 +58,7 @@ def materias():
     s_materias = False
     up = False
     if request.form.get('alta'):
-        m = Materia(nombre=request.form.get('mnombre'), codigo=request.form.get('mcodigo'), curso=int(request.form.get('mcurso')), seccion=request.form.get('mseccion'), carrera=int(request.form.get('mcarrera')), docente=int(request.form.get('mdocente')), activo = True)
+        m = Materia(nombre=request.form.get('mnombre'), codigo=request.form.get('mcodigo'), curso=request.form.get('mcurso'), seccion=request.form.get('mseccion'), carrera=int(request.form.get('mcarrera')), docente=int(request.form.get('mdocente')), activo = True)
         db.session.add(m)
         db.session.commit()
         s_materias = True
@@ -71,7 +71,7 @@ def materias():
         m = Materia.query.get(request.form.get('a_modificar'))
         m.nombre = request.form.get('mnombre')
         m.codigo = request.form.get('mcodigo')
-        m.curso = int(request.form.get('mcurso'))
+        m.curso = request.form.get('mcurso')
         m.seccion = request.form.get('mseccion')
         m.carrera = int(request.form.get('mcarrera'))
         m.docente = int(request.form.get('mdocente'))
@@ -129,7 +129,7 @@ class Materia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100),nullable=False)
     codigo = db.Column(db.String(20),nullable=False)
-    curso = db.Column(db.Integer,nullable=False)
+    curso = db.Column(db.String(10),nullable=False)
     seccion = db.Column(db.String(10),nullable=False)
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"), nullable=False)
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
@@ -141,8 +141,11 @@ class Horario(db.Model):
     dia = db.Column(db.String(10), nullable=False)
     desde = db.Column(db.String(10), nullable=False)
     hasta = db.Column(db.String(10), nullable=False)
+    inicio = db.Column(db.String(10), nullable=False)
+    fin = db.Column(db.String(10), nullable=False)
     sala = db.Column(db.String(10), nullable=False)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
+    activo = db.Column(db.Boolean(), default=True, nullable=False)
 
 class Carrera(db.Model):
     __tablename__ = "carreras"

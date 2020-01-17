@@ -2,27 +2,60 @@
 <div id="minfoModal" class="modal" tabindex="-1" role="dialog" >
   <div class="modal-content">
     <div class="modal-body">
-      <div class="panel panel-info">
-        <div class="panel-heading">Información de {{  m.nombre }} y Horarios</div>
-        <div class="panel-body">
-
-          <h4>Código: <span class="label label-primary">{{ m.codigo }}</span></h4>
-          <h4>Curso: <span class="label label-primary">{{ m.curso }}</span></h4>
-          <h4>Sección: <span class="label label-primary">{{ m.seccion }}</span></h4>
-          <h4>Carrera: <span class="label label-primary">{{ m.carrera }}</span></h4>
-          <h4>Docente: <span class="label label-primary">{{ m.docente }}</span></h4>
-          <hr>
-          <div class="input-group">
-
-            <span class="input-group-addon" id="basic-addon1">Horarios: </span>
-            <span class="input-group-btn">
-              <button class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar</button>
-            </span>
-          </div>
-
-          <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar</button>
+      <div class="panel panel-primary panel-interno">
+        <div class="panel-heading">Información de {{  m.nombre }}</div>
+          <table>
+            <tr>
+              <td><h4>Código:</h4></td><td><h4><span class="label label-primary">{{ m.codigo }}</span></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Curso:</h4></td><td><h4><span class="label label-primary">{{ m.curso }},  {{ m.seccion }}</span></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Carrera:</h4></td><td><h4><span class="label label-primary">{{ m.carrera }}</h4></td>
+            </tr>
+            <tr>
+              <td><h4>Docente:</h4></td><td><h4><span class="label label-primary">{{ m.docente }}</h4></td>
+            </tr>
+          </table>
         </div>
-      </div>
+
+        <div class="panel panel-primary panel-interno">
+          <div class="panel-heading">Administración de Horarios de {{  m.nombre }}</div>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
+              <select class="form-control" id="mcarrera">
+                <option value="Lunes">Lunes</option>
+                <option value="Martes">Martes</option>
+                <option value="Miercoles">Miercoles</option>
+                <option value="Jueves">Jueves</option>
+                <option value="Viernes">Viernes</option>
+                <option value="Sábado">Sábado</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Fechas de Clases</span>
+              <span class="input-group-addon" id="basic-addon3">Desde:</span>
+              <input class="form-control" type="date" name="fecha">
+              <span class="input-group-addon" id="basic-addon3">Hasta:</span>
+              <input class="form-control" type="date" name="fecha">
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
+              <span class="input-group-addon" id="basic-addon3">Desde:</span>
+              <input class="form-control" type="time" name="fecha">
+              <span class="input-group-addon" id="basic-addon3">Hasta:</span>
+              <input class="form-control" type="time" name="fecha">
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Sala</span>
+              <input type="text" name="" value="">
+            </div>
+
+            <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar</button>
+          </div>
+        <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar</button>
+
     </div>
   </div>
 </div>
