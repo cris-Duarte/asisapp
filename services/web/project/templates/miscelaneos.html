@@ -22,7 +22,7 @@
             <h4>Horario:</h4>
         <ul>
           {% for horario in horarios %}
-            <li>Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }}, dsde el {{ horario.inicio }} hasta {{ horario.fin }} </li>
+            <span class="label label-primary"><li>Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el{{ horario.fin }} </li></span>
           {% else %}
             <li>No hay horarios aún.</li>
           {% endfor %}

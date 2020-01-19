@@ -97,33 +97,33 @@
                 <input class="form-control" type="text" placeholder="Código de la Materia" id="mmcodigo" value='{{ m.codigo }}' required>
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon3">Curso</span>
-                <select class="form-control" id="mmcurso">
-                  {% if 1 == m.curso %}
+                <select class="form-control" id="mmcurso" autocomple>
+                  {% if '1ro' == m.curso %}
                     <option value="1ro" selected>Primero</option>
                   {% else %}
                     <option value="1ero">Primero</option>
                   {% endif %}
-                  {% if 2 == m.curso %}
+                  {% if '2do' == m.curso %}
                     <option value="2do" selected>Segundo</option>
                   {% else %}
                     <option value="2do">Segundo</option>
                   {% endif %}
-                  {% if 3 == m.curso %}
+                  {% if '3ro' == m.curso %}
                     <option value="3ro" selected>Tercero</option>
                   {% else %}
                     <option value="3ro">Tercero</option>
                   {% endif %}
-                  {% if 4 == m.curso %}
+                  {% if '4to' == m.curso %}
                     <option value="4to" selected>Cuarto</option>
                   {% else %}
                     <option value="4to">Cuarto</option>
                   {% endif %}
-                  {% if 5 == m.curso %}
+                  {% if '5to' == m.curso %}
                     <option value="5to" selected>Quinto</option>
                   {% else %}
                     <option value="5to">Quinto</option>
                   {% endif %}
-                  {% if 6 == m.curso %}
+                  {% if '6to' == m.curso %}
                     <option value="6to" selected>Sexto</option>
                   {% else %}
                     <option value="6to">Sexto</option>
