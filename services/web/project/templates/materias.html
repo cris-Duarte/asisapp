@@ -163,7 +163,7 @@
                   <select class="form-control" id="mmcarrera" data-form="tipo">
                       {% for carrera in carreras %}
                         {% if carrera.id == m.carrera %}
-                          <option value="{{ carrera.id }}" selected>{{ carrera.nombre }}</option>
+                          <option value="{{ carrera.id }}" selected>{{ carrera.nombre_carrera }}</option>
                         {% else %}
                           <option value="{{ carrera.id }}">{{ carrera.nombre_carrera }}</option>
                         {% endif %}

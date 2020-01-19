@@ -12,10 +12,10 @@
               <td><h4>Curso:</h4></td><td><h4><span class="label label-primary">{{ m.curso }},  {{ m.seccion }}</span></h4></td>
             </tr>
             <tr>
-              <td><h4>Carrera:</h4></td><td><h4><span class="label label-primary">{{ m.carrera }}</h4></td>
+              <td><h4>Carrera:</h4></td><td><h4><span class="label label-primary">{{ m.carreras['nombre_carrera'] }}</h4></td>
             </tr>
             <tr>
-              <td><h4>Docente:</h4></td><td><h4><span class="label label-primary">{{ m.docente }}</h4></td>
+              <td><h4>Docente:</h4></td><td><h4><span class="label label-primary">Prof. {{ m.docentes['nombre'] }} {{ m.docentes['apellido'] }}</h4></td>
             </tr>
           </table>
           <div id="mhorario">

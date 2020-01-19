@@ -85,7 +85,6 @@ def materias():
         return render_template("materias.html", carreras=carreras, usuarios=usuarios,m=m,modMateria=True,s_materias=False)
     else:
         carreras = Carrera.query.all()
-
         materias = db.session.query(Materia)\
             .join(Carrera)\
             .filter(Materia.activo == True)\
@@ -99,6 +98,10 @@ def materias():
 def miscelaneos():
     if request.form.get('minfo'):
         m = Materia.query.get(int(request.form.get('mid')))
+        materias = db.session.query(Materia)\
+            .join(Carrera, Usuario)\
+            .filter(Materia.activo == True)\
+            .all()
         horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
         return render_template("miscelaneos.html", m=m, horarios=horarios, minfo=True)
     if request.form.get('halta'):
@@ -144,7 +147,7 @@ class Materia(db.Model):
     curso = db.Column(db.String(10),nullable=False)
     seccion = db.Column(db.String(10),nullable=False)
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"))
-    docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
+    docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
 
 class Horario(db.Model):
@@ -178,6 +181,7 @@ class Usuario(db.Model):
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     con = db.Column(db.String(200), nullable=False)
     tipo = db.Column(db.Integer, db.ForeignKey("tipo_usuario.id"), nullable=False)
+    docentes = db.relationship('Materia', backref='docentes', lazy=True)
 
     def is_authenticated(self):
 	    return True
