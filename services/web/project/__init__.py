@@ -85,7 +85,12 @@ def materias():
         return render_template("materias.html", carreras=carreras, usuarios=usuarios,m=m,modMateria=True,s_materias=False)
     else:
         carreras = Carrera.query.all()
-        materias = Materia.query.filter_by(activo=True).all()
+
+        materias = db.session.query(Materia)\
+            .join(Carrera)\
+            .filter(Materia.activo == True)\
+            .all()
+        """materias = Materia.query.filter_by(activo=True).all()"""
         usuarios = Usuario.query.filter_by(activo=True).all()
         return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
 
@@ -138,7 +143,7 @@ class Materia(db.Model):
     codigo = db.Column(db.String(20),nullable=False)
     curso = db.Column(db.String(10),nullable=False)
     seccion = db.Column(db.String(10),nullable=False)
-    carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"), nullable=False)
+    carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"))
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
 
@@ -157,7 +162,8 @@ class Horario(db.Model):
 class Carrera(db.Model):
     __tablename__ = "carreras"
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(30), nullable=False)
+    nombre_carrera = db.Column(db.String(30), nullable=False)
+    materias = db.relationship('Materia', backref='carreras', lazy=True)
     responsable = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=True)
 
 

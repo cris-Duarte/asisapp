@@ -1,5 +1,5 @@
 from flask.cli import FlaskGroup
-from project import app, db, Usuario, TipoUsuario, Carrera, Materia
+from project import app, db, Usuario, TipoUsuario, Carrera, Materia, Horario
 
 cli = FlaskGroup(app)
 
@@ -22,11 +22,12 @@ def seed_db():
     u = Usuario(nombre="Cristhian", apellido="Duarte", ci=1234, email="cristhian@gmail.com", activo=True, con="r00t", tipo=3)
     db.session.add(u)
     db.session.commit()
-    db.session.add(Carrera(nombre="Contaduría Pública"))
-    db.session.add(Carrera(nombre="Administración de Empresas"))
-    db.session.add(Carrera(nombre="Economía"))
-    db.session.add(Carrera(nombre="Tributación"))
-    db.session.add(Carrera(nombre="Ingeniería Comercial"))
+    db.session.add(Carrera(nombre_carrera="Plan Común"))
+    db.session.add(Carrera(nombre_carrera="Contaduría Pública"))
+    db.session.add(Carrera(nombre_carrera="Administración de Empresas"))
+    db.session.add(Carrera(nombre_carrera="Economía"))
+    db.session.add(Carrera(nombre_carrera="Tributación"))
+    db.session.add(Carrera(nombre_carrera="Ingeniería Comercial"))
     db.session.commit()
 
 

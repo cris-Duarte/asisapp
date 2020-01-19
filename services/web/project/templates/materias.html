@@ -30,7 +30,7 @@
             <span class="input-group-addon" id="basic-addon3">Carreras</span>
             <select class="form-control" id="mcarrera" data-form="tipo">
                 {% for carrera in carreras %}
-                    <option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+                    <option value="{{ carrera.id }}">{{ carrera.nombre_carrera }}</option>
                 {% endfor %}
             </select>
           </div>
@@ -69,7 +69,7 @@
             <th scope="row">{{ materia.id }}</th>
             <td>{{ materia.nombre }}</td>
             <td>{{ materia.codigo }}</td>
-            <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carrera }}</td>            <td>
+            <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carreras['nombre_carrera'] }}</td>            <td>
               <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
               <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
               <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
@@ -165,7 +165,7 @@
                         {% if carrera.id == m.carrera %}
                           <option value="{{ carrera.id }}" selected>{{ carrera.nombre }}</option>
                         {% else %}
-                          <option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+                          <option value="{{ carrera.id }}">{{ carrera.nombre_carrera }}</option>
                         {% endif %}
                       {% endfor %}
                   </select>
