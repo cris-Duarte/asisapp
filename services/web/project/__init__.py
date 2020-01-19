@@ -88,6 +88,7 @@ def materias():
         materias = db.session.query(Materia)\
             .join(Carrera)\
             .filter(Materia.activo == True)\
+            .order_by(Materia.id.asc())\
             .all()
         """materias = Materia.query.filter_by(activo=True).all()"""
         usuarios = Usuario.query.filter_by(activo=True).all()
