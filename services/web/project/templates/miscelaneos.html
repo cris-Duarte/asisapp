@@ -20,13 +20,29 @@
           </table>
           <div id="mhorario">
             <h4>Horario:</h4>
-        <ul>
-          {% for horario in horarios %}
-            <span class="label label-primary"><li>Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el{{ horario.fin }} </li></span>
-          {% else %}
-            <li>No hay horarios aún.</li>
+            <table>
+              {% for horario in horarios %}
+              <tr>
+              <td>
+                <h5>
+                  Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el{{ horario.fin }}
+                </h5>
+              </td>
+              <td>
+                <button type="button" class="btn btn-info btn-xs" onclick="hmodificar({{ horario.id }},{{ m.id }})">
+                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-danger btn-xs" onclick="heliminar({{ horario.id }},{{ m.id }})">
+                  <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                </button>
+              </td>
+            </tr>
+                {% else %}
+            <td>
+                No hay horarios aún.
+            </td>
           {% endfor %}
-        </ul>
+          </table>
         </div>
         </div>
 
@@ -71,12 +87,28 @@
 </div>
 
 {% elif s_horarios %}
-  <h4>Horario:</h4>
-  <ul>
+<h4>Horario:</h4>
+<table>
   {% for horario in horarios %}
-  <li>Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }}, dsde el {{ horario.inicio }} hasta {{ horario.fin }} </li>
-  {% else %}
-  <li>No hay horarios aún.</li>
-  {% endfor %}
-  </ul>
+  <tr>
+  <td>
+    <h5>
+      Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el{{ horario.fin }}
+    </h5>
+  </td>
+  <td>
+    <button type="button" class="btn btn-info btn-xs">
+      <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="btn btn-danger btn-xs">
+      <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+    </button>
+  </td>
+</tr>
+    {% else %}
+<td>
+    No hay horarios aún.
+</td>
+{% endfor %}
+</table>
 {% endif %}

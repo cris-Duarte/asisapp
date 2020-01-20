@@ -112,6 +112,14 @@ def miscelaneos():
         horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mhid')))
         return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
 
+    if request.form.get('hbaja'):
+        h = Horario.query.get(int(request.form.get('hid')))
+        h.activo = False
+        db.session.commit()
+        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
+        s_horarios = True
+        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
+
 @app.route("/salir")
 def salir():
     logout_user()

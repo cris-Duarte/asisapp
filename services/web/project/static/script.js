@@ -98,6 +98,8 @@ var meliminar = function(id) {
 
 };
 
+
+
 var minfo = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
@@ -150,6 +152,40 @@ var addHorario = function(mhid) {
   request.open('POST', '/miscelaneos');
   request.onload = () => {
     document.getElementById('mhorario').innerHTML = request.response;
+  };
+  request.send(data);
+
+  return false;
+};
+
+var heliminar = function(hid , mid) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('hbaja', true);
+  data.append('hid',hid);
+  data.append('mid',mid);
+  request.open('POST', '/miscelaneos');
+
+  request.onload = () => {
+    document.getElementById('mhorario').innerHTML = request.response;
+  };
+  request.send(data);
+
+  return false;
+
+};
+
+var hmodificar = function(hid, mid) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('hmodificacion', true);
+  data.append('hid',hid);
+  data.append('mid',mid);
+  request.open('POST', '/materias');
+
+  request.onload = () => {
+    document.getElementById('mensaje').innerHTML = request.response;
+    $('#modHorModal').modal('show');
   };
   request.send(data);
 
