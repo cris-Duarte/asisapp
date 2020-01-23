@@ -175,17 +175,39 @@ var heliminar = function(hid , mid) {
 
 };
 
+var modHorario = function(hid) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('hid',hid);
+  let e = document.getElementById('mhdia');
+  data.append('hdia', e.options[e.selectedIndex].value);
+  data.append('hfechad', document.getElementById('mhfechad').value);
+  data.append('hfechah', document.getElementById('mhfechah').value);
+  data.append('hhorad', document.getElementById('mhhorad').value);
+  data.append('hhorah', document.getElementById('mhhorah').value);
+  data.append('hsala', document.getElementById('mhsala').value);
+  data.append('modHorario',true);
+  request.open('POST', '/miscelaneos');
+  request.onload = () => {
+    document.getElementById('mhorario').innerHTML = request.response;
+    $('#modHorarioModal').modal('hide');
+  };
+  request.send(data);
+
+  return false;
+};
+
 var hmodificar = function(hid, mid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('hmodificacion', true);
   data.append('hid',hid);
   data.append('mid',mid);
-  request.open('POST', '/materias');
+  request.open('POST', '/miscelaneos');
 
   request.onload = () => {
-    document.getElementById('mensaje').innerHTML = request.response;
-    $('#modHorModal').modal('show');
+    document.getElementById('auxBox1').innerHTML = request.response;
+    $('#modHorarioModal').modal('show');
   };
   request.send(data);
 

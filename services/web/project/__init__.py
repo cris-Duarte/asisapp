@@ -109,8 +109,13 @@ def miscelaneos():
         h = Horario(dia=request.form.get('hdia'), desde=request.form.get('hhorad'), hasta=request.form.get('hhorah'), inicio=request.form.get('hfechad'), fin=request.form.get('hfechah'), sala=request.form.get('hsala'), materia=int(request.form.get('mhid')), activo=True)
         db.session.add(h)
         db.session.commit()
-        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mhid')))
-        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
+        horarios = Horario.query\
+        .filter_by(activo=True)\
+        .filter_by(materia=int(request.form.get('mhid')))\
+        .order_by(Horario.id.asc())\
+        .all()
+        m = Materia.query.get(int(request.form.get('mhid')))
+        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios,m=m)
 
     if request.form.get('hbaja'):
         h = Horario.query.get(int(request.form.get('hid')))
@@ -118,6 +123,27 @@ def miscelaneos():
         db.session.commit()
         horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
         s_horarios = True
+        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
+    if request.form.get('hmodificacion'):
+        h = Horario.query.get(int(request.form.get('hid')))
+        m = Materia.query.get(int(request.form.get('mid')))
+        return render_template("miscelaneos.html",h=h,m=m,hmod=True)
+
+    if request.form.get('modHorario'):
+        h = Horario.query.get(int(request.form.get('hid')))
+        h.dia = request.form.get('hdia')
+        h.inicio = request.form.get('hfechad')
+        h.fin = request.form.get('hfechah')
+        h.desde = request.form.get('hhorad')
+        h.hasta = request.form.get('hhorah')
+        h.sala = request.form.get('hsala')
+        db.session.commit()
+        s_horarios = True
+        horarios = Horario.query\
+        .filter_by(activo=True)\
+        .filter_by(materia=h.materia)\
+        .order_by(Horario.id.asc())\
+        .all()
         return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
 
 @app.route("/salir")
