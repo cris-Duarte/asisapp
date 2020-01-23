@@ -5,11 +5,13 @@ body {
 .panel-interno{
   padding: .50rem;
 }
-a {
+a, input{
   margin-top: .40rem;
   margin-bottom: .40rem;
 
 }
+
+
 
 .input-group {
   margin-bottom: .40rem;

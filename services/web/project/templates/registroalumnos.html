@@ -1,0 +1,77 @@
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='script_vs.js')}}"></script>
+
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+{% endblock %}
+
+{% block html_attribs %} lang="es"{% endblock %}
+
+
+{% block title %}
+  Registro de Alumnos a Clase
+{% endblock %}
+
+{% block content %}
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Formulario de Registro de Alumnos
+  </div>
+    <div class="panel-body">
+        <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo" required>
+        <input class="form-control" type="text" placeholder="Nombres" id="anombre" required>
+        <input class="form-control" type="text" placeholder="Apellidos" id="aapellido" required>
+        <input class="form-control" type="number" placeholder="Nro de Cédula" id="aci" required>
+        <input class="form-control" type="email" placeholder="Correo Electrónico" id="aemail" required>
+        <input class="form-control" type="text" placeholder="Número de Telefono" id="atelefono" required>
+        <button onclick="acon()" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enviar</button>
+      </div>
+</div>
+
+<div id="infoAlumnoModal" class="modal" tabindex="-1" role="dialog" >
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="panel panel-info panel-interno">
+        <div class="panel-heading">Verifica tu información y la materia a la cual te inscribiras</div>
+          <table>
+            <tr>
+              <td><h4>Código de la Materia: </h4></td><td><h4><span id="cmateria" class="label label-warning"></span></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Materia: </h4></td><td><h4><span id="nmateria" class="label label-warning"></span></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Nombres: </h4></td><td><h4><span id="aanombre" class="label label-primary"></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Apellidos: </h4></td><td><h4><span id="aaaepllido" class="label label-primary"></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Nro de CI: </h4></td><td><h4><span id="aaci" class="label label-primary"></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Correo Electrónico: </h4></td><td><h4><span id="aaemail" class="label label-primary"></h4></td>
+            </tr>
+            <tr>
+              <td><h4>Nro de Teléfono:</h4></td><td><h4><span id="aatelefono" class="label label-primary"></h4></td>
+            </tr>
+          </table>
+          <button type="button" class="btn btn-default" onclick="enviar()">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true">
+              Todo esta correcto!
+            </span>
+          </button>
+          <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
+            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true">
+              Cancelar
+            </span>
+          </button>
+
+{% endblock %}

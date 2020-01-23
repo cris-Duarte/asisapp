@@ -15,7 +15,7 @@ login_manager.login_view = "ingresar"
 
 @app.route("/")
 def index():
-    return "<h6>Hello wordl</h6>"
+    return render_template('registroalumnos.html')
 
 @app.route("/ingresar")
 def ingresar():
@@ -152,6 +152,12 @@ def salir():
     return redirect(url_for('ingresar'))
 
 
+@app.route("/alumnos", methods=['POST'])
+def alumnos():
+    m = Materia.query.filter_by(codigo=request.form.get('v'))
+    if m.count() == 1:
+        return m.
+
 @app.route("/estado", methods=['POST','GET'])
 @login_required
 def estado():
@@ -213,6 +219,7 @@ class Usuario(db.Model):
     apellido = db.Column(db.String(60), nullable=False)
     ci = db.Column(db.Integer, default=0,nullable=False)
     email = db.Column(db.String(128), nullable=False)
+    telefono = db.Column(db.String(15), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     con = db.Column(db.String(200), nullable=False)
     tipo = db.Column(db.Integer, db.ForeignKey("tipo_usuario.id"), nullable=False)
