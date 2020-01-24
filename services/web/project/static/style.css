@@ -11,7 +11,10 @@ a, input{
 
 }
 
-
+.alabel {
+  padding-right: 2px;
+  padding-left:: 2px;
+}
 
 .input-group {
   margin-bottom: .40rem;

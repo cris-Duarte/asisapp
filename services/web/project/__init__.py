@@ -154,9 +154,21 @@ def salir():
 
 @app.route("/alumnos", methods=['POST'])
 def alumnos():
-    m = Materia.query.filter_by(codigo=request.form.get('v'))
-    if m.count() == 1:
-        return m.
+    if request.form.get('verificarMateria'):
+        """m = db.session.query(Materia).join(Carrera, Usuario).filter(Materia.codigo == request.form.get('v')).filter(Materia.activo == True)"""
+        m = Materia.query.filter_by(codigo=request.form.get('v'))
+        if m.count() > 0:
+            m = m.first()
+            return jsonify({
+              "Materia": m.nombre,
+              "Curso": m.curso,
+              "Seccion": m.seccion,
+              "Carrera": m.carrera,
+              "Nombre_Docente": m.docente,
+              "mensaje":"Ok"
+          })
+        else:
+            return jsonify({"mensaje":"El código de clase no es válido "+str(m.count())})
 
 @app.route("/estado", methods=['POST','GET'])
 @login_required

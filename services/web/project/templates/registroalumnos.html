@@ -25,8 +25,9 @@
     Formulario de Registro de Alumnos
   </div>
     <div class="panel-body">
-        <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo" required>
-        <input class="form-control" type="text" placeholder="Nombres" id="anombre" required>
+        <input class="form-control" type="text" placeholder="Código de Clase" id="mcodigo" onblur="verificarm()" required>
+        <div id="infomateria"></div>
+        <input class="form-control" type="text" placeholder="Nombres" id="anombre" onblur="verificara" required>
         <input class="form-control" type="text" placeholder="Apellidos" id="aapellido" required>
         <input class="form-control" type="number" placeholder="Nro de Cédula" id="aci" required>
         <input class="form-control" type="email" placeholder="Correo Electrónico" id="aemail" required>
@@ -42,36 +43,36 @@
         <div class="panel-heading">Verifica tu información y la materia a la cual te inscribiras</div>
           <table>
             <tr>
-              <td><h4>Código de la Materia: </h4></td><td><h4><span id="cmateria" class="label label-warning"></span></h4></td>
+              <td><h4>Código: </h4></td><td><h4><span id="cmateria" class="label label-warning alabel"></span></h4></td>
             </tr>
             <tr>
-              <td><h4>Materia: </h4></td><td><h4><span id="nmateria" class="label label-warning"></span></h4></td>
+              <td><h4>Materia: </h4></td><td><h4><span id="nmateria" class="label label-warning alabel"></span></h4></td>
             </tr>
             <tr>
-              <td><h4>Nombres: </h4></td><td><h4><span id="aanombre" class="label label-primary"></h4></td>
+              <td><h4>Nombres: </h4></td><td><h4><span id="aanombre" class="label label-primary alabel"></h4></td>
             </tr>
             <tr>
-              <td><h4>Apellidos: </h4></td><td><h4><span id="aaaepllido" class="label label-primary"></h4></td>
+              <td><h4>Apellidos: </h4></td><td><h4><span id="aaapellido" class="label label-primary alabel"></h4></td>
             </tr>
             <tr>
-              <td><h4>Nro de CI: </h4></td><td><h4><span id="aaci" class="label label-primary"></h4></td>
+              <td><h4>Nro de CI: </h4></td><td><h4><span id="aaci" class="label label-primary alabel"></h4></td>
             </tr>
             <tr>
-              <td><h4>Correo Electrónico: </h4></td><td><h4><span id="aaemail" class="label label-primary"></h4></td>
+              <td><h4>Correo Electrónico: </h4></td><td><h4><span id="aaemail" class="label label-primary alabel"></h4></td>
             </tr>
             <tr>
-              <td><h4>Nro de Teléfono:</h4></td><td><h4><span id="aatelefono" class="label label-primary"></h4></td>
+              <td><h4>Teléfono:</h4></td><td><h4><span id="aatelefono" class="label label-primary alabel"></h4></td>
             </tr>
           </table>
-          <button type="button" class="btn btn-default" onclick="enviar()">
-            <span class="glyphicon glyphicon-edit" aria-hidden="true">
-              Todo esta correcto!
+          <button type="button" class="btn btn-primary" onclick="enviar()">
+            <span class="glyphicon glyphicon-send" aria-hidden="true">
             </span>
+             Todo esta correcto!
           </button>
           <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
             <span class="glyphicon glyphicon-ban-circle" aria-hidden="true">
-              Cancelar
             </span>
+             Cancelar
           </button>
 
 {% endblock %}
