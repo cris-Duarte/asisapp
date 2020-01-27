@@ -172,17 +172,63 @@ def alumnos():
         else:
             return jsonify({"mensaje":"El código de clase no es válido "})
     if request.form.get('verificarAlumno'):
-        a = Usuario.query\
-        .filter(Usuario.ci == request.form.get('v'))\
-        .filter(Usuario.tipo == 4).first()
+        a = Alumno.query\
+        .filter(Alumno.ci == request.form.get('v'))\
+        .first()
         if a:
             return ({
-              "registro":"listo"
+              "registro":"listo",
+              "nombre":a.nombre,
+              "apellido":a.apellido,
+              "email":a.email,
+              "telefono":a.telefono
           })
         else:
             return jsonify({
               "registro":"falta"
           })
+
+    if request.form.get('alta_alumno'):
+        a = Alumno.query.filter_by(ci=request.form.get('aci')).first()
+        if a:
+            m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
+            c = Inscripcion.query\
+            .filter(Inscripcion.materia == m.id)\
+            .filter(Inscripcion.alumno ==a.id)\
+            .all()
+            if c:
+                return jsonify({
+                    'clase':'alert-danger',
+                    'mensaje':'Ya te has registrado a '+m.nombre
+                })
+            else:
+                i = Inscripcion(materia=m.id,alumno=a.id)
+                q = db.session.add(i)
+                db.session.commit()
+                return jsonify({
+                    "clase":'alert-success',
+                    "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
+                    })
+        else:
+            a = Alumno(\
+            nombre=request.form.get('anombre'),\
+            apellido=request.form.get('aapellido'),\
+            ci=request.form.get('aci'),\
+            con=request.form.get('aci'),\
+            email=request.form.get('aemail'),\
+            telefono=request.form.get('atelefono'),\
+            activo=True)
+            db.session.add(a)
+            db.session.commit()
+            m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
+            i = Inscripcion(materia=m.id,alumno=a.id)
+            q = db.session.add(i)
+            db.session.commit()
+            return jsonify({
+                "clase":'alert-success',
+                "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
+                })
+
 
 @app.route("/estado", methods=['POST','GET'])
 @login_required
@@ -216,6 +262,7 @@ class Materia(db.Model):
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"))
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
+    inscriptos = db.relationship('Inscripcion', backref='inscripcion_materia', lazy=True)
 
 class Horario(db.Model):
     __tablename__ = "horarios"
@@ -266,9 +313,22 @@ class Usuario(db.Model):
     def is_admin(self):
     	return self.admin
 
-class inscripcion(db.Model):
+class Inscripcion(db.Model):
     __tablename__="inscripciones"
     id = db.Column(db.Integer, primary_key=True)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
-    alumno = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+    alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
+    activo = db.Column(db.Boolean(), default=True, nullable=False)
+
+class Alumno(db.Model):
+    __tablename__ = "alumnos"
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(60), nullable=False)
+    apellido = db.Column(db.String(60), nullable=False)
+    ci = db.Column(db.Integer, default=0,nullable=False)
+    email = db.Column(db.String(128), nullable=False)
+    telefono = db.Column(db.String(15), nullable=False)
+    activo = db.Column(db.Boolean(), default=True, nullable=False)
+    con = db.Column(db.String(200), nullable=False)
+    inscriptos = db.relationship('Inscripcion', backref='inscripcion_alumnos', lazy=True)
