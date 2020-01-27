@@ -32,7 +32,7 @@ var acon = function () {
   return false;
 };
 
-const verificarm = function () {
+var verificarm = function () {
   v = document.getElementById('mcodigo').value;
   if (v != '' ) {
     const request = new XMLHttpRequest();
@@ -42,19 +42,14 @@ const verificarm = function () {
     request.open('POST', '/alumnos');
     request.onload = () => {
       const data = JSON.parse(request.responseText);
-      if ( `${data.mensaje}` == "Ok") {
-          if (data.success) {
-              const materiaInfo = `<h4><span class="label label-warning ">Materia: ${data.Materia}</span></h4>
+      if (data.mensaje == "Ok") {
+        const materiaInfo = `<h4><span class="label label-warning ">Materia: ${data.Materia}</span></h4>
                                   <h4><span class="label label-warning ">Curso: ${data.Curso}, sección: ${data.Seccion}</span></h4>
                                   <h4><span class="label label-warning ">Carrera: ${data.Carrera}</span></h4>
-                                  <h4><span class="label label-warning ">Docente: ${data.Nombre_Docente} ${data.Apellido_Docente}</span></h4>`
+                                  <h4><span class="label label-warning ">Docente: ${data.Docente}</span></h4>`;
               document.getElementById('infomateria').innerHTML = materiaInfo;
-          }
-          else {
-              document.getElementById('infomateria').innerHTML = 'Hubo un error al';
-          }
         }else{
-            document.getElementById('infomateria').innerHTML = `${data.mensaje}`;
+            document.getElementById('infomateria').innerHTML = data.mensaje;
         }
     };
     request.send(data1);
@@ -62,3 +57,5 @@ const verificarm = function () {
     return false;
   }
 };
+
+var verificara = function () { };

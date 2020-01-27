@@ -155,20 +155,22 @@ def salir():
 @app.route("/alumnos", methods=['POST'])
 def alumnos():
     if request.form.get('verificarMateria'):
-        """m = db.session.query(Materia).join(Carrera, Usuario).filter(Materia.codigo == request.form.get('v')).filter(Materia.activo == True)"""
-        m = Materia.query.filter_by(codigo=request.form.get('v'))
-        if m.count() > 0:
-            m = m.first()
+        m = db.session.query(Materia, Carrera, Usuario)\
+        .filter(Materia.carrera == Carrera.id)\
+        .filter(Materia.docente == Usuario.id)\
+        .filter(Materia.codigo == request.form.get('v'))\
+        .filter(Materia.activo == True).first()
+        if m:
             return jsonify({
-              "Materia": m.nombre,
-              "Curso": m.curso,
-              "Seccion": m.seccion,
-              "Carrera": m.carrera,
-              "Nombre_Docente": m.docente,
+              "Materia": m.Materia.nombre,
+              "Curso": m.Materia.curso,
+              "Seccion": m.Materia.seccion,
+              "Carrera": m.Carrera.nombre_carrera,
+              "Docente": m.Usuario.nombre + " " + m.Usuario.apellido,
               "mensaje":"Ok"
           })
         else:
-            return jsonify({"mensaje":"El código de clase no es válido "+str(m.count())})
+            return jsonify({"mensaje":"El código de clase no es válido "})
 
 @app.route("/estado", methods=['POST','GET'])
 @login_required
