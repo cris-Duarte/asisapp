@@ -265,3 +265,10 @@ class Usuario(db.Model):
 
     def is_admin(self):
     	return self.admin
+
+class inscripcion(db.Model):
+    __tablename__="inscripciones"
+    id = db.Column(db.Integer, primary_key=True)
+    materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
+    alumno = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
+    active = db.Column(db.Boolean(), default=True, nullable=False)

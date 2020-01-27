@@ -1,3 +1,10 @@
+document.addEventListener('DOMContentLoaded', () => {
+  fa = document.querySelectorAll('.form-alumno')
+  for (var i = 0; i < fa.length; i++) {
+  fa[i].disabled = true;
+}
+});
+
 const data = new FormData();
 var acon = function () {
   const request = new XMLHttpRequest();
@@ -74,7 +81,7 @@ var verificara = function () {
             document.getElementById('infoalumno').innerHTML = "Por favor completa los siguientes campos";
             fa = document.querySelectorAll('.form-alumno')
             for (var i = 0; i < fa.length; i++) {
-            fa[i].style.display = 'inline-block'; 
+            fa[i].disabled = false;
 }
         }
     };
