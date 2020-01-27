@@ -74,7 +74,7 @@ var verificara = function () {
             document.getElementById('infoalumno').innerHTML = "Por favor completa los siguientes campos";
             fa = document.querySelectorAll('.form-alumno')
             for (var i = 0; i < fa.length; i++) {
-            fa[i].style.display = 'inline-block';  // No es necesario llamar a myNodeList.item(i) en JavaScript
+            fa[i].style.display = 'inline-block'; 
 }
         }
     };
