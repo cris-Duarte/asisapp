@@ -58,4 +58,28 @@ var verificarm = function () {
   }
 };
 
-var verificara = function () { };
+var verificara = function () {
+  v = document.getElementById('aci').value;
+  if (v != '' ) {
+    const request = new XMLHttpRequest();
+    const data1 = new FormData()
+    data1.append('v',v);
+    data1.append('verificarAlumno',true);
+    request.open('POST', '/alumnos');
+    request.onload = () => {
+      const data = JSON.parse(request.responseText);
+      if (data.registro == "listo") {
+
+        }else{
+            document.getElementById('infoalumno').innerHTML = "Por favor completa los siguientes campos";
+            fa = document.querySelectorAll('.form-alumno')
+            for (var i = 0; i < fa.length; i++) {
+            fa[i].style.display = 'inline-block';  // No es necesario llamar a myNodeList.item(i) en JavaScript
+}
+        }
+    };
+    request.send(data1);
+
+    return false;
+  }
+};

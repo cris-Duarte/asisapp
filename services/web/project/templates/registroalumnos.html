@@ -27,11 +27,14 @@
     <div class="panel-body">
         <input class="form-control" type="text" placeholder="Código de Clase" id="mcodigo" onblur="verificarm()" required>
         <div id="infomateria"></div>
-        <input class="form-control" type="text" placeholder="Nombres" id="anombre" onblur="verificara()" required>
-        <input class="form-control" type="text" placeholder="Apellidos" id="aapellido" required>
-        <input class="form-control" type="number" placeholder="Nro de Cédula" id="aci" required>
-        <input class="form-control" type="email" placeholder="Correo Electrónico" id="aemail" required>
-        <input class="form-control" type="text" placeholder="Número de Telefono" id="atelefono" required>
+        <input class="form-control" type="number" placeholder="Nro de Cédula" id="aci" onblur="verificara()" required>
+        <div id="infoalumno">
+
+        </div>
+        <input class="form-control form-alumno" type="text" placeholder="Nombres" id="anombre" required>
+        <input class="form-control form-alumno" type="text" placeholder="Apellidos" id="aapellido">
+        <input class="form-control form-alumno" type="email" placeholder="Correo Electrónico" id="aemail" required>
+        <input class="form-control form-alumno" type="text" placeholder="Número de Telefono" id="atelefono" required>
         <button onclick="acon()" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enviar</button>
       </div>
 </div>

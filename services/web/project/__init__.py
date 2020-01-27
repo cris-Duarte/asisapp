@@ -171,6 +171,18 @@ def alumnos():
           })
         else:
             return jsonify({"mensaje":"El código de clase no es válido "})
+    if request.form.get('verificarAlumno'):
+        a = Usuario.query\
+        .filter(Usuario.ci == request.form.get('v'))\
+        .filter(Usuario.tipo == 4).first()
+        if a:
+            return ({
+              "registro":"listo"
+          })
+        else:
+            return jsonify({
+              "registro":"falta"
+          })
 
 @app.route("/estado", methods=['POST','GET'])
 @login_required
