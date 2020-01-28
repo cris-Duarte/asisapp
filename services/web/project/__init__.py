@@ -50,6 +50,14 @@ def login():
 @app.route("/perfil", methods=['POST'])
 @login_required
 def perfil():
+    mh = db.session.query(Materia, Carrera, Horario)\
+    .filter(Materia.docente == current_user.id)\
+    .filter(Materia.carrera==Carrera.id)\
+    .filter(Materia.id==Horario.materia)\
+    .filter(Materia.activo==True)\
+    .filter(Horario.activo==True)\
+    .all()
+
     return render_template("perfil.html")
 
 @app.route("/materias", methods=['POST'])
@@ -319,6 +327,7 @@ class Inscripcion(db.Model):
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
+
 
 class Alumno(db.Model):
     __tablename__ = "alumnos"
