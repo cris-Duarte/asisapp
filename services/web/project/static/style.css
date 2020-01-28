@@ -47,12 +47,7 @@ svg {
 .boton_materias{
   display: inline-block;
   float: right;
-  vertical-align: middle;
-  text-align: center;
-  width: inherit;
-  height: 100%;
 }
-
 
 .bs-callout {
     padding: 20px;
@@ -66,7 +61,9 @@ svg {
 .bs-callout h4 {
     margin-top: 0;
     margin-bottom: 5px;
+    text-decoration: underline;
 }
+
 .bs-callout p:last-child {
     margin-bottom: 0;
 }

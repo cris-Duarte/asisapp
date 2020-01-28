@@ -11,11 +11,11 @@
 <div class="clases_hoy">
   {% for m in materias %}
   <div class="bs-callout bs-callout-primary"">
-    <div class="caja_materias"
-      <h4>{{ m[0].nombre }}</h4>
-      <h5>Curso: <span class="label label-primary">{{ m[0].curso }} {{ m[0].seccion }}</span></h5>
-      <h5>Carrera: <span class="label label-primary">{{ m[1].nombre_carrera }}</span></h5>
-      <h5>Horario: <span class="label label-primary">{{ m[2].dia }}, de {{ m[2].desde }} a {{ m[2].hasta }} horas</span></h5>
+    <div class="caja_materias">
+      <h4 class="nombre_materia">{{ m[0].nombre }}</h4>
+      <h5><span class="label label-primary">Curso:</span> {{ m[0].curso }} {{ m[0].seccion }}</h5>
+      <h5><span class="label label-primary">Carrera:</span> {{ m[1].nombre_carrera }}</h5>
+      <h5><span class="label label-primary">Horario:</span> {{ m[2].dia }}, de {{ m[2].desde }} a {{ m[2].hasta }} horas</h5>
     </div>
     <div class="boton_materias">
       <button type="button" name="button" class="btn btn-primary btn-lg">Llamar lista</button>
