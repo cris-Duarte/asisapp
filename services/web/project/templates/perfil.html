@@ -4,18 +4,32 @@
       {% endif %}
       {{ current_user.nombre }} {{ current_user.apellido }}</h1>
     <p>...</p>
-    <p><a class="btn btn-primary btn-lg" href="#clases_hoy" role="button">Ver Clases de hoy</a></p>
+    <p><a class="btn btn-primary btn-lg" href="#clases_semana" role="button">Ver Clases de hoy</a></p>
   </div>
 </div>
 <h3><span class="label label-primary">Clases de Hoy</span></h3>
 <div class="clases_hoy">
+  {% for m in materias %}
   <div class="bs-callout bs-callout-primary"">
-    <h4>Informatica</h4>
-    <p>info sobre la materia</p>
+    <div class="caja_materias"
+      <h4>{{ m[0].nombre }}</h4>
+      <h5>Curso: <span class="label label-primary">{{ m[0].curso }} {{ m[0].seccion }}</span></h5>
+      <h5>Carrera: <span class="label label-primary">{{ m[1].nombre_carrera }}</span></h5>
+      <h5>Horario: <span class="label label-primary">{{ m[2].dia }}, de {{ m[2].desde }} a {{ m[2].hasta }} horas</span></h5>
+    </div>
+    <div class="boton_materias">
+      <button type="button" name="button" class="btn btn-primary btn-lg">Llamar lista</button>
+    </div>
   </div>
+  {% else %}
+    <div class="bs-callout bs-callout-warning"">
+    <h4>No tiene ninguna clase asignada</h4>
+    <p>Si cree que esto es un error, por favor, contacte con su coordinador</p>
+  </div>
+  {% endfor %}
 </div>
 <h3><span class="label label-default">Clases de la semana</span></h3>
-<div class="clases_hoy">
+<div class="clases_semana">
   <div class="bs-callout bs-callout-default"">
     <h4>Informatica</h4>
     <p>info sobre la materia</p>

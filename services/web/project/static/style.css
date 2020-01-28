@@ -40,12 +40,28 @@ svg {
   text-align: center;
 }
 
+.caja_materias{
+  display: inline-block;
+  width: 70%;
+}
+.boton_materias{
+  display: inline-block;
+  float: right;
+  vertical-align: middle;
+  text-align: center;
+  width: inherit;
+  height: 100%;
+}
+
+
 .bs-callout {
     padding: 20px;
     margin: 20px 0;
     border: 3px solid #eee;
     border-left-width: 10px;
     border-radius: 3px;
+    overflow: hidden;
+
 }
 .bs-callout h4 {
     margin-top: 0;

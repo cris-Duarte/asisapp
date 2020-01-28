@@ -58,7 +58,7 @@ def perfil():
     .filter(Horario.activo==True)\
     .all()
 
-    return render_template("perfil.html")
+    return render_template("perfil.html",materias=mh)
 
 @app.route("/materias", methods=['POST'])
 @login_required
