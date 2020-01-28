@@ -1,1 +1,23 @@
-<h2>Hola <b>{{ current_user.nombre }} {{ current_user.apellido }}</b></h2>
+<div class="jumbotron">
+  <div class="container">
+    <h1>Hola {% if current_user.tipo == 3 %}Prof.
+      {% endif %}
+      {{ current_user.nombre }} {{ current_user.apellido }}</h1>
+    <p>...</p>
+    <p><a class="btn btn-primary btn-lg" href="#clases_hoy" role="button">Ver Clases de hoy</a></p>
+  </div>
+</div>
+<h3><span class="label label-primary">Clases de Hoy</span></h3>
+<div class="clases_hoy">
+  <div class="bs-callout bs-callout-primary"">
+    <h4>Informatica</h4>
+    <p>info sobre la materia</p>
+  </div>
+</div>
+<h3><span class="label label-default">Clases de la semana</span></h3>
+<div class="clases_hoy">
+  <div class="bs-callout bs-callout-default"">
+    <h4>Informatica</h4>
+    <p>info sobre la materia</p>
+  </div>
+</div>

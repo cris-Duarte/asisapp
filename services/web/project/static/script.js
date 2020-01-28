@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+  perfil();
+});
+var perfil = function() {
   const request = new XMLHttpRequest();
   request.open('POST', '/perfil');
   request.onload = () => {
@@ -6,8 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   request.send();
   return false;
-
-});
+}
 
 var materias = function() {
   const request = new XMLHttpRequest();
