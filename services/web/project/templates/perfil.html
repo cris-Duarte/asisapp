@@ -9,13 +9,13 @@
 </div>
 <h3><span class="label label-primary">Clases de Hoy</span></h3>
 <div class="clases_hoy">
-  {% for m in materias %}
+  {% for clases_hoy in clase_hoy %}
   <div class="bs-callout bs-callout-primary"">
     <div class="caja_materias">
-      <h4 class="nombre_materia">{{ m[0].nombre }}</h4>
-      <h5><span class="label label-primary">Curso:</span> {{ m[0].curso }} {{ m[0].seccion }}</h5>
-      <h5><span class="label label-primary">Carrera:</span> {{ m[1].nombre_carrera }}</h5>
-      <h5><span class="label label-primary">Horario:</span> {{ m[2].dia }}, de {{ m[2].desde }} a {{ m[2].hasta }} horas</h5>
+      <h4 class="nombre_materia">{{ clases_hoy[0].nombre }}</h4>
+      <h5><span class="label label-primary">Curso:</span> {{ clases_hoy[0].curso }} {{ clases_hoy[0].seccion }}</h5>
+      <h5><span class="label label-primary">Carrera:</span> {{ clases_hoy[1].nombre_carrera }}</h5>
+      <h5><span class="label label-primary">Horario:</span> {{ clases_hoy[2].dia }}, de {{ clases_hoy[2].desde }} a {{ clases_hoy[2].hasta }} horas</h5>
     </div>
     <div class="boton_materias">
       <button type="button" name="button" class="btn btn-primary btn-lg">Llamar lista</button>
@@ -23,15 +23,26 @@
   </div>
   {% else %}
     <div class="bs-callout bs-callout-warning"">
-    <h4>No tiene ninguna clase asignada</h4>
+    <h4>No tiene ninguna clase para el día de hoy</h4>
     <p>Si cree que esto es un error, por favor, contacte con su coordinador</p>
   </div>
   {% endfor %}
 </div>
-<h3><span class="label label-default">Clases de la semana</span></h3>
-<div class="clases_semana">
+<h3><span class="label label-default">Clases paras la semana</span></h3>
+<div class="clases_hoy">
+  {% for clases_semana in clase_semana %}
   <div class="bs-callout bs-callout-default"">
-    <h4>Informatica</h4>
-    <p>info sobre la materia</p>
+    <div class="caja_materias">
+      <h4 class="nombre_materia">{{ clases_semana[0].nombre }}</h4>
+      <h5><span class="label label-default">Curso:</span> {{ clases_semana[0].curso }} {{ clases_semana[0].seccion }}</h5>
+      <h5><span class="label label-default">Carrera:</span> {{ clases_semana[1].nombre_carrera }}</h5>
+      <h5><span class="label label-default">Horario:</span> {{ clases_semana[2].dia }}, de {{ clases_semana[2].desde }} a {{ clases_semana[2].hasta }} horas</h5>
+    </div>
   </div>
+  {% else %}
+    <div class="bs-callout bs-callout-warning"">
+    <h4>No tiene ninguna clase para el resto de la semana</h4>
+    <p>Si cree que esto es un error, por favor, contacte con su coordinador</p>
+  </div>
+  {% endfor %}
 </div>

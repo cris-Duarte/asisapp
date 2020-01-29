@@ -60,7 +60,17 @@ def perfil():
     .filter(Horario.activo==True)\
     .all()
     t = Tiempo()
-    return render_template("perfil.html",materias=mh,ahora=t.fecha(),hora=t.hora())
+    clase_hoy = []
+    clase_semana = []
+
+    for materia in mh:
+        if t.interfecha(materia[2].inicio,materia[2].fin):
+            if t.eshoy(materia[2].dia):
+                clase_hoy.append(materia)
+            else:
+                clase_semana.append(materia)
+
+    return render_template("perfil.html",clase_hoy=clase_hoy,clase_semana=clase_semana,ahora=t.fecha(),hora=t.hora())
 
 @app.route("/materias", methods=['POST'])
 @login_required
