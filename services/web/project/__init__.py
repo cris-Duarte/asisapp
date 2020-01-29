@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 from flask_login import LoginManager,login_user,logout_user,login_required, current_user
 from flask_bootstrap import Bootstrap
+from datetime import datetime, date, timedelta
+import calendar
 
 
 app = Flask(__name__)
@@ -57,8 +59,8 @@ def perfil():
     .filter(Materia.activo==True)\
     .filter(Horario.activo==True)\
     .all()
-
-    return render_template("perfil.html",materias=mh)
+    t = Tiempo()
+    return render_template("perfil.html",materias=mh,ahora=t.fecha(),hora=t.hora())
 
 @app.route("/materias", methods=['POST'])
 @login_required
@@ -236,6 +238,50 @@ def alumnos():
                 "clase":'alert-success',
                 "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
                 })
+
+
+class Tiempo():
+    def __init__(self):
+        self.date = datetime.now()
+    def hora(self):
+        h = "{}:{}:{}".format(self.date.hour, self.date.minute, self.date.second)
+        return h
+    def fecha(self):
+        meses = ("Enero", "Febrero", "Marzo", "Abri", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+        dias = ("Lunes", "Martes","Miercoles","Jueves","Viernes","Sabado","Domingo")
+        numero_dia = self.date.day
+        mes = meses[self.date.month - 1]
+        dia = dias[self.date.isoweekday() - 1]
+        anho = self.date.year
+        f = "{}, {} de {} del {}".format(dia, numero_dia, mes, anho)
+        return f
+
+    def eshoy(self,d):
+        dias = ("Lunes", "Martes","Miercoles","Jueves","Viernes","Sabado","Domingo")
+        numero_dia = self.date.day
+        dia = dias[self.date.isoweekday() - 1]
+        if dia == d:
+            return True
+        else:
+            return False
+
+    def interfecha(self,i,f):
+        inicio = datetime.strptime(i,"%Y-%m-%d")
+        fin = datetime.strptime(f,"%Y-%m-%d")
+        if self.date > inicio and self.date < fin:
+            return True
+        else:
+            return False
+    def esahora(self,d,h):
+        desde = datetime.strptime(d, "%H:%M")
+        hasta = datetime.strptime(h, "%H:%M")
+        strahora = str(self.date.hour)+":"+str(self.date.minute)
+        ahora = datetime.strptime(strahora, "%H:%M")
+        if ahora < hasta and ahora > desde:
+            i = hasta - ahora
+            return i.seconds
+        else:
+            return False
 
 
 @app.route("/estado", methods=['POST','GET'])

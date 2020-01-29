@@ -3,7 +3,7 @@
     <h1>Hola {% if current_user.tipo == 3 %}Prof.
       {% endif %}
       {{ current_user.nombre }} {{ current_user.apellido }}</h1>
-    <p>...</p>
+      <h3><span class="label label-success">{{ ahora }}, {{ hora }} horas.</span></h3>
     <p><a class="btn btn-primary btn-lg" href="#clases_semana" role="button">Ver Clases de hoy</a></p>
   </div>
 </div>
