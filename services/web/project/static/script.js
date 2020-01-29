@@ -9,7 +9,11 @@ var perfil = function() {
   };
   request.send();
   return false;
-}
+};
+
+var llamarlista = function(id) {
+
+};
 
 var cantidad_alumnos = function(m) {
   const request = new XMLHttpRequest();

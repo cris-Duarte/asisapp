@@ -67,9 +67,9 @@ def perfil():
         if t.interfecha(materia[2].inicio,materia[2].fin):
             if t.eshoy(materia[2].dia):
                 if not t.esahora(materia[2].desde,materia[2].hasta):
-                    materia[2].falta = t.esahora(materia[2].desde,materia[2].hasta)
-                else:
                     materia[2].falta = 0
+                else:
+                    materia[2].falta = t.esahora(materia[2].desde,materia[2].hasta)
                 clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)
@@ -351,6 +351,8 @@ class Horario(db.Model):
     sala = db.Column(db.String(10), nullable=False)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
+    asistencias = db.relationship('Asistencia', backref='asistencias', lazy=True)
+
 
 class Carrera(db.Model):
     __tablename__ = "carreras"
@@ -396,6 +398,21 @@ class Inscripcion(db.Model):
     alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
 
+class Diadeclase(db.Model):
+    __tablename__ = "diasdeclases"
+    id = db.Column(db.Integer, primary_key=True)
+    horario = db.Column(db.Integer, db.ForeignKey("horarios.id"), nullable=False)
+    fecha = db.Column(db.String(50), nullable=False)
+    llamados = db.Column(db.Integer, default=0,nullable=False)
+    asistentes = db.Column(db.Integer, default=0,nullable=False)
+
+class Asistencia(db.Model):
+    __tablename__= "asistencias"
+    id = db.Column(db.Integer, primary_key=True)
+    diadeclase = db.Column(db.Integer, db.ForeignKey("diasdeclases.id"), nullable=False)
+    alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
+    hora = db.Column(db.String(15), nullable=False)
+    condicion = db.Column(db.String(10), nullable=False)
 
 class Alumno(db.Model):
     __tablename__ = "alumnos"
@@ -409,3 +426,4 @@ class Alumno(db.Model):
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     con = db.Column(db.String(200), nullable=False)
     inscriptos = db.relationship('Inscripcion', backref='inscripcion_alumnos', lazy=True)
+    asistencias = db.relationship('Asistencia', backref='asistencias', lazy=True)
