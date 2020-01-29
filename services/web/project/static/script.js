@@ -19,7 +19,7 @@ var cantidad_alumnos = function(m) {
   data.append('rca',true);
   request.open('POST', '/alumnos');
   request.onload = () => {
-  ca = document.querySelectorAll('.cant_a');
+  ca = document.querySelectorAll('.cant_a'+m);
   for (var i = 0; i < ca.length; i++) {
     ca[i].innerHTML = request.response;;
   }
