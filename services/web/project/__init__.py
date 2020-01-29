@@ -66,6 +66,10 @@ def perfil():
     for materia in mh:
         if t.interfecha(materia[2].inicio,materia[2].fin):
             if t.eshoy(materia[2].dia):
+                if not t.esahora(materia[2].desde,materia[2].hasta):
+                    materia[2].falta = t.esahora(materia[2].desde,materia[2].hasta)
+                else:
+                    materia[2].falta = 0
                 clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)
@@ -223,6 +227,7 @@ def alumnos():
                 })
             else:
                 i = Inscripcion(materia=m.id,alumno=a.id)
+                m.cantidad += 1
                 q = db.session.add(i)
                 db.session.commit()
                 return jsonify({
@@ -242,6 +247,7 @@ def alumnos():
             db.session.commit()
             m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
             i = Inscripcion(materia=m.id,alumno=a.id)
+            m.cantidad += 1
             q = db.session.add(i)
             db.session.commit()
             return jsonify({
@@ -323,6 +329,7 @@ class Materia(db.Model):
     codigo = db.Column(db.String(20),nullable=False)
     curso = db.Column(db.String(10),nullable=False)
     seccion = db.Column(db.String(10),nullable=False)
+    cantidad = db.Column(db.Integer, default=0, nullable=False)
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"))
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)

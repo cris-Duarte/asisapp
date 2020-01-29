@@ -12,13 +12,15 @@
   {% for clases_hoy in clase_hoy %}
   <div class="bs-callout bs-callout-primary"">
     <div class="caja_materias">
-      <h4 class="nombre_materia">{{ clases_hoy[0].nombre }}</h4>
+      <h4 class="nombre_materia">{{ clases_hoy[0].nombre }}, <span class="label label-primary">Cógigo: {{ clases_hoy[0].codigo }}</span></h4>
       <h5><span class="label label-primary">Curso:</span> {{ clases_hoy[0].curso }} {{ clases_hoy[0].seccion }}</h5>
       <h5><span class="label label-primary">Carrera:</span> {{ clases_hoy[1].nombre_carrera }}</h5>
+      <h5><span class="label label-primary">Sala:</span> {{ clases_hoy[2].sala }}</h5>
       <h5><span class="label label-primary">Horario:</span> {{ clases_hoy[2].dia }}, de {{ clases_hoy[2].desde }} a {{ clases_hoy[2].hasta }} horas</h5>
+      <h3><span class="label label-info">Hay  {{ clases_hoy[0].cantidad }} alumnos registrados.</span></h3>
     </div>
     <div class="boton_materias">
-      <button type="button" name="button" class="btn btn-primary btn-lg">Llamar lista</button>
+      <button type="button" name="button" class="btn btn-primary btn-lg" onclick="intervalo({{ clases_hoy[2].falta }})">Llamar lista</button>
     </div>
   </div>
   {% else %}
@@ -33,10 +35,12 @@
   {% for clases_semana in clase_semana %}
   <div class="bs-callout bs-callout-default"">
     <div class="caja_materias">
-      <h4 class="nombre_materia">{{ clases_semana[0].nombre }}</h4>
+      <h4 class="nombre_materia">{{ clases_semana[0].nombre }} <span class="label label-default">Cógigo: {{ clases_semana[0].codigo }}</span></h4>
       <h5><span class="label label-default">Curso:</span> {{ clases_semana[0].curso }} {{ clases_semana[0].seccion }}</h5>
       <h5><span class="label label-default">Carrera:</span> {{ clases_semana[1].nombre_carrera }}</h5>
+      <h5><span class="label label-default">Sala:</span> {{ clases_semana[2].sala }}</h5>
       <h5><span class="label label-default">Horario:</span> {{ clases_semana[2].dia }}, de {{ clases_semana[2].desde }} a {{ clases_semana[2].hasta }} horas</h5>
+      <h3><span class="label label-info">Hay  {{ clases_semana[0].cantidad }} alumnos registrados.</span></h3>
     </div>
   </div>
   {% else %}
