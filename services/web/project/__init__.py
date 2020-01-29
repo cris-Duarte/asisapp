@@ -178,6 +178,11 @@ def salir():
 
 @app.route("/alumnos", methods=['POST'])
 def alumnos():
+    if request.form.get('rca'):
+        c = Materia.query.filter_by(id = int(request.form.get('m'))).first()
+        c = c.cantidad
+        return str(c)
+
     if request.form.get('verificarMateria'):
         m = db.session.query(Materia, Carrera, Usuario)\
         .filter(Materia.carrera == Carrera.id)\

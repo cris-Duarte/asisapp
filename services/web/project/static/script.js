@@ -11,6 +11,23 @@ var perfil = function() {
   return false;
 }
 
+var cantidad_alumnos = function(m) {
+  const request = new XMLHttpRequest();
+  request.open('POST', '/alumnos');
+  const data = new FormData();
+  data.append('m',m);
+  data.append('rca',true);
+  request.open('POST', '/alumnos');
+  request.onload = () => {
+  ca = document.querySelectorAll('.cant_a');
+  for (var i = 0; i < ca.length; i++) {
+    ca[i].innerHTML = request.response;;
+  }
+  };
+  request.send(data);
+  return false;
+};
+
 var materias = function() {
   const request = new XMLHttpRequest();
   request.open('POST', '/materias');
