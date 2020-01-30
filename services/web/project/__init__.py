@@ -180,6 +180,7 @@ def salir():
 
 
 @app.route("/alumnos", methods=['POST'])
+@login_required
 def alumnos():
     if request.form.get('rca'):
         c = Materia.query.filter_by(id = int(request.form.get('m'))).first()
@@ -234,7 +235,8 @@ def alumnos():
                     'mensaje':'Ya te has registrado a '+m.nombre
                 })
             else:
-                i = Inscripcion(materia=m.id,alumno=a.id)
+                t = Tiempo()
+                i = Inscripcion(materia=m.id,alumno=a.id,fecha=t.fecha())
                 m.cantidad += 1
                 q = db.session.add(i)
                 db.session.commit()
@@ -254,7 +256,8 @@ def alumnos():
             db.session.add(a)
             db.session.commit()
             m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
-            i = Inscripcion(materia=m.id,alumno=a.id)
+            t = Tiempo()
+            i = Inscripcion(materia=m.id,alumno=a.id, fecha=t.fecha())
             m.cantidad += 1
             q = db.session.add(i)
             db.session.commit()
@@ -306,7 +309,10 @@ class Tiempo():
         else:
             return False
 
-
+@app.route("/lista/<int:d>", methods=['GET'])
+@login_required
+def lista(d):
+    return "lista para dia de clase "+str(d)
 @app.route("/estado", methods=['POST','GET'])
 @login_required
 def estado():
@@ -398,6 +404,7 @@ class Inscripcion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
+    fecha = db.Column(db.String(50), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
 
 class Diadeclase(db.Model):
