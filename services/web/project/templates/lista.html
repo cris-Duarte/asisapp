@@ -1,0 +1,44 @@
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='script_lista.js')}}"></script>
+
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='style_lista.css')}}">
+{% endblock %}
+
+{% block html_attribs %} lang="es"{% endblock %}
+
+
+{% block title %}
+  Lista de Asistencia de dc.Materia.nombre
+{% endblock %}
+
+{% block content %}
+
+{% if current_user.is_authenticated %}
+  {% if ahora %}
+  <div class="page-header">
+    <h1>{{ dc.Materia.nombre }} <small> - Lista de Asistencia</small></h1>
+    <h1>{{ dc.Carrera.nombre_carrera }} <small> - {{ dc.Materia.curso }} Curso, Seccion {{ dc.Materia.seccion }}</small></h1>
+    <h1>{{ dc.Materia.cantidad }} alumnos</h1>
+  </div>
+
+  {% else %}
+  <div class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    No se puede llamar la lista fuera de horario.<br> Los {{ dc.Horario.dia }}, las clases de {{ dc.Materia.nombre }} son desde las {{ dc.Horario.desde }} hasta las {{ dc.Horario.hasta }} horas, ahora son las <b>{{ hora }}</b>
+  </div>
+  <button type="button" class="btn btn-danger btn-xl" onclick="cerrar()">
+    <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar ventana
+  </button>
+
+  {% endif %}
+{% endif %}
+
+{% endblock %}

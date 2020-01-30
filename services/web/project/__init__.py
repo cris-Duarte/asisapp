@@ -312,7 +312,14 @@ class Tiempo():
 @app.route("/lista/<int:d>", methods=['GET'])
 @login_required
 def lista(d):
-    return "lista para dia de clase "+str(d)
+    diadeclase = db.session.query(Carrera, Materia, Horario, Diadeclase)\
+    .filter(Diadeclase.id==1)\
+    .first()
+    t = Tiempo()
+    ahora = t.esahora(diadeclase.Horario.desde,diadeclase.Horario.hasta)
+
+    return render_template('lista.html',dc=diadeclase, ahora=ahora,hora=t.hora())
+
 @app.route("/estado", methods=['POST','GET'])
 @login_required
 def estado():
