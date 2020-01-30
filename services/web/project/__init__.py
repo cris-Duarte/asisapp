@@ -66,10 +66,13 @@ def perfil():
     for materia in mh:
         if t.interfecha(materia[2].inicio,materia[2].fin):
             if t.eshoy(materia[2].dia):
-                if not t.esahora(materia[2].desde,materia[2].hasta):
-                    materia[2].falta = 0
-                else:
-                    materia[2].falta = t.esahora(materia[2].desde,materia[2].hasta)
+                dc = Diadeclase.query.filter(and_(Diadeclase.horario==materia[2].id,Diadeclase.fecha==t.fecha()))
+                if dc.count() == 0:
+                    dc = Diadeclase(horario=materia[2].id,fecha=t.fecha())
+                    db.session.add(dc)
+                    db.session.commit()
+                dc = Diadeclase.query.filter(and_(Diadeclase.horario==materia[2].id,Diadeclase.fecha==t.fecha())).first()
+                materia[2].diadeclase = dc.id
                 clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)
@@ -299,8 +302,7 @@ class Tiempo():
         strahora = str(self.date.hour)+":"+str(self.date.minute)
         ahora = datetime.strptime(strahora, "%H:%M")
         if ahora < hasta and ahora > desde:
-            i = hasta - ahora
-            return i.seconds
+            return True
         else:
             return False
 
@@ -351,7 +353,7 @@ class Horario(db.Model):
     sala = db.Column(db.String(10), nullable=False)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
-    asistencias = db.relationship('Asistencia', backref='asistencias', lazy=True)
+    diasdeclases = db.relationship('Diadeclase', backref='diasdeclases', lazy=True)
 
 
 class Carrera(db.Model):
