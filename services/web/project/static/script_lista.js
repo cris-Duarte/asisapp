@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   duplalumno.style.display = 'block';
   duplalumno.style.opacity = 0.2;
   document.getElementById('siguiente').appendChild(duplalumno);
-  alert('ok');
+
 });
 
 //.dataset.id;
@@ -34,7 +34,6 @@ var siguiente = function () {
     } else {
       p.replaceChild(duplalumno, p.childNodes[0]);
     }
-
     if (indice_actual == alumnos.length) {
       p = document.getElementById('actual');
       p.innerHTML = '<p class="alumno label label-info label-alumno">Ya haz llamado toda la lista</p>';
@@ -44,11 +43,10 @@ var siguiente = function () {
     p = document.getElementById('actual');
     p.replaceChild(duplalumno, p.childNodes[0]);
     }
-    if (indice_actual == alumnos.length) {
+    if (indice_actual == alumnos.length - 1 ) {
       p = document.getElementById('siguiente');
       p.removeChild(p.childNodes[0]);
-    }
-    else {
+    } else if(indice_actual == alumnos.length){} else{
       duplalumno = alumnos[indice_actual+1].cloneNode(true);
       duplalumno.style.display = 'block';
       duplalumno.style.opacity = 0.2;
@@ -77,14 +75,16 @@ var atras = function () {
     p = document.getElementById('actual');
     p.replaceChild(duplalumno, p.childNodes[0]);
 
-    duplalumno = alumnos[indice_actual+1].cloneNode(true);
-    duplalumno.style.display = 'block';
-    duplalumno.style.opacity = 0.2;
-    p = document.getElementById('siguiente');
-    if (indice_actual == alumnos.length) {
-      p.appendChild(duplalumno);
-    } else {
-      p.replaceChild(duplalumno, p.childNodes[0]);
+    if (indice_actual != alumnos.length - 1){
+      duplalumno = alumnos[indice_actual+1].cloneNode(true);
+      duplalumno.style.display = 'block';
+      duplalumno.style.opacity = 0.2;
+      p = document.getElementById('siguiente');
+      if (indice_actual == alumnos.length - 2) {
+        p.appendChild(duplalumno);
+      } else {
+        p.replaceChild(duplalumno, p.childNodes[0]);
+      }
     }
   }
 };
