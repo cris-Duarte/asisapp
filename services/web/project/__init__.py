@@ -315,10 +315,15 @@ def lista(d):
     diadeclase = db.session.query(Carrera, Materia, Horario, Diadeclase)\
     .filter(Diadeclase.id==1)\
     .first()
+
+    alumnos = i = db.session.query(Inscripcion)\
+    .join(Alumno)\
+    .filter(Inscripcion.materia==d)\
+    .all()
     t = Tiempo()
     ahora = t.esahora(diadeclase.Horario.desde,diadeclase.Horario.hasta)
 
-    return render_template('lista.html',dc=diadeclase, ahora=ahora,hora=t.hora())
+    return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
 
 @app.route("/estado", methods=['POST','GET'])
 @login_required

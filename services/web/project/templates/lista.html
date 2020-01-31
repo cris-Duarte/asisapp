@@ -22,12 +22,52 @@
 
 {% if current_user.is_authenticated %}
   {% if ahora %}
-  <div class="page-header">
-    <h1>{{ dc.Materia.nombre }} <small> - Lista de Asistencia</small></h1>
-    <h1>{{ dc.Carrera.nombre_carrera }} <small> - {{ dc.Materia.curso }} Curso, Seccion {{ dc.Materia.seccion }}</small></h1>
-    <h1>{{ dc.Materia.cantidad }} alumnos</h1>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Lista de Asistencia - {{ dc.Materia.nombre }}</h3>
+    </div>
+    <div class="panel-body">
+
+      <h4><span class="label label-default">{{ dc.Carrera.nombre_carrera }} - {{ dc.Materia.curso }} Curso, Seccion {{ dc.Materia.seccion }}</span></h4>
+      <h4><span class="label label-default">{{ dc.Materia.cantidad }} alumnos</span></h4>
+      <h3 class="panel-title"><span class="label-title label-primary">Alumnos</span></h3><br>
+      <div id="listado">
+      {% for alumno in alumnos %}
+        <p class="alumno" data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+      {% else %}
+        <p>nada</p>
+      {% endfor %}
+      <span class="label label-default label-alumno" id="anterior" onclick="atras()"></span>
+      <span class="label label-default label-alumno" id="actual"></span>
+      <span class="label label-default label-alumno" id="siguiente"></span>
+      </div>
+      <div class="btn-group-justified" role="group" aria-label="...">
+        <a role="button" class="btn btn-warning btn-lg" onclick="ausente()">
+          <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Ausente</a>
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Justificado - Salud</a></li>
+            <li><a href="#">Justificado - Trabajo</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Justificado - Otro</a></li>
+          </ul>
+
+        </div>
+        <a role="button" class="btn btn-success btn-lg" onclick="presente()">
+          <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Presente</a>
+      </div>
+    </div>
   </div>
 
+  <br>
+  <button type="button" class="btn btn-danger btn-xl" onclick="cerrar()">
+    <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar ventana
+  </button>
   {% else %}
   <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
