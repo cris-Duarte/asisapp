@@ -33,13 +33,13 @@
       <h3 class="panel-title"><span class="label-title label-primary">Alumnos</span></h3><br>
       <div id="listado">
       {% for alumno in alumnos %}
-        <p class="alumno" data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+        <p class="alumno label label-default label-alumno" data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
       {% else %}
         <p>nada</p>
       {% endfor %}
-      <span class="label label-default label-alumno" id="anterior" onclick="atras()"></span>
-      <span class="label label-default label-alumno" id="actual"></span>
-      <span class="label label-default label-alumno" id="siguiente"></span>
+      <span id="anterior" onclick="atras()"></span>
+      <span id="actual"></span>
+      <span id="siguiente"></span>
       </div>
       <div class="btn-group-justified" role="group" aria-label="...">
         <a role="button" class="btn btn-warning btn-lg" onclick="ausente()">
