@@ -191,11 +191,27 @@ def periodos():
         p.activo = False
         db.session.commit()
         s_periodos = True
+    if request.form.get('guardarmodperiodo'):
+        p = Periodo.query.get(int(request.form.get('pid')))
+        p.nombre_periodo=request.form.get('pnombre')
+        p.inicio=request.form.get('pfechad')
+        p.fin=request.form.get('pfechah')
+        db.session.commit()
+        s_periodos = True
 
-    periodos = Periodo.query\
-    .filter(Periodo.activo==True)\
-    .all()
-    return render_template('periodos.html',s_periodos=s_periodos,periodos=periodos)
+    if request.form.get('modperiodo'):
+        p = Periodo.query.get(int(request.form.get('pid')))
+        return jsonify({
+        "id":p.id,
+        "nombre":p.nombre_periodo,
+        "inicio":p.inicio,
+        "fin":p.fin
+        })
+    else:
+        periodos = Periodo.query\
+        .filter(Periodo.activo==True)\
+        .all()
+        return render_template('periodos.html',s_periodos=s_periodos,periodos=periodos)
 
 
 @app.route("/salir")

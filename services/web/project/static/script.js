@@ -47,15 +47,23 @@ var periodos = function() {
   return false;
 };
 
-var addPeriodo = function () {
+var addPeriodo = function (id) {
   const data = new FormData();
   data.append('pnombre',document.getElementById('pnombre').value);
   data.append('pfechad',document.getElementById('pfechad').value);
   data.append('pfechah',document.getElementById('pfechah').value);
-  data.append('altaperiodo',true);
+  if (id != null){
+    data.append('pid',id);
+    data.append('guardarmodperiodo',true);
+  } else {
+    data.append('altaperiodo',true);
+  }
   const request = new XMLHttpRequest();
   request.open('POST', '/periodos');
   request.onload = () => {
+    if (id != null){
+      pcancelar();
+    }
     document.getElementById('tablaperiodos').innerHTML = request.response;
   };
   request.send(data);
@@ -67,7 +75,7 @@ var addPeriodo = function () {
 var peliminar = function (pid) {
   const data = new FormData();
   data.append('pid',pid);
-  data.append('bajaperiodo');
+  data.append('bajaperiodo',true);
   const request = new XMLHttpRequest();
   request.open('POST', '/periodos');
   request.onload = () => {
@@ -76,8 +84,36 @@ var peliminar = function (pid) {
   request.send(data);
 
   return false;
-}
+};
+var pmodificar = function (pid) {
+  const data = new FormData();
+  data.append('pid',pid);
+  data.append('modperiodo',true);
+  const request = new XMLHttpRequest();
+  request.open('POST', '/periodos');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    document.getElementById('pnombre').value = respuesta.nombre;
+    document.getElementById('pfechad').value = respuesta.inicio;
+    document.getElementById('pfechah').value = respuesta.fin;
+    b = document.getElementById('btnPeriodo');
+    b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
+    b.removeAttribute("onclick");
+    b.setAttribute("onclick",`addPeriodo(${respuesta.id})`);
+  };
+  request.send(data);
 
+  return false;
+};
+var pcancelar = function () {
+  document.getElementById('pnombre').value = "";
+  document.getElementById('pfechad').value = "";
+  document.getElementById('pfechah').value = "";
+  btn = document.getElementById('btnPeriodo');
+  btn.removeAttribute("onclick");
+  btn.setAttribute("onclick","addPeriodo()");
+  btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo';
+};
 var malta = function(id) {
     const request = new XMLHttpRequest();
     const data = new FormData();
