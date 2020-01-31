@@ -325,14 +325,38 @@ def lista(d):
 
     return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
 
-@app.route("/estado", methods=['POST','GET'])
+
+
+@app.route("/listar", methods=['POST'])
 @login_required
-def estado():
-    return render_template("estado.html")
+def listar():
+    alumno = request.form.get('ida')
+    diadeclase = request.form.get('idc')
+    condicion = request.form.get('condicion')
+    t = Tiempo()
 
+    asis = Asistencia.query\
+    .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase)).first()
 
+    if not asis:
+        asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Entrada')
+        db.session.add(asistencia)
+        db.session.commit()
+    else:
+        asis.condicion = condicion
+        db.session.commit()
 
+    a = db.session.query(Alumno)\
+    .join(Asistencia)\
+    .filter(Asistencia.diadeclase==diadeclase)\
+    .filter(Asistencia.alumno==Alumno.id)\
+    .filter(Alumno.id==alumno)\
+    .first()
 
+    return jsonify({
+      "nombre": a.apellido+", "+a.nombre,
+      "condicion": a.asistencias[0].condicion
+  })
 
 """ESTOS SON LOS MODELOS"""
 
@@ -433,7 +457,8 @@ class Asistencia(db.Model):
     diadeclase = db.Column(db.Integer, db.ForeignKey("diasdeclases.id"), nullable=False)
     alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
     hora = db.Column(db.String(15), nullable=False)
-    condicion = db.Column(db.String(10), nullable=False)
+    condicion = db.Column(db.String(25), nullable=False)
+    tipo = db.Column(db.String(10), nullable=False)
 
 class Alumno(db.Model):
     __tablename__ = "alumnos"

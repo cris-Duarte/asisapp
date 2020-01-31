@@ -5,13 +5,12 @@
   margin: .3em;
 }
 #btn-principales{
-  position: relative;
   bottom: 10;
   right: 10;
   left: 10;
 }
 .volver {
-  position: relative;
+  float: right;
   right: 0;
 
   margin-right: 5px;

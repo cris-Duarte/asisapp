@@ -18,9 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //.dataset.id;
 
-var comenzar = function () {
 
-}
 
 var siguiente = function () {
   if (indice_actual < alumnos.length) {
@@ -89,12 +87,27 @@ var atras = function () {
   }
 };
 
-var presente = function () {
-  alumnos[indice_actual].className = 'alumno label label-success label-alumno'
-  siguiente();
-}
+var listar = function (idc,condicion) {
+  a = document.getElementById('actual');
+  ida = a.childNodes[0].dataset.id;
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('ida',ida);
+  data.append('idc',idc);
+  data.append('condicion',condicion);
+  request.open('POST', '/listar');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    if (respuesta.condicion == 'Ausente'){
+      start('danger','<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      alumnos[indice_actual].className = 'alumno label label-danger label-alumno';
+    } else if (condicion == 'Presente') {
+      start('success','<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      alumnos[indice_actual].className = 'alumno label label-success label-alumno';
+    }
+    siguiente();
+  };
+  request.send(data);
+  return false;
 
-var ausente = function () {
-  alumnos[indice_actual].className = 'alumno label label-warning label-alumno'
-  siguiente();
 }
