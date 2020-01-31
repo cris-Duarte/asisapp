@@ -22,7 +22,7 @@ var comenzar = function () {
 }
 
 var siguiente = function () {
-  if (indice_actual < alumnos.length) {
+  if (indice_actual < alumnos.length - 1) {
     indice_actual++;
     duplalumno = alumnos[indice_actual-1].cloneNode(true);
     duplalumno.style.display = 'block';
@@ -31,7 +31,7 @@ var siguiente = function () {
       p.appendChild(duplalumno);
     } else {
       p.replaceChild(duplalumno, p.childNodes[0]);
-  }
+    }
 
     duplalumno = alumnos[indice_actual].cloneNode(true);
     duplalumno.style.display = 'block';
@@ -39,7 +39,7 @@ var siguiente = function () {
     p.replaceChild(duplalumno, p.childNodes[0]);
     if (indice_actual == alumnos.length - 1) {
       p = document.getElementById('siguiente');
-      p.removeChild(p,childNodes[0]);
+      p.removeChild(p.childNodes[0]);
     } else {
       duplalumno = alumnos[indice_actual+1].cloneNode(true);
       duplalumno.style.display = 'block';
@@ -51,7 +51,6 @@ var siguiente = function () {
 };
 
 var atras = function () {
-
   if (indice_actual > 0) {
     indice_actual--;
     if (indice_actual == 0) {
@@ -67,10 +66,15 @@ var atras = function () {
     duplalumno.style.display = 'block';
     p = document.getElementById('actual');
     p.replaceChild(duplalumno, p.childNodes[0]);
+
     duplalumno = alumnos[indice_actual+1].cloneNode(true);
     duplalumno.style.display = 'block';
     p = document.getElementById('siguiente');
-    p.replaceChild(duplalumno, p.childNodes[0]);
+    if (indice_actual == alumnos.length-2) {
+      p.appendChild(duplalumno);
+    } else {
+      p.replaceChild(duplalumno, p.childNodes[0]);
+    }
   }
 };
 
