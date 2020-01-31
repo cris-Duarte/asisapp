@@ -173,6 +173,31 @@ def miscelaneos():
         .all()
         return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
 
+@app.route("/periodos", methods=['POST'])
+@login_required
+def periodos():
+    s_periodos = False
+    if request.form.get('altaperiodo'):
+        p = Periodo(\
+        nombre_periodo=request.form.get('pnombre'),\
+        inicio=request.form.get('pfechad'),\
+        fin=request.form.get('pfechah'))
+        db.session.add(p)
+        db.session.commit()
+        s_periodos = True
+
+    if request.form.get('bajaperiodo'):
+        p = Periodo.query.get(int(request.form.get('pid')))
+        p.activo = False
+        db.session.commit()
+        s_periodos = True
+
+    periodos = Periodo.query\
+    .filter(Periodo.activo==True)\
+    .all()
+    return render_template('periodos.html',s_periodos=s_periodos,periodos=periodos)
+
+
 @app.route("/salir")
 def salir():
     logout_user()
@@ -397,6 +422,13 @@ class Horario(db.Model):
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     diasdeclases = db.relationship('Diadeclase', backref='diasdeclases', lazy=True)
 
+class Periodo(db.Model):
+    __tablename__ = "periodos"
+    id = db.Column(db.Integer, primary_key=True)
+    nombre_periodo = db.Column(db.String(100), nullable=False)
+    inicio = db.Column(db.String(20), nullable=False)
+    fin = db.Column(db.String(20), nullable=False)
+    activo = db.Column(db.Boolean(), default=True, nullable=False)
 
 class Carrera(db.Model):
     __tablename__ = "carreras"

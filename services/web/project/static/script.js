@@ -11,10 +11,6 @@ var perfil = function() {
   return false;
 };
 
-var llamarlista = function(id) {
-
-};
-
 var cantidad_alumnos = function(m) {
   const request = new XMLHttpRequest();
   request.open('POST', '/alumnos');
@@ -41,6 +37,46 @@ var materias = function() {
   request.send();
   return false;
 };
+var periodos = function() {
+  const request = new XMLHttpRequest();
+  request.open('POST', '/periodos');
+  request.onload = () => {
+      document.getElementById('body').innerHTML = request.response;
+  };
+  request.send();
+  return false;
+};
+
+var addPeriodo = function () {
+  const data = new FormData();
+  data.append('pnombre',document.getElementById('pnombre').value);
+  data.append('pfechad',document.getElementById('pfechad').value);
+  data.append('pfechah',document.getElementById('pfechah').value);
+  data.append('altaperiodo',true);
+  const request = new XMLHttpRequest();
+  request.open('POST', '/periodos');
+  request.onload = () => {
+    document.getElementById('tablaperiodos').innerHTML = request.response;
+  };
+  request.send(data);
+
+  return false;
+
+};
+
+var peliminar = function (pid) {
+  const data = new FormData();
+  data.append('pid',pid);
+  data.append('bajaperiodo');
+  const request = new XMLHttpRequest();
+  request.open('POST', '/periodos');
+  request.onload = () => {
+    document.getElementById('tablaperiodos').innerHTML = request.response;
+  };
+  request.send(data);
+
+  return false;
+}
 
 var malta = function(id) {
     const request = new XMLHttpRequest();
