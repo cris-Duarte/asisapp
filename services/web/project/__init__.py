@@ -313,12 +313,12 @@ class Tiempo():
 @login_required
 def lista(d):
     diadeclase = db.session.query(Carrera, Materia, Horario, Diadeclase)\
-    .filter(Diadeclase.id==1)\
+    .filter(Diadeclase.id==d)\
     .first()
 
     alumnos = i = db.session.query(Inscripcion)\
     .join(Alumno)\
-    .filter(Inscripcion.materia==d)\
+    .filter(Inscripcion.materia==diadeclase[1].id)\
     .all()
     t = Tiempo()
     ahora = t.esahora(diadeclase.Horario.desde,diadeclase.Horario.hasta)
