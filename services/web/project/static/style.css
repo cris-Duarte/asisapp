@@ -5,6 +5,11 @@ body {
 .panel-interno{
   padding: .50rem;
 }
+h5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
 a, input{
 
   margin-bottom: .40rem;
@@ -44,9 +49,9 @@ svg {
   display: inline-block;
   width: 70%;
 }
-.boton_materias{
-  display: inline-block;
+.btn-llamar{
   float: right;
+  bottom: 0;
 }
 
 

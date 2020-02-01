@@ -4,6 +4,21 @@
 .panel {
   margin: .3em;
 }
+
+html,body{
+margin:0px;
+height:100%;
+}
+
+#panel-lista{
+    position: fixed;
+    bottom: 5;
+    top: 5;
+    right: 2;
+    left: 2;
+    height: 100%;
+}
+
 #btn-principales{
   bottom: 10;
   right: 10;

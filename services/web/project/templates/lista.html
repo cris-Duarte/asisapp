@@ -23,7 +23,7 @@
 
 {% if current_user.is_authenticated %}
   {% if ahora %}
-  <div class="panel panel-default">
+  <div id="panel-lista" class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Lista de Asistencia - {{ dc.Materia.nombre }}</h3>
     </div>
@@ -39,7 +39,7 @@
       {% for alumno in alumnos %}
         <p class="alumno label label-default label-alumno" data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
       {% else %}
-        <p>nada</p>
+        <p class="label label-warning label-alumno">No hay alumnos registrados</p>
       {% endfor %}
       <span id="anterior" onclick="atras()"></span>
       <span id="actual"></span>
@@ -47,11 +47,10 @@
       </div>
       <div id="btn-principales" class="btn-group-justified" role="group" aria-label="...">
         <a role="button" class="btn btn-danger btn-lg" onclick="listar({{dc.Diadeclase.id}},'Ausente')">
-          <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Ausente</a>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Ausente</a>
         <div class="btn-group dropup">
           <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-            <span class="caret"></span>
+            <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu">
@@ -63,7 +62,7 @@
 
         </div>
         <a role="button" class="btn btn-success btn-lg" onclick="listar({{dc.Diadeclase.id}},'Presente')">
-          <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Presente</a>
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Presente</a>
       </div>
     </div>
   </div>
@@ -75,9 +74,9 @@
     <span class="sr-only">Error:</span>
     No se puede llamar la lista fuera de horario.<br> Los {{ dc.Horario.dia }}, las clases de {{ dc.Materia.nombre }} son desde las {{ dc.Horario.desde }} hasta las {{ dc.Horario.hasta }} horas, ahora son las <b>{{ hora }}</b>
   </div>
-  <button type="button" class="btn btn-danger btn-xl" onclick="cerrar()">
-    <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar ventana
-  </button>
+  <a role="button" class="btn btn-primary volver" href="{{ url_for('dashboard') }}">
+    <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver
+  </a>
 
   {% endif %}
 {% endif %}

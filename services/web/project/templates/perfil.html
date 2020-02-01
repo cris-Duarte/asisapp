@@ -17,13 +17,11 @@
       <h5><span class="label label-primary">Curso:</span> {{ clases_hoy[0].curso }} {{ clases_hoy[0].seccion }}</h5>
       <h5><span class="label label-primary">Carrera:</span> {{ clases_hoy[1].nombre_carrera }}</h5>
       <h5><span class="label label-primary">Sala:</span> {{ clases_hoy[2].sala }}</h5>
-      <h5><span class="label label-primary">Horario:</span> {{ clases_hoy[2].dia }}, de {{ clases_hoy[2].desde }} a {{ clases_hoy[2].hasta }} horas</h5>
+      <h5><span class="label label-primary">Horario:</span> {{ clases_hoy[2].dia }}, de {{ clases_hoy[2].desde }} a {{ clases_hoy[2].hasta }} horas. {{ clases_hoy[3].nombre_periodo }}</h5>
       <h3><span class="label label-info" onclick="cantidad_alumnos({{ clases_hoy[0].id }})"><span class="cant_a{{ clases_hoy[0].id }}">{{ clases_hoy[0].cantidad }}</span> alumnos registrados  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></h3>
 
     </div>
-    <div class="boton_materias">
-      <a class="btn btn-primary btn-lg" href="{{ url_for('lista', d=clases_hoy[2].diadeclase) }}">Llamar lista</a>
-    </div>
+    <a class="btn btn-primary btn-lg btn-llamar" href="{{ url_for('lista', d=clases_hoy[2].diadeclase) }}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> Llamar lista</a>
   </div>
   {% else %}
     <div class="bs-callout bs-callout-warning"">
@@ -41,7 +39,7 @@
       <h5><span class="label label-default">Curso:</span> {{ clases_semana[0].curso }} {{ clases_semana[0].seccion }}</h5>
       <h5><span class="label label-default">Carrera:</span> {{ clases_semana[1].nombre_carrera }}</h5>
       <h5><span class="label label-default">Sala:</span> {{ clases_semana[2].sala }}</h5>
-      <h5><span class="label label-default">Horario:</span> {{ clases_semana[2].dia }}, de {{ clases_semana[2].desde }} a {{ clases_semana[2].hasta }} horas</h5>
+      <h5><span class="label label-default">Horario:</span> {{ clases_semana[2].dia }}, de {{ clases_semana[2].desde }} a {{ clases_semana[2].hasta }} horas. {{ clases_semana[3].nombre_periodo }}</h5>
       <h3>
         <span class="label label-info" onclick="cantidad_alumnos({{ clases_semana[0].id }})">
           <span class="cant_a{{ clases_semana[0].id }}">{{ clases_semana[0].cantidad }}

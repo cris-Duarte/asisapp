@@ -99,10 +99,10 @@ var listar = function (idc,condicion) {
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
     if (respuesta.condicion == 'Ausente'){
-      start('danger','<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      start('danger','<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
       alumnos[indice_actual].className = 'alumno label label-danger label-alumno';
     } else if (condicion == 'Presente') {
-      start('success','<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      start('success','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
       alumnos[indice_actual].className = 'alumno label label-success label-alumno';
     }
     siguiente();
