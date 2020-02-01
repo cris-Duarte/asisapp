@@ -27,8 +27,7 @@
               <tr>
               <td>
                 <h5>
-                  Sala: {{ horario.sala }},{{ horario.dia }}, de {{ horario.desde }} hasta {{ horario.hasta }} horas, periodo aqui
-                </h5>
+                  Sala: {{ horario.sala }}, {{ horario.dia }}, de {{ horario.desde }} hasta {{ horario.hasta }} horas, periodo aqui  </h5>
               </td>
               <td>
                 <button type="button" class="btn btn-info btn-xs" onclick="hmodificar({{ horario.id }},{{ horario.materia }})">
@@ -65,7 +64,7 @@
             </div>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Periodo de Clases</span>
-              <select class="form-control" name="hperiodo">
+              <select class="form-control" id="hperiodo">
                 <option value="falta_valor">Elija una opción</option>
                 {% for periodo in periodos %}
                 <option value="{{periodo.id}}" id="periodo{{periodo.id}}">{{periodo.nombre_periodo}}</option>

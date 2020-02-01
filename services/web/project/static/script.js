@@ -223,7 +223,7 @@ var minfo = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('minfo', true);
-  data.append('mhid',id);
+  data.append('mid',id);
   request.open('POST', '/detallemateria');
 
   request.onload = () => {
@@ -242,7 +242,7 @@ var minfo = function(id) {
 var addHorario = function(mhid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
-  data.append('mhid',mhid);
+  data.append('mid',mhid);
   e = document.getElementById('hdia');
   data.append('hdia', e.options[e.selectedIndex].value);
   e = document.getElementById('hperiodo');
@@ -266,7 +266,7 @@ var heliminar = function(hid , mid) {
   data.append('hbaja', true);
   data.append('hid',hid);
   data.append('mid',mid);
-  request.open('POST', '/miscelaneos');
+  request.open('POST', '/detallemateria');
 
   request.onload = () => {
     document.getElementById('mhorario').innerHTML = request.response;
@@ -281,13 +281,14 @@ var modHorario = function(hid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('hid',hid);
-  e = document.getElementById('mhdia');
-  data.append('hdia', e.options[e.selectedIndex].value);
+  data.append('mid',document.getElementById('btnhorario').dataset.id);
+  e = document.getElementById('hdia');
+  data.append('hdia',e.options[e.selectedIndex].value);
   e = document.getElementById('hperiodo');
   data.append('hperiodo', e.options[e.selectedIndex].value);
-  data.append('hhorad', document.getElementById('mhhorad').value);
-  data.append('hhorah', document.getElementById('mhhorah').value);
-  data.append('hsala', document.getElementById('mhsala').value);
+  data.append('hhorad', document.getElementById('hhorad').value);
+  data.append('hhorah', document.getElementById('hhorah').value);
+  data.append('hsala', document.getElementById('hsala').value);
   data.append('modHorario',true);
   request.open('POST', '/detallemateria');
   request.onload = () => {
@@ -300,6 +301,7 @@ var modHorario = function(hid) {
 };
 
 var hmodificar = function(hid, mid) {
+  hcancelar();
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('hmodificacion', true);
@@ -308,9 +310,9 @@ var hmodificar = function(hid, mid) {
   request.open('POST', '/detallemateria');
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
-    document.getElementById('mhhorad').value = respuesta.desde;
-    document.getElementById('mhhorah').value = respuesta.hasta;
-    document.getElementById('mhsala').value = respuesta.sala;
+    document.getElementById('hhorad').value = respuesta.desde;
+    document.getElementById('hhorah').value = respuesta.hasta;
+    document.getElementById('hsala').value = respuesta.sala;
     document.getElementById(`periodo${respuesta.periodo}`).setAttribute("selected","selected");
     document.getElementById(respuesta.dia).setAttribute("selected","selected");
 
@@ -324,11 +326,16 @@ var hmodificar = function(hid, mid) {
   return false;
 };
 
+
 var hcancelar = function (idm) {
-  document.getElementById('mhhorad').value = "";
-  document.getElementById('mhhorah').value = "";
-  document.getElementById('mhsala').value = "";
-  document.getElementById('mhdia').selectedIndex = 0;
+  o = document.querySelectorAll('option');
+  for (var i = 0; i < o.length; i++) {
+    o[i].removeAttribute("selected");
+  }
+  document.getElementById('hhorad').value = "";
+  document.getElementById('hhorah').value = "";
+  document.getElementById('hsala').value = "";
+  document.getElementById('hdia').selectedIndex = 0;
   document.getElementById('hperiodo').selectedIndex = 0;
 
   b = document.getElementById('btnhorario');

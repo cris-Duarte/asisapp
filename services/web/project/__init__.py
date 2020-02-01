@@ -139,7 +139,7 @@ def detallemateria():
         hasta=request.form.get('hhorah'),\
         periodo=request.form.get('hperiodo'),\
         sala=request.form.get('hsala'),\
-        materia=int(request.form.get('mhid')))
+        materia=int(request.form.get('mid')))
         db.session.add(h)
         db.session.commit()
         s_horarios = True
@@ -162,6 +162,7 @@ def detallemateria():
     if request.form.get('hmodificacion'):
         h = Horario.query.get(int(request.form.get('hid')))
         return jsonify({
+        "id":h.id,
         "dia":h.dia,
         "periodo":h.periodo,
         "desde":h.desde,
@@ -169,16 +170,12 @@ def detallemateria():
         "sala":h.sala
         })
     else:
-        m = Materia.query.get(int(request.form.get('mhid')))
+        m = Materia.query.get(int(request.form.get('mid')))
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
         .all()
-        materias = db.session.query(Materia)\
-            .join(Carrera, Usuario)\
-            .filter(Materia.activo == True)\
-            .all()
         horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
-        return render_template("detallemateria.html", m=m,periodos=periodos, horarios=horarios, minfo=True)
+        return render_template("detallemateria.html",s_horarios=s_horarios, m=m,periodos=periodos, horarios=horarios, minfo=True)
 
 @app.route("/periodos", methods=['POST'])
 @login_required
