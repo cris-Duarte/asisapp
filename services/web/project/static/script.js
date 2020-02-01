@@ -185,10 +185,10 @@ var mmodificar = function(id) {
     const respuesta = JSON.parse(request.responseText);
     document.getElementById('mnombre').value = respuesta.nombre;
     document.getElementById('mcodigo').value = respuesta.codigo;
-    document.getElementById(respuesta.curso).setAttribute("selected","selected");
-    document.getElementById(respuesta.seccion).setAttribute("selected","selected");
-    document.getElementById(`carrera${respuesta.carrera}`).setAttribute("selected","selected");
-    document.getElementById(`docente${respuesta.docente}`).setAttribute("selected","selected");
+    document.getElementById(`${respuesta.curso}`).selected = true;
+    document.getElementById(`${respuesta.seccion}`).selected = true;
+    document.getElementById(`carrera${respuesta.carrera}`).selected = true;
+    document.getElementById(`docente${respuesta.docente}`).selected = true;
 
     b = document.getElementById('btnmateria');
     b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
@@ -200,16 +200,13 @@ var mmodificar = function(id) {
   return false;
 };
 var mcancelar = function () {
-  o = document.querySelectorAll('option')
-  for (var i = 0; i < o.length; i++) {
-    o[i].removeAttribute("selected");
-  }
+
   document.getElementById('mnombre').value = "";
   document.getElementById('mcodigo').value = "";
-  document.getElementById('mcurso').selectedIndex = 0;
-  document.getElementById('mseccion').selectedIndex = 0;
-  document.getElementById('mcarrera').selectedIndex = 0;
-  document.getElementById('mdocente').selectedIndex = 0;
+  document.getElementById('mcurso').firstElementChild.selected = true;
+  document.getElementById('mseccion').firstElementChild.selected = true;
+  document.getElementById('mcarrera').firstElementChild.selected = true;
+  document.getElementById('mdocente').firstElementChild.selected = true;
 
   b = document.getElementById('btnmateria');
   b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Materia Nueva";
@@ -301,7 +298,7 @@ var modHorario = function(hid) {
 };
 
 var hmodificar = function(hid, mid) {
-  hcancelar();
+
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('hmodificacion', true);
@@ -313,8 +310,9 @@ var hmodificar = function(hid, mid) {
     document.getElementById('hhorad').value = respuesta.desde;
     document.getElementById('hhorah').value = respuesta.hasta;
     document.getElementById('hsala').value = respuesta.sala;
-    document.getElementById(`periodo${respuesta.periodo}`).setAttribute("selected","selected");
-    document.getElementById(respuesta.dia).setAttribute("selected","selected");
+    document.getElementById(`periodo${respuesta.periodo}`).selected = true;
+    document.getElementById(`${respuesta.dia}`).selected = true;
+
 
     btn = document.getElementById('btnhorario');
     btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Modificar Horario';
@@ -335,8 +333,8 @@ var hcancelar = function (idm) {
   document.getElementById('hhorad').value = "";
   document.getElementById('hhorah').value = "";
   document.getElementById('hsala').value = "";
-  document.getElementById('hdia').selectedIndex = 0;
-  document.getElementById('hperiodo').selectedIndex = 0;
+  document.getElementById('hdia').firstElementChild.selected = true;
+  document.getElementById('hperiodo').firstElementChild.selected = true;
 
   b = document.getElementById('btnhorario');
   b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Horario Nueva";
