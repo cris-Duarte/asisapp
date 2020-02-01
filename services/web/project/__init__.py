@@ -52,10 +52,11 @@ def login():
 @app.route("/perfil", methods=['POST'])
 @login_required
 def perfil():
-    mh = db.session.query(Materia, Carrera, Horario)\
+    mh = db.session.query(Materia, Carrera, Horario, Periodo)\
     .filter(Materia.docente == current_user.id)\
     .filter(Materia.carrera==Carrera.id)\
     .filter(Materia.id==Horario.materia)\
+    .filter(Horario.periodo==Periodo.id)\
     .filter(Materia.activo==True)\
     .filter(Horario.activo==True)\
     .all()
@@ -64,7 +65,7 @@ def perfil():
     clase_semana = []
 
     for materia in mh:
-        if t.interfecha(materia[2].inicio,materia[2].fin):
+        if t.interfecha(materia[3].inicio,materia[3].fin):
             if t.eshoy(materia[2].dia):
                 dc = Diadeclase.query.filter(and_(Diadeclase.horario==materia[2].id,Diadeclase.fecha==t.fecha()))
                 if dc.count() == 0:
@@ -174,7 +175,9 @@ def detallemateria():
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
         .all()
-        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
+        horarios = Horario.query\
+        .filter_by(activo=True)\
+        .filter_by(materia=int(request.form.get('mid')))
         return render_template("detallemateria.html",s_horarios=s_horarios, m=m,periodos=periodos, horarios=horarios, minfo=True)
 
 @app.route("/periodos", methods=['POST'])

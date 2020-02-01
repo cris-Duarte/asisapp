@@ -27,7 +27,7 @@
               <tr>
               <td>
                 <h5>
-                  Sala: {{ horario.sala }}, {{ horario.dia }}, de {{ horario.desde }} hasta {{ horario.hasta }} horas, periodo aqui  </h5>
+                  {{ horario.horariosperiodo.nombre_periodo }}. {{ horario.dia }}, de {{ horario.desde }} a {{ horario.hasta }} horas. Sala: {{ horario.sala }}  </h5>
               </td>
               <td>
                 <button type="button" class="btn btn-info btn-xs" onclick="hmodificar({{ horario.id }},{{ horario.materia }})">
