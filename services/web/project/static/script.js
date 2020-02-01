@@ -219,7 +219,7 @@ var minfo = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('minfo', true);
-  data.append('mid',id);
+  data.append('mhid',id);
   request.open('POST', '/detallemateria');
 
   request.onload = () => {
@@ -239,15 +239,15 @@ var addHorario = function(mhid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('mhid',mhid);
-  let e = document.getElementById('hdia');
+  e = document.getElementById('hdia');
   data.append('hdia', e.options[e.selectedIndex].value);
-  data.append('hfechad', document.getElementById('hfechad').value);
-  data.append('hfechah', document.getElementById('hfechah').value);
+  e = document.getElementById('hperiodo');
+  data.append('hperiodo', e.options[e.selectedIndex].value);
   data.append('hhorad', document.getElementById('hhorad').value);
   data.append('hhorah', document.getElementById('hhorah').value);
   data.append('hsala', document.getElementById('hsala').value);
   data.append('halta',true);
-  request.open('POST', '/miscelaneos');
+  request.open('POST', '/detallemateria');
   request.onload = () => {
     document.getElementById('mhorario').innerHTML = request.response;
   };
@@ -277,18 +277,18 @@ var modHorario = function(hid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('hid',hid);
-  let e = document.getElementById('mhdia');
+  e = document.getElementById('mhdia');
   data.append('hdia', e.options[e.selectedIndex].value);
-  data.append('hfechad', document.getElementById('mhfechad').value);
-  data.append('hfechah', document.getElementById('mhfechah').value);
+  e = document.getElementById('hperiodo');
+  data.append('hperiodo', e.options[e.selectedIndex].value);
   data.append('hhorad', document.getElementById('mhhorad').value);
   data.append('hhorah', document.getElementById('mhhorah').value);
   data.append('hsala', document.getElementById('mhsala').value);
   data.append('modHorario',true);
-  request.open('POST', '/miscelaneos');
+  request.open('POST', '/detallemateria');
   request.onload = () => {
     document.getElementById('mhorario').innerHTML = request.response;
-    $('#modHorarioModal').modal('hide');
+    hcancelar();
   };
   request.send(data);
 
@@ -301,15 +301,36 @@ var hmodificar = function(hid, mid) {
   data.append('hmodificacion', true);
   data.append('hid',hid);
   data.append('mid',mid);
-  request.open('POST', '/miscelaneos');
-
+  request.open('POST', '/detallemateria');
   request.onload = () => {
-    document.getElementById('auxBox1').innerHTML = request.response;
-    $('#modHorarioModal').modal('show');
+    const respuesta = JSON.parse(request.responseText);
+    document.getElementById('mhhorad').value = respuesta.desde;
+    document.getElementById('mhhorah').value = respuesta.hasta;
+    document.getElementById('mhsala').value = respuesta.sala;
+    document.getElementById(`periodo${respuesta.periodo}`).setAttribute("selected","selected");
+    document.getElementById(respuesta.dia).setAttribute("selected","selected");
+
+    btn = document.getElementById('btnhorario');
+    btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Modificar Horario';
+    btn.removeAttribute('onclick');
+    btn.setAttribute('onclick',`modHorario(${respuesta.id})`);
   };
   request.send(data);
 
   return false;
+};
+
+var hcancelar = function (idm) {
+  document.getElementById('mhhorad').value = "";
+  document.getElementById('mhhorah').value = "";
+  document.getElementById('mhsala').value = "";
+  document.getElementById('mhdia').selectedIndex = 0;
+  document.getElementById('hperiodo').selectedIndex = 0;
+
+  b = document.getElementById('btnhorario');
+  b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Horario Nueva";
+  b.removeAttribute("onclick");
+  b.setAttribute("onclick","malta("+idm+")");
 };
 
 // FIN DE ADMINISTRACION DE HORARIOS

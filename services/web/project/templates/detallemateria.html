@@ -1,4 +1,5 @@
 {% if minfo == True %}
+{% if not s_horarios %}
 <div id="minfoModal" class="modal" tabindex="-1" role="dialog" >
   <div class="modal-content">
     <div class="modal-body">
@@ -19,13 +20,14 @@
             </tr>
           </table>
           <div id="mhorario">
+{% endif %}
             <h4>Horario:</h4>
             <table>
               {% for horario in horarios %}
               <tr>
               <td>
                 <h5>
-                  Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el {{ horario.fin }}
+                  Sala: {{ horario.sala }},{{ horario.dia }}, de {{ horario.desde }} hasta {{ horario.hasta }} horas, periodo aqui
                 </h5>
               </td>
               <td>
@@ -43,6 +45,7 @@
             </td>
           {% endfor %}
           </table>
+{% if not s_horarios %}
         </div>
         </div>
 
@@ -52,12 +55,12 @@
               <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
               <select class="form-control" id="hdia">
                 <option value="falta_valor">Elija una opción</option>
-                <option value="Lunes">Lunes</option>
-                <option value="Martes">Martes</option>
-                <option value="Miercoles">Miercoles</option>
-                <option value="Jueves">Jueves</option>
-                <option value="Viernes">Viernes</option>
-                <option value="Sabado">Sábado</option>
+                <option value="Lunes" id="Lunes">Lunes</option>
+                <option value="Martes" id="Martes">Martes</option>
+                <option value="Miercoles" id="Miercoles">Miercoles</option>
+                <option value="Jueves" id="Jueves">Jueves</option>
+                <option value="Viernes" id="Viernes">Viernes</option>
+                <option value="Sabado" id="Sabado">Sábado</option>
               </select>
             </div>
             <div class="input-group">
@@ -83,106 +86,12 @@
               <input type="text" id="hsala" value="">
             </div>
 
-            <button onclick="addHorario({{m.id}})" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar</button>
+            <button onclick="addHorario({{m.id}})" class="btn btn-primary" type="button" id="btnhorario"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Horario Nuevo</button>
+            <button type="button" class="btn btn-danger" onclick='hcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
           </div>
-        <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar</button>
-
+        <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>
     </div>
   </div>
 </div>
-
-{% elif s_horarios %}
-<h4>Horario:</h4>
-<table>
-  {% for horario in horarios %}
-  <tr>
-  <td>
-    <h5>
-      Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el {{ horario.fin }}
-    </h5>
-  </td>
-  <td>
-    <button type="button" class="btn btn-info btn-xs" onclick="hmodificar({{ horario.id }},{{ horario.materia }})">
-      <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-    </button>
-    <button type="button" class="btn btn-danger btn-xs" onclick="heliminar({{ horario.id }},{{ horario.materia }})">
-      <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
-    </button>
-  </td>
-</tr>
-    {% else %}
-<td>
-    No hay horarios aún.
-</td>
-{% endfor %}
-</table>
 {% endif %}
-
-{% if hmod == True %}
-<div id="modHorarioModal" class="modal" tabindex="-1" role="dialog" >
-  <div class="modal-content">
-    <div class="modal-body">
-      <div class="panel panel-primary panel-interno">
-  <div class="panel-heading">Mofificación de Horario de {{  m.nombre }}</div>
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
-      <select class="form-control" id="mhdia">
-        {% if h.dia == "Lunes" %}
-          <option value="Lunes" selected>Lunes</option>
-        {% else %}
-          <option value="Lunes">Lunes</option>
-        {% endif %}
-        {% if h.dia == "Martes" %}
-          <option value="Martes" selected>Martes</option>
-        {% else %}
-          <option value="Martes">Martes</option>
-        {% endif %}
-        {% if h.dia == "Miercoles" %}
-          <option value="Miercoles" selected>Miercoles</option>
-        {% else %}
-          <option value="Miercoles">Miercoles</option>
-        {% endif %}
-        {% if h.dia == "Jueves" %}
-          <option value="Jueves" selected>Jueves</option>
-        {% else %}
-          <option value="Jueves">Jueves</option>
-        {% endif %}
-        {% if h.dia == "Viernes" %}
-          <option value="Viernes" selected>Viernes</option>
-        {% else %}
-          <option value="Viernes">Viernes</option>
-        {% endif %}
-        {% if h.dia == "Sabado" %}
-          <option value="Sabado" selected>Sábado</option>
-        {% else %}
-          <option value="Sabado">Sábado</option>
-        {% endif %}
-      </select>
-    </div>
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon3">Fechas de Clases</span>
-      <span class="input-group-addon" id="basic-addon3">Desde:</span>
-      <input class="form-control" type="date" id="mhfechad" value="{{ h.inicio }}">
-      <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-      <input class="form-control" type="date" id="mhfechah" value="{{ h.fin }}">
-    </div>
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
-      <span class="input-group-addon" name="hhorad">Desde:</span>
-      <input class="form-control" type="time" id="mhhorad" value="{{ h.desde }}">
-      <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-      <input class="form-control" type="time" id="mhhorah" value="{{ h.hasta }}">
-    </div>
-    <div class="input-group">
-      <span class="input-group-addon" id="sala">Sala</span>
-      <input type="text" id="mhsala" value="{{ h.sala }}">
-    </div>
-
-    <button onclick="modHorario({{h.id}})" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Modificación</button>
-    <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar</button>
-      </div>
-     </div>
-  </div>
-</div>
-
 {% endif %}

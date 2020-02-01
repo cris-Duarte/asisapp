@@ -133,47 +133,43 @@ def materias():
 def detallemateria():
     s_horarios = False
     if request.form.get('halta'):
-        h = Horario(dia=request.form.get('hdia'), desde=request.form.get('hhorad'), hasta=request.form.get('hhorah'), inicio=request.form.get('hfechad'), fin=request.form.get('hfechah'), sala=request.form.get('hsala'), materia=int(request.form.get('mhid')), activo=True)
+        h = Horario(\
+        dia=request.form.get('hdia'),\
+        desde=request.form.get('hhorad'),\
+        hasta=request.form.get('hhorah'),\
+        periodo=request.form.get('hperiodo'), \\
+        sala=request.form.get('hsala'),\
+        materia=int(request.form.get('mhid')))
         db.session.add(h)
         db.session.commit()
-        horarios = Horario.query\
-        .filter_by(activo=True)\
-        .filter_by(materia=int(request.form.get('mhid')))\
-        .order_by(Horario.id.asc())\
-        .all()
-        m = Materia.query.get(int(request.form.get('mhid')))
         s_horarios = True
-
     if request.form.get('hbaja'):
         h = Horario.query.get(int(request.form.get('hid')))
         h.activo = False
         db.session.commit()
-        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
         s_horarios = True
 
     if request.form.get('modHorario'):
         h = Horario.query.get(int(request.form.get('hid')))
         h.dia = request.form.get('hdia')
-        h.inicio = request.form.get('hfechad')
-        h.fin = request.form.get('hfechah')
+        h.periodo = request.form.get('hperiodo')
         h.desde = request.form.get('hhorad')
         h.hasta = request.form.get('hhorah')
         h.sala = request.form.get('hsala')
         db.session.commit()
         s_horarios = True
-        horarios = Horario.query\
-        .filter_by(activo=True)\
-        .filter_by(materia=h.materia)\
-        .order_by(Horario.id.asc())\
-        .all()
-        s_horarios=True
 
     if request.form.get('hmodificacion'):
         h = Horario.query.get(int(request.form.get('hid')))
-        m = Materia.query.get(int(request.form.get('mid')))
-        return render_template("detallemateria.html",h=h,m=m,hmod=True)
+        return jsonify({
+        "dia":h.dia,
+        "periodo":h.periodo,
+        "desde":h.desde,
+        "hasta":h.hasta,
+        "sala":h.sala
+        })
     else:
-        m = Materia.query.get(int(request.form.get('mid')))
+        m = Materia.query.get(int(request.form.get('mhid')))
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
         .all()
@@ -435,6 +431,7 @@ class Materia(db.Model):
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
     inscriptos = db.relationship('Inscripcion', backref='inscripcion_materia', lazy=True)
+    materia = db.relationship('Materia', backref='materias', lazy=True)
 
 class Horario(db.Model):
     __tablename__ = "horarios"
@@ -442,12 +439,13 @@ class Horario(db.Model):
     dia = db.Column(db.String(10), nullable=False)
     desde = db.Column(db.String(10), nullable=False)
     hasta = db.Column(db.String(10), nullable=False)
-    inicio = db.Column(db.String(10), nullable=False)
-    fin = db.Column(db.String(10), nullable=False)
     sala = db.Column(db.String(10), nullable=False)
-    materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     diasdeclases = db.relationship('Diadeclase', backref='diasdeclases', lazy=True)
+    materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
+    periodo = db.Column(db.Integer, db.ForeignKey("periodos.id"), nullable=False)
+
+
 
 class Periodo(db.Model):
     __tablename__ = "periodos"
@@ -456,6 +454,8 @@ class Periodo(db.Model):
     inicio = db.Column(db.String(20), nullable=False)
     fin = db.Column(db.String(20), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
+    horarios = db.relationship('Horario', backref='horarios', lazy=True)
+
 
 class Carrera(db.Model):
     __tablename__ = "carreras"
