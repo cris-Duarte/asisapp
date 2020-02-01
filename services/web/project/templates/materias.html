@@ -7,7 +7,7 @@
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon3">Curso</span>
           <select class="form-control" id="mcurso">
-              <option value="falta_valor">Elija una opción</option>
+              <option class="falta_valor" value="falta_valor">Elija una opción</option>
               <option value="1ro" id="1ro">Primero</option>
               <option value="2do" id="2do">Segundo</option>
               <option value="3ro" id="3ro">Tercero</option>
@@ -19,7 +19,7 @@
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon4">Sección</span>
           <select class="form-control" id="mseccion">
-              <option value="falta_valor">Elija una opción</option>
+              <option class="falta_valor" value="falta_valor">Elija una opción</option>
               <option value="A" id="A">A</option>
               <option value="B" id="B">B</option>
               <option value="C" id="C">C</option>
@@ -30,7 +30,7 @@
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Carreras</span>
             <select class="form-control" id="mcarrera" data-form="tipo">
-              <option value="falta_valor">Elija una opción</option>
+              <option class="falta_valor" value="falta_valor">Elija una opción</option>
                 {% for carrera in carreras %}
                     <option value="{{ carrera.id }}" id='carrera{{ carrera.id }}'>{{ carrera.nombre_carrera }}</option>
                 {% endfor %}
@@ -40,7 +40,7 @@
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Docente</span>
             <select class="form-control" id="mdocente">
-              <option value="falta_valor">Elija una opción</option>
+              <option class="falta_valor" value="falta_valor">Elija una opción</option>
                 {% for usuario in usuarios %}
                     <option value="{{ usuario.id }}" id='docente{{ usuario.id }}'>{{ usuario.nombre }} {{ usuario.apellido }}</option>
                 {% endfor %}

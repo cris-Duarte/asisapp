@@ -200,6 +200,10 @@ var mmodificar = function(id) {
   return false;
 };
 var mcancelar = function () {
+  o = document.querySelectorAll('option')
+  for (var i = 0; i < o.length; i++) {
+    o[i].removeAttribute("selected");
+  }
   document.getElementById('mnombre').value = "";
   document.getElementById('mcodigo').value = "";
   document.getElementById('mcurso').selectedIndex = 0;
@@ -330,7 +334,7 @@ var hcancelar = function (idm) {
   b = document.getElementById('btnhorario');
   b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Horario Nueva";
   b.removeAttribute("onclick");
-  b.setAttribute("onclick","malta("+idm+")");
+  b.setAttribute("onclick","malta("+b.dataset.id+")");
 };
 
 // FIN DE ADMINISTRACION DE HORARIOS

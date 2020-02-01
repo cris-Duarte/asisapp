@@ -54,7 +54,7 @@
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
               <select class="form-control" id="hdia">
-                <option value="falta_valor">Elija una opción</option>
+                <option class="falta_valor" value="falta_valor">Elija una opción</option>
                 <option value="Lunes" id="Lunes">Lunes</option>
                 <option value="Martes" id="Martes">Martes</option>
                 <option value="Miercoles" id="Miercoles">Miercoles</option>
@@ -86,7 +86,7 @@
               <input type="text" id="hsala" value="">
             </div>
 
-            <button onclick="addHorario({{m.id}})" class="btn btn-primary" type="button" id="btnhorario"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Horario Nuevo</button>
+            <button data-id="{{ m.id }}" onclick="addHorario({{m.id}})" class="btn btn-primary" type="button" id="btnhorario"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Horario Nuevo</button>
             <button type="button" class="btn btn-danger" onclick='hcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
           </div>
         <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>

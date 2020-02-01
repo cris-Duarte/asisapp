@@ -137,7 +137,7 @@ def detallemateria():
         dia=request.form.get('hdia'),\
         desde=request.form.get('hhorad'),\
         hasta=request.form.get('hhorah'),\
-        periodo=request.form.get('hperiodo'), \\
+        periodo=request.form.get('hperiodo'),\
         sala=request.form.get('hsala'),\
         materia=int(request.form.get('mhid')))
         db.session.add(h)
@@ -431,7 +431,7 @@ class Materia(db.Model):
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
     inscriptos = db.relationship('Inscripcion', backref='inscripcion_materia', lazy=True)
-    materia = db.relationship('Materia', backref='materias', lazy=True)
+    horariosmateria = db.relationship('Horario', backref='horariosmateria', lazy=True)
 
 class Horario(db.Model):
     __tablename__ = "horarios"
@@ -454,7 +454,7 @@ class Periodo(db.Model):
     inicio = db.Column(db.String(20), nullable=False)
     fin = db.Column(db.String(20), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
-    horarios = db.relationship('Horario', backref='horarios', lazy=True)
+    horariosperiodo = db.relationship('Horario', backref='horariosperiodo', lazy=True)
 
 
 class Carrera(db.Model):
