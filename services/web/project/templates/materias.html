@@ -1,36 +1,38 @@
-{% if not modMateria %}
-  {% if not s_materias %}
+{% if not s_materias %}
   <div class="panel panel-default">
     <div class="panel-heading">Formulario de Registro de Materias</div>
       <div class="panel-body">
-          <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre" onfocus="this.value=''" required>
-          <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo" onfocus="this.value=''" required>
+          <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre">
+          <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo">
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon3">Curso</span>
           <select class="form-control" id="mcurso">
-              <option value="1ro">Primero</option>
-              <option value="2do">Segundo</option>
-              <option value="3ro">Tercero</option>
-              <option value="4to">Cuarto</option>
-              <option value="5to">Quinto</option>
-              <option value="6to">Sexto</option>
+              <option value="falta_valor">Elija una opción</option>
+              <option value="1ro" id="1ro">Primero</option>
+              <option value="2do" id="2do">Segundo</option>
+              <option value="3ro" id="3ro">Tercero</option>
+              <option value="4to" id="4to">Cuarto</option>
+              <option value="5to" id="5to">Quinto</option>
+              <option value="6to" id="6to">Sexto</option>
           </select>
         </div>
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon4">Sección</span>
           <select class="form-control" id="mseccion">
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
+              <option value="falta_valor">Elija una opción</option>
+              <option value="A" id="A">A</option>
+              <option value="B" id="B">B</option>
+              <option value="C" id="C">C</option>
+              <option value="D" id="D">D</option>
           </select>
         </div>
 
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Carreras</span>
             <select class="form-control" id="mcarrera" data-form="tipo">
+              <option value="falta_valor">Elija una opción</option>
                 {% for carrera in carreras %}
-                    <option value="{{ carrera.id }}">{{ carrera.nombre_carrera }}</option>
+                    <option value="{{ carrera.id }}" id='carrera{{ carrera.id }}'>{{ carrera.nombre_carrera }}</option>
                 {% endfor %}
             </select>
           </div>
@@ -38,12 +40,14 @@
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Docente</span>
             <select class="form-control" id="mdocente">
+              <option value="falta_valor">Elija una opción</option>
                 {% for usuario in usuarios %}
-                    <option value="{{ usuario.id }}">{{ usuario.nombre }} {{ usuario.apellido }}</option>
+                    <option value="{{ usuario.id }}" id='docente{{ usuario.id }}'>{{ usuario.nombre }} {{ usuario.apellido }}</option>
                 {% endfor %}
             </select>
           </div>
-            <button onclick="malta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar</button>
+            <button id="btnmateria" onclick="malta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Materia Nueva</button>
+            <button type="button" class="btn btn-danger" onclick='mcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
         </div>
       </div>
 
@@ -84,117 +88,3 @@
       </tbody>
       </table>
       </div>
-
-
-
-{% else %}
-<div id="modModal" class="modal" tabindex="-1" role="dialog" >
-    <div class="modal-content">
-      <div class="modal-body">
-        <!-- IDEA: comienza intento de cambiar el formulario -->
-
-        <div class="panel panel-default">
-          <div class="panel-heading">Formulario de Modificación de Materias</div>
-            <div class="panel-body">
-                <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mmnombre" data-form="nombre" required value='{{ m.nombre }}'>
-                <input class="form-control" type="text" placeholder="Código de la Materia" id="mmcodigo" value='{{ m.codigo }}' required>
-              <div class="input-group">
-                <span class="input-group-addon" id="basic-addon3">Curso</span>
-                <select class="form-control" id="mmcurso" autocomple>
-                  {% if '1ro' == m.curso %}
-                    <option value="1ro" selected>Primero</option>
-                  {% else %}
-                    <option value="1ero">Primero</option>
-                  {% endif %}
-                  {% if '2do' == m.curso %}
-                    <option value="2do" selected>Segundo</option>
-                  {% else %}
-                    <option value="2do">Segundo</option>
-                  {% endif %}
-                  {% if '3ro' == m.curso %}
-                    <option value="3ro" selected>Tercero</option>
-                  {% else %}
-                    <option value="3ro">Tercero</option>
-                  {% endif %}
-                  {% if '4to' == m.curso %}
-                    <option value="4to" selected>Cuarto</option>
-                  {% else %}
-                    <option value="4to">Cuarto</option>
-                  {% endif %}
-                  {% if '5to' == m.curso %}
-                    <option value="5to" selected>Quinto</option>
-                  {% else %}
-                    <option value="5to">Quinto</option>
-                  {% endif %}
-                  {% if '6to' == m.curso %}
-                    <option value="6to" selected>Sexto</option>
-                  {% else %}
-                    <option value="6to">Sexto</option>
-                  {% endif %}
-                </select>
-              </div>
-              <div class="input-group">
-                <span class="input-group-addon" id="basic-addon4">Sección</span>
-                <select class="form-control" id="mmseccion">
-                  {% if 'A' == m.seccion %}
-                    <option value="A" selected>A</option>
-                  {% else %}
-                    <option value="A">A</option>
-                  {% endif %}
-                  {% if 'B' == m.seccion %}
-                    <option value="B" selected>B</option>
-                  {% else %}
-                    <option value="B">B</option>
-                  {% endif %}
-                  {% if 'C' == m.seccion %}
-                    <option value="C" selected>C</option>
-                  {% else %}
-                    <option value="C">C</option>
-                  {% endif %}
-                  {% if 'D' == m.seccion %}
-                    <option value="D" selected>D</option>
-                  {% else %}
-                    <option value="D">D</option>
-                  {% endif %}
-                </select>
-              </div>
-
-
-
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">Carreras</span>
-                  <select class="form-control" id="mmcarrera" data-form="tipo">
-                      {% for carrera in carreras %}
-                        {% if carrera.id == m.carrera %}
-                          <option value="{{ carrera.id }}" selected>{{ carrera.nombre_carrera }}</option>
-                        {% else %}
-                          <option value="{{ carrera.id }}">{{ carrera.nombre_carrera }}</option>
-                        {% endif %}
-                      {% endfor %}
-                  </select>
-                </div>
-
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">Docente</span>
-                  <select class="form-control" id="mmdocente" data-form="tipo">
-                      {% for usuario in usuarios %}
-                        {% if usuario.id == m.docente %}
-                          <option value="{{ usuario.id }}" selected>{{ usuario.nombre }} {{ usuario.apellido }}</option>
-                        {% else %}
-                          <option value="{{ usuario.id }}">{{ usuario.nombre }} {{ usuario.apellido }}</option>
-                        {% endif %}
-                      {% endfor %}
-                  </select>
-                </div>
-                  <button onclick="mmod({{ m.id }})" class="btn btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Modificación</button>
-                  <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cancelar</button>
-              </div>
-            </div>
-
-        <!-- IDEA: termina intento -->
-      </div>
-    </div>
-  </div>
-
-
-{% endif %}

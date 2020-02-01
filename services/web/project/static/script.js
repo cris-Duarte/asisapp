@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   perfil();
 });
+// Elementos cargados por el NAVBAR, perfil, materias, periodos
 var perfil = function() {
   const request = new XMLHttpRequest();
   request.open('POST', '/perfil');
@@ -10,24 +11,6 @@ var perfil = function() {
   request.send();
   return false;
 };
-
-var cantidad_alumnos = function(m) {
-  const request = new XMLHttpRequest();
-  request.open('POST', '/alumnos');
-  const data = new FormData();
-  data.append('m',m);
-  data.append('rca',true);
-  request.open('POST', '/alumnos');
-  request.onload = () => {
-  ca = document.querySelectorAll('.cant_a'+m);
-  for (var i = 0; i < ca.length; i++) {
-    ca[i].innerHTML = request.response;;
-  }
-  };
-  request.send(data);
-  return false;
-};
-
 var materias = function() {
   const request = new XMLHttpRequest();
   request.open('POST', '/materias');
@@ -47,6 +30,29 @@ var periodos = function() {
   return false;
 };
 
+//FIN Elementos cargados por el NAVBAR, perfil, materias, periodos
+
+// UTILITARIOS
+var cantidad_alumnos = function(m) {
+  const request = new XMLHttpRequest();
+  request.open('POST', '/alumnos');
+  const data = new FormData();
+  data.append('m',m);
+  data.append('rca',true);
+  request.open('POST', '/alumnos');
+  request.onload = () => {
+  ca = document.querySelectorAll('.cant_a'+m);
+  for (var i = 0; i < ca.length; i++) {
+    ca[i].innerHTML = request.response;;
+  }
+  };
+  request.send(data);
+  return false;
+};
+
+// FIN UTILITARIOS
+
+// INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
   const data = new FormData();
   data.append('pnombre',document.getElementById('pnombre').value);
@@ -114,11 +120,15 @@ var pcancelar = function () {
   btn.setAttribute("onclick","addPeriodo()");
   btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo';
 };
+// FIN DE ADMINISTRACION DE PERIODOS
+
+// INICIO DE ADMINISTRACION DE MATERIAS
 var malta = function(id) {
     const request = new XMLHttpRequest();
     const data = new FormData();
     data.append('mnombre', document.getElementById('mnombre').value);
     data.append('mcodigo', document.getElementById('mcodigo').value);
+
     let e = document.getElementById('mcurso');
     data.append('mcurso', e.options[e.selectedIndex].value);
 
@@ -134,43 +144,15 @@ var malta = function(id) {
     if (id == null){
       data.append('alta',true);
     } else {
-      data.append('a_modificar',id);
+      data.append('a_modificar',true);
+      data.append('mid',id);
     }
     request.open('POST', '/materias');
     request.onload = () => {
       if (id != null){
-        document.getElementById('body').innerHTML = request.response;
-
-      } else {
-        document.getElementById('tablaconsulta').innerHTML = request.response;
+        mcancelar();
       }
-    };
-    request.send(data);
-
-    return false;
-
-};
-var mmod = function(id) {
-    const request = new XMLHttpRequest();
-    const data = new FormData();
-    data.append('mnombre', document.getElementById('mmnombre').value);
-    data.append('mcodigo', document.getElementById('mmcodigo').value);
-    let e = document.getElementById('mmcurso');
-    data.append('mcurso', e.options[e.selectedIndex].value);
-
-    let f = document.getElementById('mmseccion');
-    data.append('mseccion', f.options[f.selectedIndex].value);
-
-    let g = document.getElementById('mmcarrera');
-    data.append('mcarrera', g.options[g.selectedIndex].value);
-
-    let h = document.getElementById('mmdocente');
-    data.append('mdocente', h.options[h.selectedIndex].value);
-    data.append('a_modificar',id);
-    request.open('POST', '/materias');
-    request.onload = () => {
-    document.getElementById('tablaconsulta').innerHTML = request.response;
-    $('#modModal').modal('hide');
+      document.getElementById('tablaconsulta').innerHTML = request.response;
     };
     request.send(data);
 
@@ -193,14 +175,52 @@ var meliminar = function(id) {
 
 };
 
+var mmodificar = function(id) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('modificacion', true);
+  data.append('mid',id);
+  request.open('POST', '/materias');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    document.getElementById('mnombre').value = respuesta.nombre;
+    document.getElementById('mcodigo').value = respuesta.codigo;
+    document.getElementById(respuesta.curso).setAttribute("selected","selected");
+    document.getElementById(respuesta.seccion).setAttribute("selected","selected");
+    document.getElementById(`carrera${respuesta.carrera}`).setAttribute("selected","selected");
+    document.getElementById(`docente${respuesta.docente}`).setAttribute("selected","selected");
 
+    b = document.getElementById('btnmateria');
+    b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
+    b.removeAttribute("onclick");
+    b.setAttribute("onclick",`malta(${respuesta.id})`);
+  };
+  request.send(data);
+
+  return false;
+};
+var mcancelar = function () {
+  document.getElementById('mnombre').value = "";
+  document.getElementById('mcodigo').value = "";
+  document.getElementById('mcurso').selectedIndex = 0;
+  document.getElementById('mseccion').selectedIndex = 0;
+  document.getElementById('mcarrera').selectedIndex = 0;
+  document.getElementById('mdocente').selectedIndex = 0;
+
+  b = document.getElementById('btnmateria');
+  b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Materia Nueva";
+  b.removeAttribute("onclick");
+  b.setAttribute("onclick","malta()");
+};
+
+// INICIO DE ADMINISTRACION DE PERIODOS
 
 var minfo = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('minfo', true);
   data.append('mid',id);
-  request.open('POST', '/miscelaneos');
+  request.open('POST', '/detallemateria');
 
   request.onload = () => {
     document.getElementById('mensaje').innerHTML = request.response;
@@ -212,26 +232,9 @@ var minfo = function(id) {
 
 };
 
-var cerrarModModal = function() {
-  $('#modModal').modal('hide');
-};
+// FIN DE ADMINISTRACION DE MATERIAS
 
-var mmodificar = function(id) {
-  const request = new XMLHttpRequest();
-  const data = new FormData();
-  data.append('modificacion', true);
-  data.append('mid',id);
-  request.open('POST', '/materias');
-
-  request.onload = () => {
-    document.getElementById('mensaje').innerHTML = request.response;
-    $('#modModal').modal('show');
-  };
-  request.send(data);
-
-  return false;
-};
-
+// INICIO DE ADMINISTRACION DE HORARIOS
 var addHorario = function(mhid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
@@ -308,3 +311,5 @@ var hmodificar = function(hid, mid) {
 
   return false;
 };
+
+// FIN DE ADMINISTRACION DE HORARIOS

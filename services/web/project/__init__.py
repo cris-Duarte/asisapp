@@ -94,8 +94,9 @@ def materias():
         m.activo = False
         db.session.commit()
         s_materias = True
-    if request.form.get('a_modificar') != None:
-        m = Materia.query.get(request.form.get('a_modificar'))
+
+    if request.form.get('a_modificar'):
+        m = Materia.query.get(request.form.get('mid'))
         m.nombre = request.form.get('mnombre')
         m.codigo = request.form.get('mcodigo')
         m.curso = request.form.get('mcurso')
@@ -107,9 +108,15 @@ def materias():
 
     if request.form.get('modificacion'):
         m = Materia.query.get(int(request.form.get('mid')))
-        carreras = Carrera.query.all()
-        usuarios = Usuario.query.filter_by(activo=True).all()
-        return render_template("materias.html", carreras=carreras, usuarios=usuarios,m=m,modMateria=True,s_materias=False)
+        return jsonify({
+        "id":m.id,
+        "nombre":m.nombre,
+        "codigo":m.codigo,
+        "curso":m.curso,
+        "seccion":m.seccion,
+        "carrera":m.carrera,
+        "docente":m.docente
+        })
     else:
         carreras = Carrera.query.all()
         materias = db.session.query(Materia)\
@@ -121,9 +128,9 @@ def materias():
         usuarios = Usuario.query.filter_by(activo=True).all()
         return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
 
-@app.route("/miscelaneos", methods=['POST'])
+@app.route("/detallemateria", methods=['POST'])
 @login_required
-def miscelaneos():
+def detallemateria():
     if request.form.get('minfo'):
         m = Materia.query.get(int(request.form.get('mid')))
         materias = db.session.query(Materia)\
