@@ -131,14 +131,7 @@ def materias():
 @app.route("/detallemateria", methods=['POST'])
 @login_required
 def detallemateria():
-    if request.form.get('minfo'):
-        m = Materia.query.get(int(request.form.get('mid')))
-        materias = db.session.query(Materia)\
-            .join(Carrera, Usuario)\
-            .filter(Materia.activo == True)\
-            .all()
-        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
-        return render_template("miscelaneos.html", m=m, horarios=horarios, minfo=True)
+    s_horarios = False
     if request.form.get('halta'):
         h = Horario(dia=request.form.get('hdia'), desde=request.form.get('hhorad'), hasta=request.form.get('hhorah'), inicio=request.form.get('hfechad'), fin=request.form.get('hfechah'), sala=request.form.get('hsala'), materia=int(request.form.get('mhid')), activo=True)
         db.session.add(h)
@@ -149,7 +142,7 @@ def detallemateria():
         .order_by(Horario.id.asc())\
         .all()
         m = Materia.query.get(int(request.form.get('mhid')))
-        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios,m=m)
+        s_horarios = True
 
     if request.form.get('hbaja'):
         h = Horario.query.get(int(request.form.get('hid')))
@@ -157,11 +150,6 @@ def detallemateria():
         db.session.commit()
         horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
         s_horarios = True
-        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
-    if request.form.get('hmodificacion'):
-        h = Horario.query.get(int(request.form.get('hid')))
-        m = Materia.query.get(int(request.form.get('mid')))
-        return render_template("miscelaneos.html",h=h,m=m,hmod=True)
 
     if request.form.get('modHorario'):
         h = Horario.query.get(int(request.form.get('hid')))
@@ -178,7 +166,23 @@ def detallemateria():
         .filter_by(materia=h.materia)\
         .order_by(Horario.id.asc())\
         .all()
-        return render_template("miscelaneos.html",s_horarios=True,horarios=horarios)
+        s_horarios=True
+
+    if request.form.get('hmodificacion'):
+        h = Horario.query.get(int(request.form.get('hid')))
+        m = Materia.query.get(int(request.form.get('mid')))
+        return render_template("detallemateria.html",h=h,m=m,hmod=True)
+    else:
+        m = Materia.query.get(int(request.form.get('mid')))
+        periodos = Periodo.query\
+        .filter(Periodo.activo==True)\
+        .all()
+        materias = db.session.query(Materia)\
+            .join(Carrera, Usuario)\
+            .filter(Materia.activo == True)\
+            .all()
+        horarios = Horario.query.filter_by(activo=True).filter_by(materia=int(request.form.get('mid')))
+        return render_template("detallemateria.html", m=m,periodos=periodos, horarios=horarios, minfo=True)
 
 @app.route("/periodos", methods=['POST'])
 @login_required

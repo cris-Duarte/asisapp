@@ -25,7 +25,7 @@
               <tr>
               <td>
                 <h5>
-                  Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el {{ horario.fin }} 
+                  Sala: {{ horario.sala }}, los días {{ horario.dia }} desde las {{ horario.desde }} hasta las {{ horario.hasta }} horas, desde el {{ horario.inicio }} hasta el {{ horario.fin }}
                 </h5>
               </td>
               <td>
@@ -51,6 +51,7 @@
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
               <select class="form-control" id="hdia">
+                <option value="falta_valor">Elija una opción</option>
                 <option value="Lunes">Lunes</option>
                 <option value="Martes">Martes</option>
                 <option value="Miercoles">Miercoles</option>
@@ -60,11 +61,15 @@
               </select>
             </div>
             <div class="input-group">
-              <span class="input-group-addon" id="basic-addon3">Fechas de Clases</span>
-              <span class="input-group-addon" id="basic-addon3">Desde:</span>
-              <input class="form-control" type="date" id="hfechad">
-              <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-              <input class="form-control" type="date" id="hfechah">
+              <span class="input-group-addon" id="basic-addon3">Periodo de Clases</span>
+              <select class="form-control" name="hperiodo">
+                <option value="falta_valor">Elija una opción</option>
+                {% for periodo in periodos %}
+                <option value="{{periodo.id}}" id="periodo{{periodo.id}}">{{periodo.nombre_periodo}}</option>
+                {% else %}
+                <option value="falta_valor">No hay periodos cargados</option>
+                {% endfor %}
+              </select>
             </div>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
