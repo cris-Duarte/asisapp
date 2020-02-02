@@ -67,13 +67,6 @@ def perfil():
     for materia in mh:
         if t.interfecha(materia[3].inicio,materia[3].fin):
             if t.eshoy(materia[2].dia):
-                dc = Diadeclase.query.filter(and_(Diadeclase.horario==materia[2].id,Diadeclase.fecha==t.fecha()))
-                if dc.count() == 0:
-                    dc = Diadeclase(horario=materia[2].id,fecha=t.fecha())
-                    db.session.add(dc)
-                    db.session.commit()
-                dc = Diadeclase.query.filter(and_(Diadeclase.horario==materia[2].id,Diadeclase.fecha==t.fecha())).first()
-                materia[2].diadeclase = dc.id
                 clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)
@@ -144,6 +137,8 @@ def detallemateria():
         db.session.add(h)
         db.session.commit()
         s_horarios = True
+        p = Periodo.query.get(int(request.form.get("hperiodo")))
+        dias_clases('alta',h.id,h.dia,p.inicio,p.fin)
     if request.form.get('hbaja'):
         h = Horario.query.get(int(request.form.get('hid')))
         h.activo = False
@@ -159,6 +154,8 @@ def detallemateria():
         h.sala = request.form.get('hsala')
         db.session.commit()
         s_horarios = True
+        p = Periodo.query.get(int(request.form.get("hperiodo")))
+        dias_clases('mod',h.id,request.form.get('hdia'),p.inicio,p.fin)
 
     if request.form.get('hmodificacion'):
         h = Horario.query.get(int(request.form.get('hid')))
@@ -313,15 +310,52 @@ def alumnos():
                 "clase":'alert-success',
                 "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
                 })
-
+def dias_clases(c,h,dia_clase,fi,ff):
+    sgt = datetime.strptime(fi,"%Y-%m-%d")
+    fin = datetime.strptime(ff,"%Y-%m-%d")
+    dia = ("Lunes", "Martes","Miercoles","Jueves","Viernes","Sabado","Domingo")
+    if c == 'alta':
+        b = True
+        while b:
+            if dia[sgt.isoweekday() - 1] == dia_clase:
+                fecha_clase = sgt
+                b = False
+            sgt = sgt + timedelta(days=1)
+        while fecha_clase <= fin:
+            d = Diadeclase(horario=h,fecha=fecha_clase)
+            db.session.add(d)
+            db.session.commit()
+            fecha_clase = fecha_clase + timedelta(days=7)
+    else:
+        t = Tiempo()
+        d = Diadeclase.query.filter_by(horario=h)
+        dias_mod = []
+        for dc in d:
+            fecha_lista = datetime.strptime(dc.fecha,"%Y-%m-%d %H:%M:%S")
+            if fecha_lista > t.s_fecha():
+                db.session.delete(dc)
+                db.session.commit()
+        sgt = t.s_fecha()
+        b = True
+        while b:
+            if dia[sgt.isoweekday() - 1] == dia_clase:
+                fecha_clase = sgt
+                b = False
+            sgt = sgt + timedelta(days=1)
+        while fecha_clase <= fin:
+            d = Diadeclase(horario=h,fecha=fecha_clase)
+            db.session.add(d)
+            db.session.commit()
+            fecha_clase = fecha_clase + timedelta(days=7)
+    return True
 
 class Tiempo():
     def __init__(self):
         fecha_sistema = datetime.now()
         retraso = timedelta(hours=3)
-        self.date = fecha_sistema - retraso 
+        self.date = fecha_sistema - retraso
     def hora(self):
-        h = "{}:{}:{}".format(self.date.hour, self.date.minute, self.date.second)
+        h = "{}:{}".format(self.date.hour, self.date.minute)
         return h
     def fecha(self):
         meses = ("Enero", "Febrero", "Marzo", "Abri", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
@@ -332,6 +366,13 @@ class Tiempo():
         anho = self.date.year
         f = "{}, {} de {} del {}".format(dia, numero_dia, mes, anho)
         return f
+    def fecha_com(self):
+        return self.date
+
+    def s_fecha(self):
+        sf = self.date
+        sf = sf.replace(hour=0, minute=0, second=0, microsecond=0)
+        return sf
 
     def eshoy(self,d):
         dias = ("Lunes", "Martes","Miercoles","Jueves","Viernes","Sabado","Domingo")
