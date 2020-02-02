@@ -317,7 +317,9 @@ def alumnos():
 
 class Tiempo():
     def __init__(self):
-        self.date = datetime.now()
+        fecha_sistema = datetime.now()
+        retraso = timedelta(hours=3)
+        self.date = fecha_sistema - retraso 
     def hora(self):
         h = "{}:{}:{}".format(self.date.hour, self.date.minute, self.date.second)
         return h
