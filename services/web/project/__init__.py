@@ -67,6 +67,10 @@ def perfil():
     for materia in mh:
         if t.interfecha(materia[3].inicio,materia[3].fin):
             if t.eshoy(materia[2].dia):
+                d = Diadeclase.query\
+                .filter(Diadeclase.horario==materia[2].id)\
+                .filter(Diadeclase.fecha==str(t.s_fecha())).first()
+                materia[3].diadeclase=d.id
                 clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)

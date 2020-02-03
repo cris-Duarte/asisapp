@@ -21,7 +21,7 @@
       <h3><span class="label label-info" onclick="cantidad_alumnos({{ clases_hoy[0].id }})"><span class="cant_a{{ clases_hoy[0].id }}">{{ clases_hoy[0].cantidad }}</span> alumnos registrados  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></h3>
 
     </div>
-    <a class="btn btn-primary btn-lg btn-llamar" href="{{ url_for('lista', d=clases_hoy[2].diadeclase) }}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> Llamar lista</a>
+    <a class="btn btn-primary btn-lg btn-llamar" href="{{ url_for('lista', d=clases_hoy[3].diadeclase) }}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> Llamar lista</a>
   </div>
   {% else %}
     <div class="bs-callout bs-callout-warning"">
