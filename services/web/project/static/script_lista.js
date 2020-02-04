@@ -1,15 +1,17 @@
-function cerrar() {
-   window.open('','_parent','');
-   window.close();
-}
 var alumnos = []
-var indice_actual = 0
+var indice_actual = 1
 document.addEventListener('DOMContentLoaded', () => {
   alumnos = document.querySelectorAll('.alumno');
+
   duplalumno = alumnos[0].cloneNode(true);
   duplalumno.style.display = 'block';
-  document.getElementById('actual').appendChild(duplalumno);
+  document.getElementById('anterior').appendChild(duplalumno);
+
   duplalumno = alumnos[1].cloneNode(true);
+  duplalumno.style.display = 'block';
+  document.getElementById('actual').appendChild(duplalumno);
+
+  duplalumno = alumnos[2].cloneNode(true);
   duplalumno.style.display = 'block';
   duplalumno.style.opacity = 0.2;
   document.getElementById('siguiente').appendChild(duplalumno);
@@ -17,6 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //.dataset.id;
+
+var s = function () {
+
+};
+
+var a = function () {
+
+};
 
 
 
@@ -34,7 +44,7 @@ var siguiente = function () {
     }
     if (indice_actual == alumnos.length) {
       p = document.getElementById('actual');
-      p.innerHTML = '<p class="alumno label label-info label-alumno">Ya haz llamado toda la lista</p>';
+      p.innerHTML = '<p class="alumno label label-info label-alumno">Fin de la lista</p>';
     } else {
     duplalumno = alumnos[indice_actual].cloneNode(true);
     duplalumno.style.display = 'block';
@@ -88,8 +98,9 @@ var atras = function () {
 };
 
 var listar = function (idc,condicion) {
+  if (indice_actual > 1 && indice_actual < alumnos.length-2) {
   a = document.getElementById('actual');
-  ida = a.childNodes[0].dataset.id;
+  ida = a.firstElementChild.dataset.id;
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('ida',ida);
@@ -109,5 +120,7 @@ var listar = function (idc,condicion) {
   };
   request.send(data);
   return false;
-
+} else {
+  siguiente();
+}
 }

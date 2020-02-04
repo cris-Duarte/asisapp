@@ -429,11 +429,10 @@ def lista(d):
 @app.route("/listar", methods=['POST'])
 @login_required
 def listar():
-    alumno = request.form.get('ida')
-    diadeclase = request.form.get('idc')
+    alumno = int(request.form.get('ida'))
+    diadeclase = int(request.form.get('idc'))
     condicion = request.form.get('condicion')
     t = Tiempo()
-
     asis = Asistencia.query\
     .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase)).first()
 
