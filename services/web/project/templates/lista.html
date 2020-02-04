@@ -16,7 +16,7 @@
 
 
 {% block title %}
-  Lista de Asistencia de dc.Materia.nombre
+  Lista de Asistencia de dc.diasdeclases.horariosmateria.nombre
 {% endblock %}
 
 {% block content %}
@@ -25,14 +25,14 @@
   {% if ahora %}
   <div id="panel-lista" class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Lista de Asistencia - {{ dc.Materia.nombre }}</h3>
+      <h3 class="panel-title">Lista de Asistencia - {{ dc.diasdeclases.horariosmateria.nombre }}</h3>
     </div>
     <div class="panel-body">
       <a role="button" class="btn btn-primary volver" href="{{ url_for('dashboard') }}">
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver
       </a>
-      <h4><span class="label label-default">{{ dc.Carrera.nombre_carrera }} - {{ dc.Materia.curso }} Curso, Seccion {{ dc.Materia.seccion }}</span></h4>
-      <h4><span class="label label-default">{{ dc.Materia.cantidad }} alumnos</span></h4>
+      <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.carreras.nombre_carrera }} - {{ dc.diasdeclases.horariosmateria.curso }} Curso, Seccion {{ dc.diasdeclases.horariosmateria.seccion }}</span></h4>
+      <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.cantidad }} alumnos</span></h4>
       <hr>
       <h3 class="panel-title"><span class="label-title label-primary">Alumnos</span></h3><br>
       <div id="listado">
@@ -46,7 +46,7 @@
       <span id="siguiente"></span>
       </div>
       <div id="btn-principales" class="btn-group-justified" role="group" aria-label="...">
-        <a role="button" class="btn btn-danger btn-lg" onclick="listar({{dc.Diadeclase.id}},'Ausente')">
+        <a role="button" class="btn btn-danger btn-lg" onclick="listar({{dc.diasdeclases.id}},'Ausente')">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Ausente</a>
         <div class="btn-group dropup">
           <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,25 +54,24 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu">
-            <li><a role="button" onclick="listar({{dc.Diadeclase.id}},'Justificado - Salud')">Justificado - Salud</a></li>
-            <li><a role="button" onclick="listar({{dc.Diadeclase.id}},'Justificado - Trabajo')">Justificado - Trabajo</a></li>
+            <li><a role="button" onclick="listar({{dc.diasdeclases.id}},'Justificado - Salud')">Justificado - Salud</a></li>
+            <li><a role="button" onclick="listar({{dc.diasdeclases.id}},'Justificado - Trabajo')">Justificado - Trabajo</a></li>
             <li role="separator" class="divider"></li>
-            <li><a role="button" onclick="listar({{dc.Diadeclase.id}},'Justificado - Otro')">Justificado - Otro</a></li>
+            <li><a role="button" onclick="listar({{dc.diasdeclases.id}},'Justificado - Otro')">Justificado - Otro</a></li>
           </ul>
 
         </div>
-        <a role="button" class="btn btn-success btn-lg" onclick="listar({{dc.Diadeclase.id}},'Presente')">
+        <a role="button" class="btn btn-success btn-lg" onclick="listar({{dc.diasdeclases.id}},'Presente')">
           <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Presente</a>
       </div>
     </div>
   </div>
 
-
   {% else %}
   <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span class="sr-only">Error:</span>
-    No se puede llamar la lista fuera de horario.<br> Los {{ dc.Horario.dia }}, las clases de {{ dc.Materia.nombre }} son desde las {{ dc.Horario.desde }} hasta las {{ dc.Horario.hasta }} horas, ahora son las <b>{{ hora }}</b>
+    No se puede llamar la lista fuera de horario.<br> Los {{ dc.diasdeclases.dia }}, las clases de {{ dc.diasdeclases.horariosmateria.nombre }} son desde las {{ dc.diasdeclases.desde }} hasta las {{ dc.diasdeclases.hasta }} horas, ahora son las <b>{{ hora }}</b>
   </div>
   <a role="button" class="btn btn-primary volver" href="{{ url_for('dashboard') }}">
     <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver

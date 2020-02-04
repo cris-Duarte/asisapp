@@ -65,12 +65,18 @@ def perfil():
     clase_semana = []
 
     for materia in mh:
-        if t.interfecha(materia[3].inicio,materia[3].fin):
-            if t.eshoy(materia[2].dia):
-                d = Diadeclase.query\
-                .filter(Diadeclase.horario==materia[2].id)\
-                .filter(Diadeclase.fecha==str(t.s_fecha())).first()
-                materia[3].diadeclase=d.id
+        if t.interfecha(materia.Periodo.inicio,materia.Periodo.fin):
+            if t.eshoy(materia.Horario.dia):
+                d = db.session.query(Diadeclase)\
+                .join(Horario)\
+                .filter(Horario.activo==True)\
+                .filter(Horario.id==Diadeclase.horario)\
+                .filter(Diadeclase.horario==materia.Horario.id)\
+                .filter(Diadeclase.fecha==str(t.s_fecha()))
+                if d.count() == 1:
+                    materia.Horario.diadeclase=d[0].id
+                else:
+                    materia.Horario.diadeclase='Error con el id de clase'
                 clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)
@@ -336,7 +342,7 @@ def dias_clases(c,h,dia_clase,fi,ff):
         dias_mod = []
         for dc in d:
             fecha_lista = datetime.strptime(dc.fecha,"%Y-%m-%d %H:%M:%S")
-            if fecha_lista > t.s_fecha():
+            if fecha_lista >= t.s_fecha():
                 db.session.delete(dc)
                 db.session.commit()
         sgt = t.s_fecha()
@@ -407,16 +413,14 @@ class Tiempo():
 @app.route("/lista/<int:d>", methods=['GET'])
 @login_required
 def lista(d):
-    diadeclase = db.session.query(Carrera, Materia, Horario, Diadeclase)\
-    .filter(Diadeclase.id==d)\
-    .first()
+    diadeclase = Diadeclase.query.get(d)
 
-    alumnos = i = db.session.query(Inscripcion)\
+    alumnos = db.session.query(Inscripcion)\
     .join(Alumno)\
-    .filter(Inscripcion.materia==diadeclase[1].id)\
+    .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
     .all()
     t = Tiempo()
-    ahora = t.esahora(diadeclase.Horario.desde,diadeclase.Horario.hasta)
+    ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta)
 
     return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
 
