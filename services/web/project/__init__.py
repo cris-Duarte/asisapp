@@ -364,6 +364,16 @@ class Tiempo():
         fecha_sistema = datetime.now()
         retraso = timedelta(hours=3)
         self.date = fecha_sistema - retraso
+    def paso10min(self,h):
+        ha = datetime.strptime(h, "%H:%M")
+        strahora = str(self.date.hour)+":"+str(self.date.minute)
+        ahora = datetime.strptime(self.hora(), "%H:%M")
+
+        if ha - ahora > timedelta(minutes=10):
+            return True
+        else:
+            return False
+
     def hora(self):
         h = "{}:{}".format(self.date.hour, self.date.minute)
         return h
@@ -441,6 +451,7 @@ def listar():
         db.session.add(asistencia)
         db.session.commit()
     else:
+
         asis.condicion = condicion
         db.session.commit()
 
