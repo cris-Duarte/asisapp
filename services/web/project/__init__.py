@@ -366,10 +366,9 @@ class Tiempo():
         self.date = fecha_sistema - retraso
     def paso10min(self,h):
         ha = datetime.strptime(h, "%H:%M")
-        strahora = str(self.date.hour)+":"+str(self.date.minute)
         ahora = datetime.strptime(self.hora(), "%H:%M")
 
-        if ha - ahora > timedelta(minutes=10):
+        if ahora - ha > timedelta(seconds=60):
             return True
         else:
             return False
@@ -443,28 +442,51 @@ def listar():
     diadeclase = int(request.form.get('idc'))
     condicion = request.form.get('condicion')
     t = Tiempo()
-    asis = Asistencia.query\
-    .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase)).first()
-
-    if not asis:
+    basis = Asistencia.query\
+    .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
+    .filter(Asistencia.tipo=='Entrada')
+    asis = basis.first()
+    if basis.count()==0:
         asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Entrada')
         db.session.add(asistencia)
         db.session.commit()
+        a = db.session.query(Alumno)\
+        .join(Asistencia)\
+        .filter(Asistencia.diadeclase==diadeclase)\
+        .filter(Asistencia.alumno==Alumno.id)\
+        .filter(Alumno.id==alumno)\
+        .first()
     else:
+        if t.paso10min(asis.hora):
+            if asis.tipo == 'Salida':
+                asis.condicion = condicion
+                db.session.commit()
+            else:
+                asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Salida')
+                db.session.add(asistencia)
+                db.session.commit()
+            a = db.session.query(Alumno)\
+            .join(Asistencia)\
+            .filter(Asistencia.diadeclase==diadeclase)\
+            .filter(Asistencia.alumno==Alumno.id)\
+            .filter(Alumno.id==alumno)\
+            .filter(Asistencia.tipo=='Salida')\
+            .first()
 
-        asis.condicion = condicion
-        db.session.commit()
-
-    a = db.session.query(Alumno)\
-    .join(Asistencia)\
-    .filter(Asistencia.diadeclase==diadeclase)\
-    .filter(Asistencia.alumno==Alumno.id)\
-    .filter(Alumno.id==alumno)\
-    .first()
+        else:
+            asis.condicion = condicion
+            db.session.commit()
+            a = db.session.query(Alumno)\
+            .join(Asistencia)\
+            .filter(Asistencia.diadeclase==diadeclase)\
+            .filter(Asistencia.alumno==Alumno.id)\
+            .filter(Alumno.id==alumno)\
+            .first()
 
     return jsonify({
       "nombre": a.apellido+", "+a.nombre,
-      "condicion": a.asistencias[0].condicion
+      "condicion": a.asistencias[0].condicion,
+      "tipo": a.asistencias[0].tipo
   })
 
 """ESTOS SON LOS MODELOS"""

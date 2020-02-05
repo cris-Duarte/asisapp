@@ -35,6 +35,9 @@
       <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.curso }} Curso, Seccion {{ dc.diasdeclases.horariosmateria.seccion }}</span></h4>
       <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.cantidad }} alumnos</span></h4>
       <hr>
+      <script>
+          sin_alumnos = false;
+      </script>
       <h3 class="panel-title"><span class="label-title label-primary">Alumnos</span></h3><br>
       <div id="listado">
         <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
@@ -43,6 +46,9 @@
         <p class="alumno label label-default label-alumno" data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
       {% else %}
         <p class="label label-warning label-alumno">No hay alumnos registrados</p>
+        <script>
+            sin_alumnos = true;
+        </script>
       {% endfor %}
       <p class="alumno label label-info label-alumno" style='display:none;'>Fin de Lista</p>
       <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>

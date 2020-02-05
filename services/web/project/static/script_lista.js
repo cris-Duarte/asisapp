@@ -1,20 +1,22 @@
 var indice_actual = 1
 var alumnos = []
-document.addEventListener('DOMContentLoaded', () => {
-  alumnos = document.querySelectorAll('.alumno');
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!sin_alumnos){
+      alumnos = document.querySelectorAll('.alumno');
 
-  duplalumno = alumnos[0].cloneNode(true);
-  duplalumno.style.display = 'block';
-  document.getElementById('anterior').appendChild(duplalumno);
+      duplalumno = alumnos[0].cloneNode(true);
+      duplalumno.style.display = 'block';
+      document.getElementById('anterior').appendChild(duplalumno);
 
-  duplalumno = alumnos[1].cloneNode(true);
-  duplalumno.style.display = 'block';
-  document.getElementById('actual').appendChild(duplalumno);
+      duplalumno = alumnos[1].cloneNode(true);
+      duplalumno.style.display = 'block';
+      document.getElementById('actual').appendChild(duplalumno);
 
-  duplalumno = alumnos[2].cloneNode(true);
-  duplalumno.style.display = 'block';
-  duplalumno.style.opacity = 0.2;
-  document.getElementById('siguiente').appendChild(duplalumno);
+      duplalumno = alumnos[2].cloneNode(true);
+      duplalumno.style.display = 'block';
+      duplalumno.style.opacity = 0.2;
+      document.getElementById('siguiente').appendChild(duplalumno);
+    }
 
 });
 
@@ -91,13 +93,13 @@ var listar = function (idc,condicion) {
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
     if (respuesta.condicion == 'Ausente'){
-      start('danger','<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      start('danger','<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.tipo}: ${respuesta.condicion}`);
       alumnos[indice_actual].className = 'alumno label label-danger label-alumno';
     } else if (condicion == 'Presente') {
-      start('success','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      start('success','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.tipo}: ${respuesta.condicion}`);
       alumnos[indice_actual].className = 'alumno label label-success label-alumno';
     } else{
-      start('default','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.condicion}`);
+      start('default','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.tipo}: ${respuesta.condicion}`);
       alumnos[indice_actual].className = 'alumno label label-default label-alumno';
     }
     siguiente();
