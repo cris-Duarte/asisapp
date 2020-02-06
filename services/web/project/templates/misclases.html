@@ -1,6 +1,6 @@
   {% for clase in clases %}
 <div class="panel-group" id="carrera-parent{{ clase.id }}" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default">
+  <div class="panel panel-primary">
     <div class="panel-heading" role="tab" id="heading{{ clase.nombre_carrera }}">
       <h4 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera-parent{{ clase.id }}" href="#carrera{{clase.id}}" aria-expanded="false" aria-controls="collapseTwo">
@@ -10,10 +10,10 @@
     </div>
     <div id="carrera{{clase.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
       <div class="panel-group" id="carrera{{clase.id}}-padre" role="tablist" aria-multiselectable="true">
-        <div class="panel-body">
+        <div class="panel-body panel-interno">
           {% for materia in clase.materias %}
           <!-- IDEA:  -->
-          <div class="panel panel-default">
+          <div class="panel panel-success">
             <div class="panel-heading" role="tab" id="heading{{ materia.nombre }}">
               <h4 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera{{clase.id}}-padre" href="#materia{{ materia.id }}" aria-expanded="false" aria-controls="collapseThree">
@@ -22,13 +22,12 @@
               </h4>
             </div>
             <div id="materia{{ materia.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-              <div class="panel-body">
+              <div class="panel-body panel-interno">
                 <table class="table">
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col"># Ci</th>
-                    <th scope="col">Apellidos</th>
-                    <th scope="col">Nombres</th>
+                    <th scope="col">Alumno</th>
                     <th scope="col">% Asistencia</th>
                     <th scope="col">Acción</th>
                   </tr>
@@ -37,8 +36,7 @@
                   {% for inscripcion in materia.inscriptos %}
                   <tr>
                     <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
-                    <td>{{ inscripcion.inscripcion_alumnos.apellido }}</td>
-                    <td>{{ inscripcion.inscripcion_alumnos.nombre }}</td>
+                    <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
                     <td>asistencia</td>
                     <td>acciones</td>
                   </tr>
@@ -58,20 +56,22 @@
       </div>
     </div>
   </div>
+  </div>
   {% else %}
+  <div class="panel-group" id="panel-vacio" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingThree">
       <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#c4" aria-expanded="false" aria-controls="collapseThree">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#panel-vacio" href="#o1" aria-expanded="false" aria-controls="collapseThree">
           No tiene clases asignadas por el momento
         </a>
       </h4>
     </div>
-    <div id="c4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+    <div id="o1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
       <div class="panel-body">
         Ninguna clases
       </div>
     </div>
   </div>
-</div>
+  </div>
 {% endfor %}
