@@ -409,12 +409,12 @@ class Tiempo():
             return True
         else:
             return False
-    def esahora(self,d,h):
+    def esahora(self,d,h,f):
         desde = datetime.strptime(d, "%H:%M")
         hasta = datetime.strptime(h, "%H:%M")
-        strahora = str(self.date.hour)+":"+str(self.date.minute)
-        ahora = datetime.strptime(strahora, "%H:%M")
-        if ahora < hasta and ahora > desde:
+        ahora = datetime.strptime(self.hora(), "%H:%M")
+        fecha = datetime.strptime(f,"%Y-%m-%d %H:%M:%S")
+        if ahora < hasta and ahora > desde and fecha == self.s_fecha():
             return True
         else:
             return False
@@ -429,7 +429,7 @@ def lista(d):
     .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
     .all()
     t = Tiempo()
-    ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta)
+    ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
 
     return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
 
@@ -441,53 +441,46 @@ def listar():
     alumno = int(request.form.get('ida'))
     diadeclase = int(request.form.get('idc'))
     condicion = request.form.get('condicion')
+    tipo = request.form.get('tipo')
+    d = Diadeclase.query.get(diadeclase)
     t = Tiempo()
-    basis = Asistencia.query\
-    .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
-    .filter(Asistencia.tipo=='Entrada')
-    asis = basis.first()
-    if basis.count()==0:
-        asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Entrada')
-        db.session.add(asistencia)
-        db.session.commit()
-        a = db.session.query(Alumno)\
-        .join(Asistencia)\
-        .filter(Asistencia.diadeclase==diadeclase)\
-        .filter(Asistencia.alumno==Alumno.id)\
-        .filter(Alumno.id==alumno)\
-        .first()
-    else:
-        if t.paso10min(asis.hora):
-            if asis.tipo == 'Salida':
-                asis.condicion = condicion
-                db.session.commit()
-            else:
-                asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Salida')
-                db.session.add(asistencia)
-                db.session.commit()
-            a = db.session.query(Alumno)\
-            .join(Asistencia)\
-            .filter(Asistencia.diadeclase==diadeclase)\
-            .filter(Asistencia.alumno==Alumno.id)\
-            .filter(Alumno.id==alumno)\
-            .filter(Asistencia.tipo=='Salida')\
-            .first()
-
+    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha):
+        basis = Asistencia.query\
+        .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
+        .filter(Asistencia.tipo==tipo)
+        asis = basis.first()
+        d = Diadeclase.query.get(diadeclase)
+        if basis.count()==0:
+            asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo=tipo)
+            db.session.add(asistencia)
+            if condicion == 'Presente' or condicion != 'Ausente':
+                d.asistentes += 0.5
         else:
+            if asis.condicion == 'Presente' and condicion == 'Ausente':
+                d.asistentes -= 0.5
+            elif asis.condicion == 'Ausente' and condicion == 'Presente':
+                d.asistentes += 0.5
             asis.condicion = condicion
-            db.session.commit()
-            a = db.session.query(Alumno)\
-            .join(Asistencia)\
-            .filter(Asistencia.diadeclase==diadeclase)\
-            .filter(Asistencia.alumno==Alumno.id)\
-            .filter(Alumno.id==alumno)\
-            .first()
 
-    return jsonify({
-      "nombre": a.apellido+", "+a.nombre,
-      "condicion": a.asistencias[0].condicion,
-      "tipo": a.asistencias[0].tipo
-  })
+        db.session.commit()
+        a = db.session.query(Alumno,Asistencia)\
+        .filter(Alumno.id==alumno)\
+        .filter(Asistencia.alumno==Alumno.id)\
+        .filter(Asistencia.diadeclase==diadeclase)\
+        .filter(Asistencia.tipo==tipo)\
+        .first()
+
+        return jsonify({
+          "nombre": a[0].apellido+", "+a[0].nombre,
+          "condicion": a[1].condicion,
+          "tipo": a[1].tipo,
+          "resultado":"ok"
+          })
+    else:
+        return jsonify({
+            "mensaje":"Las clases de "+d.diasdeclases.horariosmateria.nombre+" de los "+d.diasdeclases.dia+" son de "+d.diasdeclases.desde+" a "+d.diasdeclases.hasta+" horas.",
+            "resultado":"error"
+        })
 
 """ESTOS SON LOS MODELOS"""
 
@@ -591,7 +584,7 @@ class Diadeclase(db.Model):
     horario = db.Column(db.Integer, db.ForeignKey("horarios.id"), nullable=False)
     fecha = db.Column(db.String(50), nullable=False)
     llamados = db.Column(db.Integer, default=0,nullable=False)
-    asistentes = db.Column(db.Integer, default=0,nullable=False)
+    asistentes = db.Column(db.Float(), default=0,nullable=False)
 
 class Asistencia(db.Model):
     __tablename__= "asistencias"

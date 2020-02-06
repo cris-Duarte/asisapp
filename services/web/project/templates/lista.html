@@ -33,12 +33,18 @@
       </a>
       <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.carreras.nombre_carrera }}</span></h4>
       <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.curso }} Curso, Seccion {{ dc.diasdeclases.horariosmateria.seccion }}</span></h4>
-      <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.cantidad }} alumnos</span></h4>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon3">Llamar lista para: </span>
+        <select class="form-control" id='asistipo' onchange="estado_inicial(true)">
+          <option value="Entrada">Entrada</option>
+          <option value="Salida">Salida</option>
+        </select>
+      </div>
       <hr>
       <script>
           sin_alumnos = false;
       </script>
-      <h3 class="panel-title"><span class="label-title label-primary">Alumnos</span></h3><br>
+      <h3 class="panel-title"><span id="cantidadalumnos" class="label-title label-primary">Alumnos</span></h3><br>
       <div id="listado">
         <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
         <p class="alumno label label-info label-alumno" style='display:none;'>Inicio de Lista</p>
@@ -78,6 +84,24 @@
     </div>
   </div>
 
+  <div id="errorModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Error</h5>
+        </div>
+        <div class="modal-body">
+          <div id="mensajeError">
+
+          </div>
+          <a role="button" class="btn btn-primary" href="{{ url_for('dashboard') }}">
+            <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {% else %}
   <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -87,6 +111,8 @@
   <a role="button" class="btn btn-primary volver" href="{{ url_for('dashboard') }}">
     <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver
   </a>
+
+
 
   {% endif %}
 {% endif %}
