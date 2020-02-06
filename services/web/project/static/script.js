@@ -30,6 +30,16 @@ var periodos = function() {
   return false;
 };
 
+var misclases = function () {
+  const request = new XMLHttpRequest();
+  request.open('POST', '/misclases');
+  request.onload = () => {
+      document.getElementById('body').innerHTML = request.response;
+  };
+  request.send();
+  return false;
+};
+
 //FIN Elementos cargados por el NAVBAR, perfil, materias, periodos
 
 // UTILITARIOS

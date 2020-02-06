@@ -49,6 +49,11 @@ def login():
         login_user(u,remember=True, duration=None, force=False, fresh=True)
         return redirect(url_for('dashboard'), code=303)
 
+@app.route("/misclases", methods=['POST'])
+@login_required
+def misclases():
+    return render_template('misclases.html')
+
 @app.route("/perfil", methods=['POST'])
 @login_required
 def perfil():
