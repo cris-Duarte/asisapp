@@ -5,6 +5,17 @@ body {
 .panel-interno{
   padding: .50rem;
 }
+.label-inline{
+  display: inline-block;
+  margin-bottom: 5px;
+  font-size: 85%;
+  line-height: 1.5;
+}
+.parent-panel {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+}
 h5 {
   margin-top: 5px;
   margin-bottom: 5px;

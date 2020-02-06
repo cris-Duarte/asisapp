@@ -52,7 +52,12 @@ def login():
 @app.route("/misclases", methods=['POST'])
 @login_required
 def misclases():
-    return render_template('misclases.html')
+    clases = db.session.query(Carrera)\
+    .join(Materia, Inscripcion, Alumno)\
+    .filter(Materia.docente==current_user.id)\
+    .all()
+
+    return render_template('misclases.html',clases=clases)
 
 @app.route("/perfil", methods=['POST'])
 @login_required

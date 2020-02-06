@@ -44,14 +44,14 @@ var verificarm = function () {
     request.onload = () => {
       const data = JSON.parse(request.responseText);
       if (data.mensaje == "Ok") {
-        const materiaInfo = `<h4><span class="label label-info">Materia: ${data.Materia}</span></h4>
-                                  <h4><span class="label label-info">Curso: ${data.Curso}, sección: ${data.Seccion}</span></h4>
-                                  <h4><span class="label label-info">Carrera: ${data.Carrera}</span></h4>
-                                  <h4><span class="label label-info">Docente: ${data.Docente}</span></h4>`;
+        const materiaInfo = `<p class="label label-info label-inline">Materia: ${data.Materia}</p>
+                                  <p class="label label-info label-inline">Curso: ${data.Curso}, sección: ${data.Seccion}</p>
+                                  <p class="label label-info label-inline">Carrera: ${data.Carrera}</p>
+                                  <p class="label label-info label-inline">Docente: ${data.Docente}</p>`;
               document.getElementById('infomateria').innerHTML = materiaInfo;
               document.getElementById('btnAltaAlumno').disabled = false;
         }else{
-            document.getElementById('infomateria').innerHTML = '<h4><span class="label label-danger">'+data.mensaje+'</span></h4>';
+            document.getElementById('infomateria').innerHTML = '<p class="label label-danger label-inline">'+data.mensaje+'</p>';
             document.getElementById('btnAltaAlumno').disabled = true;
         }
     };
@@ -81,7 +81,7 @@ var verificara = function () {
           fa[i].disabled = true;
         }
         }else{
-            document.getElementById('infoalumno').innerHTML = '<h4><span class="label label-warning ">Por favor completa los siguientes campos</span></h4>';
+            document.getElementById('infoalumno').innerHTML = '<span class="label label-warning label-inline">Por favor completa los siguientes campos</span>';
             fa = document.querySelectorAll('.form-alumno');
             for (var i = 0; i < fa.length; i++) {
               fa[i].disabled = false;
