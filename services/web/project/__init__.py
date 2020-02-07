@@ -65,8 +65,8 @@ def misclases():
             .filter(Diadeclase.asistentes>0).count()
 
             for inscripcion in materia.inscriptos:
-                a = calcularasistencia(inscripcion.id,d,materia.id)
-                inscripcion.asistencia = a
+                a = calcularasistencia(inscripcion.inscripcion_alumnos.id,d,materia.id)
+                inscripcion.inscripcion_alumnos.asistencia = a
 
     return render_template('misclases.html',clases=clases)
 
@@ -387,8 +387,8 @@ def calcularasistencia(a,tc,m):
     .filter(Alumno.id==a)\
     .filter(Asistencia.condicion=='Presente')\
     .count()
-    resultado = (alumno*100)/tc
-    return str(resultado)+" %"
+    resultado = (alumno*50)/tc
+    return resultado
 
 
 class Tiempo():
