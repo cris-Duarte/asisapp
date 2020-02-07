@@ -57,6 +57,17 @@ def misclases():
     .filter(Materia.docente==current_user.id)\
     .all()
 
+    for carrera in clases:
+        for materia in carrera.materias:
+            d = db.session.query(Diadeclase)\
+            .join(Horario, Materia)\
+            .filter(Materia.id==materia.id)\
+            .filter(Diadeclase.asistentes>0).count()
+
+            for inscripcion in materia.inscriptos:
+                a = calcularasistencia(inscripcion.id,d,materia.id)
+                inscripcion.asistencia = a
+
     return render_template('misclases.html',clases=clases)
 
 @app.route("/perfil", methods=['POST'])
@@ -368,6 +379,17 @@ def dias_clases(c,h,dia_clase,fi,ff):
             db.session.commit()
             fecha_clase = fecha_clase + timedelta(days=7)
     return True
+
+def calcularasistencia(a,tc,m):
+    alumno = db.session.query(Asistencia)\
+    .join(Diadeclase, Horario, Materia, Alumno)\
+    .filter(Materia.id==m)\
+    .filter(Alumno.id==a)\
+    .filter(Asistencia.condicion=='Presente')\
+    .count()
+    resultado = (alumno*100)/tc
+    return str(resultado)+" %"
+
 
 class Tiempo():
     def __init__(self):
