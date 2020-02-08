@@ -3,7 +3,7 @@
 <div id="minfoModal" class="modal" tabindex="-1" role="dialog" >
   <div class="modal-content">
     <div class="modal-body">
-      <div class="panel panel-primary panel-interno">
+      <div class="panel panel-default panel-interno">
         <div class="panel-heading">Información de {{  m.nombre }}</div>
           <table>
             <tr>
@@ -20,7 +20,7 @@
             </tr>
           </table>
           <div id="mhorario">
-{% endif %}
+  {% endif %}
             <h4>Horario:</h4>
             <table>
               {% for horario in horarios %}
@@ -44,51 +44,62 @@
             </td>
           {% endfor %}
           </table>
-{% if not s_horarios %}
+  {% if not s_horarios %}
         </div>
-        </div>
+      </div>
 
-        <div class="panel panel-primary panel-interno">
-          <div class="panel-heading">Administración de Horarios de {{  m.nombre }}</div>
-            <div class="input-group">
-              <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
-              <select class="form-control" id="hdia">
-                <option class="falta_valor" value="falta_valor">Elija una opción</option>
-                <option value="Lunes" id="Lunes">Lunes</option>
-                <option value="Martes" id="Martes">Martes</option>
-                <option value="Miercoles" id="Miercoles">Miercoles</option>
-                <option value="Jueves" id="Jueves">Jueves</option>
-                <option value="Viernes" id="Viernes">Viernes</option>
-                <option value="Sabado" id="Sabado">Sábado</option>
-              </select>
-            </div>
-            <div class="input-group">
-              <span class="input-group-addon" id="basic-addon3">Periodo de Clases</span>
-              <select class="form-control" id="hperiodo">
-                <option value="falta_valor">Elija una opción</option>
-                {% for periodo in periodos %}
-                <option value="{{periodo.id}}" id="periodo{{periodo.id}}">{{periodo.nombre_periodo}}</option>
-                {% else %}
-                <option value="falta_valor">No hay periodos cargados</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="input-group">
-              <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
-              <span class="input-group-addon" name="hhorad">Desde:</span>
-              <input class="form-control" type="time" id="hhorad">
-              <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-              <input class="form-control" type="time" id="hhorah">
-            </div>
-            <div class="input-group">
-              <span class="input-group-addon" id="sala">Sala</span>
-              <input type="text" id="hsala" value="">
-            </div>
-
-            <button data-id="{{ m.id }}" onclick="addHorario({{m.id}})" class="btn btn-primary" type="button" id="btnhorario"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Horario Nuevo</button>
-            <button type="button" class="btn btn-danger" onclick='hcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
+      <div class="panel-group" id="acordeonAdminHorarios" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingThree">
+            <h4 class="panel-title">
+              <a role="button" data-toggle="collapse" data-parent="#acordeonAdminHorarios" href="#adminHorarios" aria-expanded="true" aria-controls="collapseTwo">
+                Administración de Horarios de {{  m.nombre }}
+              </a>
+            </h4>
           </div>
-        <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>
+          <div id="adminHorarios" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
+                <select class="form-control" id="hdia">
+                  <option class="falta_valor" value="falta_valor">Elija una opción</option>
+                  <option value="Lunes" id="Lunes">Lunes</option>
+                  <option value="Martes" id="Martes">Martes</option>
+                  <option value="Miercoles" id="Miercoles">Miercoles</option>
+                  <option value="Jueves" id="Jueves">Jueves</option>
+                  <option value="Viernes" id="Viernes">Viernes</option>
+                  <option value="Sabado" id="Sabado">Sábado</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Periodo de Clases</span>
+                <select class="form-control" id="hperiodo">
+                  <option value="falta_valor">Elija una opción</option>
+                  {% for periodo in periodos %}
+                  <option value="{{periodo.id}}" id="periodo{{periodo.id}}">{{periodo.nombre_periodo}}</option>
+                  {% else %}
+                  <option value="falta_valor">No hay periodos cargados</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
+                <span class="input-group-addon" name="hhorad">Desde:</span>
+                <input class="form-control" type="time" id="hhorad">
+                <span class="input-group-addon" id="basic-addon3">Hasta:</span>
+                <input class="form-control" type="time" id="hhorah">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="sala">Sala</span>
+                <input type="text" id="hsala" value="">
+              </div>
+              <button data-id="{{ m.id }}" onclick="addHorario({{m.id}})" class="btn btn-primary" type="button" id="btnhorario"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Horario Nuevo</button>
+              <button type="button" class="btn btn-danger" onclick='hcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>
     </div>
   </div>
 </div>
