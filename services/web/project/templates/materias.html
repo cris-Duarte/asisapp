@@ -1,10 +1,18 @@
 {% if not s_materias %}
+<div class="panel-group" id="acordeonMaterias" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
-    <div class="panel-heading">Formulario de Registro de Materias</div>
-      <div class="panel-body">
-          <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre">
-          <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo">
-        <div class="input-group">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#acordeonMaterias" href="#registroMaterias" aria-expanded="true" aria-controls="collapseOne">
+          Formulario de Registro de Materias
+        </a>
+      </h4>
+    </div>
+    <div id="registroMaterias" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+    <div class="panel-body">
+      <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre">
+      <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo">
+      <div class="input-group">
           <span class="input-group-addon" id="basic-addon3">Curso</span>
           <select class="form-control" id="mcurso">
               <option class="falta_valor" value="falta_valor">Elija una opción</option>
@@ -48,15 +56,20 @@
           </div>
             <button id="btnmateria" onclick="malta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Materia Nueva</button>
             <button type="button" class="btn btn-danger" onclick='mcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
+        <!-- IDEA:  -->
         </div>
       </div>
-
-      <div id="mensaje">
-
-      </div>
-      <div id="auxBox1">
-
-      </div>
+    </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#acordeonMaterias" href="#listaMaterias" aria-expanded="true" aria-controls="collapseTwo">
+              Listado de Materias
+            </a>
+          </h4>
+        </div>
+        <div id="listaMaterias" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
     <div id="tablaconsulta">
   {% endif %}
 
@@ -87,4 +100,15 @@
         {% endfor %}
       </tbody>
       </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+      <div id="mensaje">
+
+      </div>
+      <div id="auxBox1">
+
       </div>
