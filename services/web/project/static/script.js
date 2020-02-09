@@ -20,16 +20,15 @@ var materias = function() {
   request.send();
   return false;
 };
-var periodos = function() {
+var administracion = function() {
   const request = new XMLHttpRequest();
-  request.open('POST', '/periodos');
+  request.open('POST', 'administracion');
   request.onload = () => {
       document.getElementById('body').innerHTML = request.response;
   };
   request.send();
   return false;
 };
-
 var misclases = function () {
   const request = new XMLHttpRequest();
   request.open('POST', '/misclases');
@@ -65,6 +64,7 @@ var cantidad_alumnos = function(m) {
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
   const data = new FormData();
+  data.append('admin-periodos',true);
   data.append('pnombre',document.getElementById('pnombre').value);
   data.append('pfechad',document.getElementById('pfechad').value);
   data.append('pfechah',document.getElementById('pfechah').value);
@@ -75,27 +75,24 @@ var addPeriodo = function (id) {
     data.append('altaperiodo',true);
   }
   const request = new XMLHttpRequest();
-  request.open('POST', '/periodos');
+  request.open('POST', 'administracion');
   request.onload = () => {
-    if (id != null){
-      pcancelar();
-    }
-    document.getElementById('tablaperiodos').innerHTML = request.response;
+  document.getElementById('admin-periodos').innerHTML = request.response;
   };
   request.send(data);
 
   return false;
 
 };
-
 var peliminar = function (pid) {
   const data = new FormData();
+  data.append('admin-periodos',true);
   data.append('pid',pid);
   data.append('bajaperiodo',true);
   const request = new XMLHttpRequest();
-  request.open('POST', '/periodos');
+  request.open('POST', 'administracion');
   request.onload = () => {
-    document.getElementById('tablaperiodos').innerHTML = request.response;
+    document.getElementById('admin-periodos').innerHTML = request.response;
   };
   request.send(data);
 
@@ -103,10 +100,11 @@ var peliminar = function (pid) {
 };
 var pmodificar = function (pid) {
   const data = new FormData();
+  data.append('admin-periodos',true);
   data.append('pid',pid);
   data.append('modperiodo',true);
   const request = new XMLHttpRequest();
-  request.open('POST', '/periodos');
+  request.open('POST', 'administracion');
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
     document.getElementById('pnombre').value = respuesta.nombre;
@@ -131,7 +129,6 @@ var pcancelar = function () {
   btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo';
 };
 // FIN DE ADMINISTRACION DE PERIODOS
-
 // INICIO DE ADMINISTRACION DE MATERIAS
 var malta = function(id) {
     const request = new XMLHttpRequest();
@@ -184,7 +181,6 @@ var meliminar = function(id) {
   return false;
 
 };
-
 var mmodificar = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
@@ -223,9 +219,7 @@ var mcancelar = function () {
   b.removeAttribute("onclick");
   b.setAttribute("onclick","malta()");
 };
-
 // INICIO DE ADMINISTRACION DE PERIODOS
-
 var minfo = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
@@ -242,9 +236,7 @@ var minfo = function(id) {
   return false;
 
 };
-
 // FIN DE ADMINISTRACION DE MATERIAS
-
 // INICIO DE ADMINISTRACION DE HORARIOS
 var addHorario = function(mhid) {
   const request = new XMLHttpRequest();
@@ -266,7 +258,6 @@ var addHorario = function(mhid) {
 
   return false;
 };
-
 var heliminar = function(hid , mid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
@@ -283,7 +274,6 @@ var heliminar = function(hid , mid) {
   return false;
 
 };
-
 var modHorario = function(hid) {
   const request = new XMLHttpRequest();
   const data = new FormData();
@@ -306,7 +296,6 @@ var modHorario = function(hid) {
 
   return false;
 };
-
 var hmodificar = function(hid, mid) {
 
   const request = new XMLHttpRequest();
@@ -333,8 +322,6 @@ var hmodificar = function(hid, mid) {
 
   return false;
 };
-
-
 var hcancelar = function (idm) {
   o = document.querySelectorAll('option');
   for (var i = 0; i < o.length; i++) {

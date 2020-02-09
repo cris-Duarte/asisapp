@@ -6,14 +6,12 @@ from flask_bootstrap import Bootstrap
 from datetime import datetime, date, timedelta
 import calendar
 
-
 app = Flask(__name__)
 Bootstrap(app)
 app.secret_key = b'\x9f\xa5\xb3\xaa\xfa\x8f\xdc\xe4;\xdbf_\x9a\xd2\x1dP'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "ingresar"
-
 
 @app.route("/")
 def index():
@@ -26,7 +24,6 @@ def ingresar():
     else:
         return render_template("ingresar.html")
 
-
 @login_manager.user_loader
 def load_user(id):
     return Usuario.query.get(int(id))
@@ -35,7 +32,6 @@ def load_user(id):
 @login_required
 def dashboard():
     return render_template("dashboard.html")
-
 
 @app.route("/login", methods=['POST'])
 def login():
@@ -208,46 +204,45 @@ def detallemateria():
         .filter_by(materia=int(request.form.get('mid')))
         return render_template("detallemateria.html",s_horarios=s_horarios, m=m,periodos=periodos, horarios=horarios, minfo=True)
 
-@app.route("/periodos", methods=['POST'])
+@app.route("/administracion", methods=['POST'])
 @login_required
-def periodos():
-    s_periodos = False
-    if request.form.get('altaperiodo'):
-        p = Periodo(\
-        nombre_periodo=request.form.get('pnombre'),\
-        inicio=request.form.get('pfechad'),\
-        fin=request.form.get('pfechah'))
-        db.session.add(p)
-        db.session.commit()
-        s_periodos = True
-
-    if request.form.get('bajaperiodo'):
-        p = Periodo.query.get(int(request.form.get('pid')))
-        p.activo = False
-        db.session.commit()
-        s_periodos = True
-    if request.form.get('guardarmodperiodo'):
-        p = Periodo.query.get(int(request.form.get('pid')))
-        p.nombre_periodo=request.form.get('pnombre')
-        p.inicio=request.form.get('pfechad')
-        p.fin=request.form.get('pfechah')
-        db.session.commit()
-        s_periodos = True
-
-    if request.form.get('modperiodo'):
-        p = Periodo.query.get(int(request.form.get('pid')))
-        return jsonify({
-        "id":p.id,
-        "nombre":p.nombre_periodo,
-        "inicio":p.inicio,
-        "fin":p.fin
-        })
+def administracion():
+    if request.form.get('admin-periodos'):
+        if request.form.get('altaperiodo'):
+            p = Periodo(\
+            nombre_periodo=request.form.get('pnombre'),\
+            inicio=request.form.get('pfechad'),\
+            fin=request.form.get('pfechah'))
+            db.session.add(p)
+            db.session.commit()
+        if request.form.get('bajaperiodo'):
+            p = Periodo.query.get(int(request.form.get('pid')))
+            p.activo = False
+            db.session.commit()
+        if request.form.get('guardarmodperiodo'):
+            p = Periodo.query.get(int(request.form.get('pid')))
+            p.nombre_periodo=request.form.get('pnombre')
+            p.inicio=request.form.get('pfechad')
+            p.fin=request.form.get('pfechah')
+            db.session.commit()
+        if request.form.get('modperiodo'):
+            p = Periodo.query.get(int(request.form.get('pid')))
+            return jsonify({
+            "id":p.id,
+            "nombre":p.nombre_periodo,
+            "inicio":p.inicio,
+            "fin":p.fin
+            })
+        else:
+            periodos = Periodo.query\
+            .filter(Periodo.activo==True)\
+            .all()
+            return render_template('administracion.html',periodos=periodos)
     else:
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
         .all()
-        return render_template('periodos.html',s_periodos=s_periodos,periodos=periodos)
-
+        return render_template('administracion.html',periodos=periodos)
 
 @app.route("/salir")
 def salir():
@@ -341,6 +336,68 @@ def alumnos():
                 "clase":'alert-success',
                 "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
                 })
+
+@app.route("/lista/<int:d>", methods=['GET'])
+@login_required
+def lista(d):
+    diadeclase = Diadeclase.query.get(d)
+
+    alumnos = db.session.query(Inscripcion)\
+    .join(Alumno)\
+    .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
+    .all()
+    t = Tiempo()
+    ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
+
+    return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
+
+@app.route("/listar", methods=['POST'])
+@login_required
+def listar():
+    alumno = int(request.form.get('ida'))
+    diadeclase = int(request.form.get('idc'))
+    condicion = request.form.get('condicion')
+    tipo = request.form.get('tipo')
+    d = Diadeclase.query.get(diadeclase)
+    t = Tiempo()
+    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha):
+        basis = Asistencia.query\
+        .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
+        .filter(Asistencia.tipo==tipo)
+        asis = basis.first()
+        d = Diadeclase.query.get(diadeclase)
+        if basis.count()==0:
+            asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo=tipo)
+            db.session.add(asistencia)
+            if condicion == 'Presente' or condicion != 'Ausente':
+                d.asistentes += 0.5
+        else:
+            if asis.condicion == 'Presente' and condicion == 'Ausente':
+                d.asistentes -= 0.5
+            elif asis.condicion == 'Ausente' and condicion == 'Presente':
+                d.asistentes += 0.5
+            asis.condicion = condicion
+
+        db.session.commit()
+        a = db.session.query(Alumno,Asistencia)\
+        .filter(Alumno.id==alumno)\
+        .filter(Asistencia.alumno==Alumno.id)\
+        .filter(Asistencia.diadeclase==diadeclase)\
+        .filter(Asistencia.tipo==tipo)\
+        .first()
+
+        return jsonify({
+          "nombre": a[0].apellido+", "+a[0].nombre,
+          "condicion": a[1].condicion,
+          "tipo": a[1].tipo,
+          "resultado":"ok"
+          })
+    else:
+        return jsonify({
+            "mensaje":"Las clases de "+d.diasdeclases.horariosmateria.nombre+" de los "+d.diasdeclases.dia+" son de "+d.diasdeclases.desde+" a "+d.diasdeclases.hasta+" horas.",
+            "resultado":"error"
+        })
+
 def dias_clases(c,h,dia_clase,fi,ff):
     sgt = datetime.strptime(fi,"%Y-%m-%d")
     fin = datetime.strptime(ff,"%Y-%m-%d")
@@ -389,7 +446,6 @@ def calcularasistencia(a,tc,m):
     .count()
     resultado = (alumno*50)/tc
     return resultado
-
 
 class Tiempo():
     def __init__(self):
@@ -451,69 +507,6 @@ class Tiempo():
         else:
             return False
 
-@app.route("/lista/<int:d>", methods=['GET'])
-@login_required
-def lista(d):
-    diadeclase = Diadeclase.query.get(d)
-
-    alumnos = db.session.query(Inscripcion)\
-    .join(Alumno)\
-    .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
-    .all()
-    t = Tiempo()
-    ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
-
-    return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
-
-
-
-@app.route("/listar", methods=['POST'])
-@login_required
-def listar():
-    alumno = int(request.form.get('ida'))
-    diadeclase = int(request.form.get('idc'))
-    condicion = request.form.get('condicion')
-    tipo = request.form.get('tipo')
-    d = Diadeclase.query.get(diadeclase)
-    t = Tiempo()
-    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha):
-        basis = Asistencia.query\
-        .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
-        .filter(Asistencia.tipo==tipo)
-        asis = basis.first()
-        d = Diadeclase.query.get(diadeclase)
-        if basis.count()==0:
-            asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo=tipo)
-            db.session.add(asistencia)
-            if condicion == 'Presente' or condicion != 'Ausente':
-                d.asistentes += 0.5
-        else:
-            if asis.condicion == 'Presente' and condicion == 'Ausente':
-                d.asistentes -= 0.5
-            elif asis.condicion == 'Ausente' and condicion == 'Presente':
-                d.asistentes += 0.5
-            asis.condicion = condicion
-
-        db.session.commit()
-        a = db.session.query(Alumno,Asistencia)\
-        .filter(Alumno.id==alumno)\
-        .filter(Asistencia.alumno==Alumno.id)\
-        .filter(Asistencia.diadeclase==diadeclase)\
-        .filter(Asistencia.tipo==tipo)\
-        .first()
-
-        return jsonify({
-          "nombre": a[0].apellido+", "+a[0].nombre,
-          "condicion": a[1].condicion,
-          "tipo": a[1].tipo,
-          "resultado":"ok"
-          })
-    else:
-        return jsonify({
-            "mensaje":"Las clases de "+d.diasdeclases.horariosmateria.nombre+" de los "+d.diasdeclases.dia+" son de "+d.diasdeclases.desde+" a "+d.diasdeclases.hasta+" horas.",
-            "resultado":"error"
-        })
-
 """ESTOS SON LOS MODELOS"""
 
 app.config.from_object("project.config.Config")
@@ -553,8 +546,6 @@ class Horario(db.Model):
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     periodo = db.Column(db.Integer, db.ForeignKey("periodos.id"), nullable=False)
 
-
-
 class Periodo(db.Model):
     __tablename__ = "periodos"
     id = db.Column(db.Integer, primary_key=True)
@@ -564,14 +555,12 @@ class Periodo(db.Model):
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     horariosperiodo = db.relationship('Horario', backref='horariosperiodo', lazy=True)
 
-
 class Carrera(db.Model):
     __tablename__ = "carreras"
     id = db.Column(db.Integer, primary_key=True)
     nombre_carrera = db.Column(db.String(30), nullable=False)
     materias = db.relationship('Materia', backref='carreras', lazy=True)
     responsable = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=True)
-
 
 class Usuario(db.Model):
     __tablename__ = "usuarios"
