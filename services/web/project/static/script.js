@@ -1,6 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
   perfil();
 });
+// CLASES
+class FormP {
+  constructor (nombre_grupo) {
+    this.nombre_grupo = nombre_grupo;
+    this.bandera = true;
+  }
+  // Método
+  formV () {
+    var data = new FormData();
+    var opt = document.querySelectorAll(this.nombre_grupo);
+    for (var i = 0; i < opt.length - 1; i++) {
+      if (opt[i].type == 'text'){
+        if (opt[i].value == ''){
+          this.bandera = false;
+        } else {
+          data.append(opt[i].id,opt[i].value);
+        }
+      } else if (opt[i].type == 'select-one'){
+        let e = opt[i]
+        if (e.selectedIndex == 0){
+          this.bandera = false;
+        } else {
+          data.append(e.id, e.options[e.selectedIndex].value);
+        }
+      }
+    }
+    return data;
+  }
+};
+
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
 var perfil = function() {
   const request = new XMLHttpRequest();
@@ -60,7 +90,42 @@ var cantidad_alumnos = function(m) {
 };
 
 // FIN UTILITARIOS
+// INICIO DE ALTA DE DOCENTES
+var dcon = function () {
+  f = new FormP('.form-docentes');
+  if (f.bandera){
+    const request = new XMLHttpRequest();
+    request.open('POST', '/docentes');
+    data = f.formV();
+    data.append('altadocente',true);
+    request.onload = () => {
+      const respuesta = JSON.parse(request.responseText);
+      start('success',`Bien hecho ${respuesta.nombre}, tus datos fueron registrados exitoxamente`);
+    };
+    request.send(data);
+    return false;
+  } else {
+    start('danger','Por favor complete todos los campos');
+  }
+};
+var verificard = function (v) {
+  const data = new FormData();
+  data.append('dci',v);
+  data.append('verificard',true);
+  const request = new XMLHttpRequest();
+  request.open('POST', '/docentes');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    if(respuesta.estado == 'ya') {
+      start('danger',`Ya te has resistrado previamente ${respuesta.nombre}`);
+      document.getElementById('btndocente').disabled = true;
+    }
+  };
+  request.send(data);
 
+  return false;
+}
+//FIN DE ALTA DE DOCENTES
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
   const data = new FormData();

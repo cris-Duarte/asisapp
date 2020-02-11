@@ -17,6 +17,39 @@ login_manager.login_view = "ingresar"
 def index():
     return render_template('registroalumnos.html')
 
+@app.route("/registrodocentes")
+def registrodocentes():
+    return render_template('registrodocentes.html')
+
+@app.route("/docentes", methods=['POST'])
+def docentes():
+    if request.form.get('altadocente'):
+        d = Usuario(\
+        nombre=request.form.get('dnombre'),\
+        apellido=request.form.get('dapellido'),\
+        ci=request.form.get('dci'),\
+        email=request.form.get('demail'),\
+        telefono=request.form.get('dtelefono'),\
+        con=request.form.get('dcon'),
+        tipo=3,\
+        activo=True)
+        db.session.add(d)
+        db.session.commit()
+        return jsonify({
+            'nombre':d.nombre+' '+d.apellido
+        })
+    elif request.form.get('verificard'):
+        d = Usuario.query.filter_by(ci=request.form.get('dci'))
+        if d.count()>0:
+            return jsonify({
+                'estado':'ya',
+                'nombre':d.nombre+' '+d.apellido
+            })
+        else:
+            return jsonify({
+            'estado':'aun_no'
+            })
+
 @app.route("/ingresar")
 def ingresar():
     if current_user.is_active:
@@ -61,7 +94,10 @@ def misclases():
             .filter(Diadeclase.asistentes>0).count()
 
             for inscripcion in materia.inscriptos:
-                a = calcularasistencia(inscripcion.inscripcion_alumnos.id,d,materia.id)
+                if d > 0:
+                    a = calcularasistencia(inscripcion.inscripcion_alumnos.id,d,materia.id)
+                else:
+                    a = 0
                 inscripcion.inscripcion_alumnos.asistencia = a
 
     return render_template('misclases.html',clases=clases)
@@ -237,12 +273,12 @@ def administracion():
             periodos = Periodo.query\
             .filter(Periodo.activo==True)\
             .all()
-            return render_template('administracion.html',periodos=periodos)
+            return render_template('administracion.html',periodos=periodos,s_periodos=True)
     else:
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
         .all()
-        return render_template('administracion.html',periodos=periodos)
+        return render_template('administracion.html',periodos=periodos, t=True)
 
 @app.route("/salir")
 def salir():

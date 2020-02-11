@@ -1,6 +1,8 @@
+{% if not s_periodos or t %}
 <div class="panel-group" id="acordeonAdministracion" role="tablist" aria-multiselectable="true">
 <!-- IDEA: INICIO PERIODOS -->
   <div id="admin-periodos">
+{% endif %}
     <div class="panel panel-default panel-admin">
       <div class="panel-heading" role="tab" id="headingOne">
         <h4 class="panel-title">
@@ -65,6 +67,7 @@
         </div>
       </div>
     </div>
+{% if not s_periodos or t %}
   </div>
 <!-- IDEA: FIN PERIODOS -->
 
@@ -129,14 +132,14 @@
           <div class="panel-body">
             <div id='infoproceso' class="alert " role="alert" style="display:none">
             </div>
-            <input class="form-control form-usuario" type="text" placeholder="Nombres" id="unombre" required>
+            <input class="form-control form-usuario" type="text" placeholder="Nombres"  id="unombre" required>
             <input class="form-control form-usuario" type="text" placeholder="Apellidos" id="uapellido">
-            <input class="form-control" type="number" placeholder="Nro de Cédula" id="uci" onblur="verificarU()" required>
+            <input class="form-control form-usuario" type="number" placeholder="Nro de Cédula" id="uci" onblur="verificarU()" required>
             <input class="form-control form-usuario" type="email" placeholder="Correo Electrónico" id="uemail" required>
             <input class="form-control form-usuario" type="text" placeholder="Número de Telefono" id="utelefono" required>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">Tipo de Usuario</span>
-              <select class="form-control" id="utipo">
+              <select class="form-control form-usuario" id="utipo">
                 <option value="falta_valor">Elija una opción</option>
                 <option value="2">Coordinador</option>
                 <option value="1">Administrador</option>
@@ -167,3 +170,4 @@
   </div>
 <!-- IDEA: FIN COORDINADORES Y ADMINISTRADORES  -->
 </div>
+{% endif %}

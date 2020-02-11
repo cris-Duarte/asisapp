@@ -1,0 +1,44 @@
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='script.js')}}"></script>
+
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+{% endblock %}
+
+{% block html_attribs %} lang="es"{% endblock %}
+
+
+{% block title %}
+  Registro de Docentes
+{% endblock %}
+
+{% block content %}
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Formulario de Registro de Docentes
+  </div>
+    <div class="panel-body">
+      <div class="alert" role="alert" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p></p>
+      </div>
+        <form id="form-docentes">
+          <input class="form-control form-docente" type="text" placeholder="Nombres" id="dnombre" required>
+          <input class="form-control form-docente" type="text" placeholder="Apellidos" id="dapellido">
+          <input class="form-control form-docente" type="number" placeholder="Nro de Cédula" id="dci" onblur="verificard(this.value)" required>
+          <input class="form-control form-docente" type="email" placeholder="Correo Electrónico" id="demail" required>
+          <input class="form-control form-docente" type="text" placeholder="Número de Telefono" id="dtelefono" required>
+          <input class="form-control form-docente" type="password" placeholder="Elija una contraseña" id="dcon" required>
+        </form>
+        <button id='btndocente' onclick="dcon()" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enviar</button>
+      </div>
+</div>
+
+{% endblock %}
