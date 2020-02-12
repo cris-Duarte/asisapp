@@ -91,6 +91,7 @@ def misclases():
             d = db.session.query(Diadeclase)\
             .join(Horario, Materia)\
             .filter(Materia.id==materia.id)\
+            .filter(Materia.activo==True)\
             .filter(Diadeclase.asistentes>0).count()
 
             for inscripcion in materia.inscriptos:
