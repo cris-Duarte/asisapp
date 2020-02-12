@@ -49,11 +49,11 @@ var formV = function (nf) {
          data.append(e.id, e.options[e.selectedIndex].value);
        }
      }
-     if (bandera) {
-       return data;
-     } else {
-       return false;
-     }
+   }
+   if (bandera) {
+     return data;
+   } else {
+     return false;
    }
    return data;
  }
