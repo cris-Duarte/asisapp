@@ -41,6 +41,7 @@ def docentes():
     elif request.form.get('verificard'):
         d = Usuario.query.filter_by(ci=request.form.get('dci'))
         if d.count()>0:
+            d = d.first()
             return jsonify({
                 'estado':'ya',
                 'nombre':d.nombre+' '+d.apellido

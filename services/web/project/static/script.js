@@ -34,12 +34,13 @@ var formV = function (nf) {
   var bandera = true;
    var data = new FormData();
    var opt = document.querySelectorAll(nf);
-   for (var i = 0; i < opt.length - 1; i++) {
-     if (opt[i].type == 'text'){
-       if (opt[i].value == ''){
+   for (var i = 0; i < opt.length; i++) {
+     if (opt[i].type == 'text' || opt[i].type == 'number' || opt[i].type == 'email' || opt[i].type == 'password') {
+       if (opt[i].value == ""){
          bandera = false;
        } else {
          data.append(opt[i].id,opt[i].value);
+         console.log(opt[i].id+" "+opt[i].value);
        }
      } else if (opt[i].type == 'select-one'){
        let e = opt[i]
@@ -48,6 +49,8 @@ var formV = function (nf) {
        } else {
          data.append(e.id, e.options[e.selectedIndex].value);
        }
+     } else {
+       console.log(opt[i].id);
      }
    }
    if (bandera) {
@@ -119,11 +122,11 @@ var cantidad_alumnos = function(m) {
 // FIN UTILITARIOS
 // INICIO DE ALTA DE DOCENTES
 var dcon = function () {
-  f = new FormP('.form-docentes');
-  if (f.bandera){
+  f = formV('.form-docente')
+  if (f != false){
     const request = new XMLHttpRequest();
     request.open('POST', '/docentes');
-    data = f.formV();
+    data = f;
     data.append('altadocente',true);
     request.onload = () => {
       const respuesta = JSON.parse(request.responseText);
@@ -146,6 +149,8 @@ var verificard = function (v) {
     if(respuesta.estado == 'ya') {
       start('danger',`Ya te has resistrado previamente ${respuesta.nombre}`);
       document.getElementById('btndocente').disabled = true;
+    } else {
+      document.getElementById('btndocente').disabled = false;
     }
   };
   request.send(data);
