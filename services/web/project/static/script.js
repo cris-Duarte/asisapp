@@ -30,6 +30,33 @@ class FormP {
     return data;
   }
 };
+var formV = function (nf) {
+  var bandera = true;
+   var data = new FormData();
+   var opt = document.querySelectorAll(nf);
+   for (var i = 0; i < opt.length - 1; i++) {
+     if (opt[i].type == 'text'){
+       if (opt[i].value == ''){
+         bandera = false;
+       } else {
+         data.append(opt[i].id,opt[i].value);
+       }
+     } else if (opt[i].type == 'select-one'){
+       let e = opt[i]
+       if (e.selectedIndex == 0){
+         bandera = false;
+       } else {
+         data.append(e.id, e.options[e.selectedIndex].value);
+       }
+     }
+     if (bandera) {
+       return data;
+     } else {
+       return false;
+     }
+   }
+   return data;
+ }
 
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
 var perfil = function() {
