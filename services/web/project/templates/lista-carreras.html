@@ -12,7 +12,7 @@
     <tr>
       <td>{{carrera.id}}</td>
       <td>{{carrera.nombre_carrera}}</td>
-      <td>{{carrera.coordinador}}</td>
+      <td>{{carrera.responsables.apellido}}, {{carrera.responsables.nombre}}</td>
       <td>
         <button type="button" class="btn btn-primary" onclick='cmodificar({{carrera.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
         <button type="button" class="btn btn-danger" onclick='celiminar({{carrera.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>

@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, request, abort, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from flask_login import LoginManager,login_user,logout_user,login_required, current_user
 from flask_bootstrap import Bootstrap
 from datetime import datetime, date, timedelta
@@ -245,10 +245,11 @@ def detallemateria():
 @app.route("/administracion", methods=['POST'])
 @login_required
 def administracion():
-        periodos = Periodo.query\
-        .filter(Periodo.activo==True)\
-        .all()
-        return render_template('administracion.html',periodos=periodos, t=True)
+    coord = Usuario.query\
+    .filter(or_(Usuario.tipo == 2, Usuario.tipo == 1))\
+    .filter(Usuario.activo == True)\
+    .all()
+    return render_template('administracion.html',coord=coord)
 
 @app.route("/listacarreras", methods=['POST'])
 @login_required
@@ -298,7 +299,7 @@ def listaperiodos():
 @login_required
 def listausuarios():
     usuarios = db.session.query(Usuario)\
-    .join(Tipo_usuario)\
+    .join(TipoUsuario)\
     .filter(Usuario.activo == True)\
     .all()
     return render_template('lista-usuarios.html',usuarios=usuarios)
@@ -575,9 +576,7 @@ class TipoUsuario(db.Model):
     __tablename__ = "tipo_usuario"
     id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(60), nullable=False)
-
-    def __init__(self, descripcion):
-        self.descripcion = descripcion
+    tipos = db.relationship('Usuario', backref='tipos', lazy=True)
 
 class Materia(db.Model):
     __tablename__ = "materias"
@@ -634,6 +633,7 @@ class Usuario(db.Model):
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     con = db.Column(db.String(200), nullable=False)
     tipo = db.Column(db.Integer, db.ForeignKey("tipo_usuario.id"), nullable=False)
+    responsables = db.relationship('Carrera', backref='responsables', lazy=True)
     docentes = db.relationship('Materia', backref='docentes', lazy=True)
 
     def is_authenticated(self):

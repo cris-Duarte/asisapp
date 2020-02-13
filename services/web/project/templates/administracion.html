@@ -53,8 +53,11 @@
             <span class="input-group-addon" id="basic-addon3">Coordinador a cargo:</span>
             <select class="form-control" id="ccarrera">
               <option value="falta_valor">Elija una opción</option>
-              <option value="2">Coordinador</option>
-              <option value="1">Administrador</option>
+              {% for coords in coord %}
+              <option value="{{ coords.id }}">{{ coords.nombre }} {{coords.apellido}}</option>
+              {% else %}
+              <option>No hay coordinadores registrados</option>
+              {% endfor %}
             </select>
           </div>
           <button id="btncarrera" onclick="calta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Carrera Nueva</button>
@@ -110,8 +113,3 @@
   </div>
 <!-- IDEA: FIN COORDINADORES Y ADMINISTRADORES  -->
 </div>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    cargalistas();
-  });
-</script>
