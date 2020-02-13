@@ -21,12 +21,12 @@ def seed_db():
     u = Usuario(nombre="Cristhian", apellido="Duarte", ci=1234, email="cristhian@gmail.com", telefono='0991001188', activo=True, con="r00t", tipo=3)
     db.session.add(u)
     db.session.commit()
-    db.session.add(Carrera(nombre_carrera="Plan Común"))
-    db.session.add(Carrera(nombre_carrera="Contaduría Pública"))
-    db.session.add(Carrera(nombre_carrera="Administración de Empresas"))
-    db.session.add(Carrera(nombre_carrera="Economía"))
-    db.session.add(Carrera(nombre_carrera="Tributación"))
-    db.session.add(Carrera(nombre_carrera="Ingeniería Comercial"))
+    db.session.add(Carrera(nombre_carrera="Plan Común",responsable=2))
+    db.session.add(Carrera(nombre_carrera="Contaduría Pública",responsable=2))
+    db.session.add(Carrera(nombre_carrera="Administración de Empresas",responsable=2))
+    db.session.add(Carrera(nombre_carrera="Economía",responsable=2))
+    db.session.add(Carrera(nombre_carrera="Tributación",responsable=2))
+    db.session.add(Carrera(nombre_carrera="Ingeniería Comercial",responsable=2))
     db.session.commit()
 
 
