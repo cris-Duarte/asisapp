@@ -151,7 +151,6 @@ var verificard = function (v) {
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
   const data = new FormData();
-  data.append('admin-periodos',true);
   data.append('pnombre',document.getElementById('pnombre').value);
   data.append('pfechad',document.getElementById('pfechad').value);
   data.append('pfechah',document.getElementById('pfechah').value);
@@ -162,9 +161,9 @@ var addPeriodo = function (id) {
     data.append('altaperiodo',true);
   }
   const request = new XMLHttpRequest();
-  request.open('POST', 'administracion');
+  request.open('POST', '/listaperiodos');
   request.onload = () => {
-  document.getElementById('admin-periodos').innerHTML = request.response;
+  document.getElementById('lista-periodos').innerHTML = request.response;
   };
   request.send(data);
 
