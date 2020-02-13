@@ -30,6 +30,16 @@ class FormP {
     return data;
   }
 };
+
+var cargadevistasimple = function(u,d) {
+  const request = new XMLHttpRequest();
+  request.open('POST',u);
+  request.onload = () => {
+      document.getElementById(d).innerHTML = request.response;
+  };
+  request.send();
+  return false;
+};
 var formV = function (nf) {
   var bandera = true;
    var data = new FormData();
@@ -62,24 +72,9 @@ var formV = function (nf) {
  }
 
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
-var perfil = function() {
-  const request = new XMLHttpRequest();
-  request.open('POST', '/perfil');
-  request.onload = () => {
-      document.getElementById('body').innerHTML = request.response;
-  };
-  request.send();
-  return false;
-};
-var materias = function() {
-  const request = new XMLHttpRequest();
-  request.open('POST', '/materias');
-  request.onload = () => {
-      document.getElementById('body').innerHTML = request.response;
-  };
-  request.send();
-  return false;
-};
+var perfil = function() { cargadevistasimple('/perfil','body');};
+var materias = function() { cargadevistasimple('/materias','body');};
+var misclases = function () { cargadevistasimple('/misclases','body');};
 var administracion = function() {
   const request = new XMLHttpRequest();
   request.open('POST', 'administracion');
@@ -89,15 +84,7 @@ var administracion = function() {
   request.send();
   return false;
 };
-var misclases = function () {
-  const request = new XMLHttpRequest();
-  request.open('POST', '/misclases');
-  request.onload = () => {
-      document.getElementById('body').innerHTML = request.response;
-  };
-  request.send();
-  return false;
-};
+
 
 //FIN Elementos cargados por el NAVBAR, perfil, materias, periodos
 
