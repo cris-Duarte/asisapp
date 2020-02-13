@@ -1,0 +1,33 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">C.I.</th>
+      <th scope="col">Nombre y Apellido</th>
+      <th scope="col">Telefono</th>
+      <th scope="col">Tipo de Usuario</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for usuario in usuarios %}
+    <tr>
+      <td>{{usuario.ci}}</td>
+      <td>{{usuario.apellido}}, {{usuario.nombre}}</td>
+      <td>{{usuario.telefono}}</td>
+      <td>{{usuario.tipo}}</td>
+      <td>
+        <button type="button" class="btn btn-primary" onclick='umodificar({{usuario.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-danger" onclick='ueliminar({{usuario.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+      </td>
+    </tr>
+{% else %}
+    <tr>
+      <td>
+        <p>
+          No hay usuarios registrados
+        </p>
+      </td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>

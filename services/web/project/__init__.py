@@ -245,42 +245,63 @@ def detallemateria():
 @app.route("/administracion", methods=['POST'])
 @login_required
 def administracion():
-    if request.form.get('admin-periodos'):
-        if request.form.get('altaperiodo'):
-            p = Periodo(\
-            nombre_periodo=request.form.get('pnombre'),\
-            inicio=request.form.get('pfechad'),\
-            fin=request.form.get('pfechah'))
-            db.session.add(p)
-            db.session.commit()
-        if request.form.get('bajaperiodo'):
-            p = Periodo.query.get(int(request.form.get('pid')))
-            p.activo = False
-            db.session.commit()
-        if request.form.get('guardarmodperiodo'):
-            p = Periodo.query.get(int(request.form.get('pid')))
-            p.nombre_periodo=request.form.get('pnombre')
-            p.inicio=request.form.get('pfechad')
-            p.fin=request.form.get('pfechah')
-            db.session.commit()
-        if request.form.get('modperiodo'):
-            p = Periodo.query.get(int(request.form.get('pid')))
-            return jsonify({
-            "id":p.id,
-            "nombre":p.nombre_periodo,
-            "inicio":p.inicio,
-            "fin":p.fin
-            })
-        else:
-            periodos = Periodo.query\
-            .filter(Periodo.activo==True)\
-            .all()
-            return render_template('administracion.html',periodos=periodos,s_periodos=True)
-    else:
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
         .all()
         return render_template('administracion.html',periodos=periodos, t=True)
+
+@app.route("/listacarreras", methods=['POST'])
+@login_required
+def listacarreras():
+    carreras = db.session.query(Carrera)\
+    .join(Usuario)\
+    .filter(Carrera.coordinador==Usuario.id)\
+    .filter(Carrera.activo == True)\
+    .all()
+    return render_template('lista-carreras.html',carreras=carreras)
+
+@app.route("/listaperiodos", methods=['POST'])
+@login_required
+def listaperiodos():
+    if request.form.get('altaperiodo'):
+        p = Periodo(\
+        nombre_periodo=request.form.get('pnombre'),\
+        inicio=request.form.get('pfechad'),\
+        fin=request.form.get('pfechah'))
+        db.session.add(p)
+        db.session.commit()
+    if request.form.get('bajaperiodo'):
+        p = Periodo.query.get(int(request.form.get('pid')))
+        p.activo = False
+        db.session.commit()
+    if request.form.get('guardarmodperiodo'):
+        p = Periodo.query.get(int(request.form.get('pid')))
+        p.nombre_periodo=request.form.get('pnombre')
+        p.inicio=request.form.get('pfechad')
+        p.fin=request.form.get('pfechah')
+        db.session.commit()
+    if request.form.get('modperiodo'):
+        p = Periodo.query.get(int(request.form.get('pid')))
+        return jsonify({
+        "id":p.id,
+        "nombre":p.nombre_periodo,
+        "inicio":p.inicio,
+        "fin":p.fin
+        })
+    else:
+        periodos = Periodo.query\
+        .filter(Periodo.activo==True)\
+        .all()
+        return render_template('lista-periodos.html',periodos=periodos)
+
+@app.route("/listausuarios", methods=['POST'])
+@login_required
+def listausuarios():
+    usuarios = db.session.query(Usuario)\
+    .join(Tipo_usuario)\
+    .filter(Usuario.activo == True)\
+    .all()
+    return render_template('lista-usuarios.html',usuarios=usuarios)
 
 @app.route("/salir")
 def salir():

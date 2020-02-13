@@ -1,8 +1,6 @@
-{% if not s_periodos or t %}
 <div class="panel-group" id="acordeonAdministracion" role="tablist" aria-multiselectable="true">
 <!-- IDEA: INICIO PERIODOS -->
   <div id="admin-periodos">
-{% endif %}
     <div class="panel panel-default panel-admin">
       <div class="panel-heading" role="tab" id="headingOne">
         <h4 class="panel-title">
@@ -29,45 +27,12 @@
             <button id="btnPeriodo" onclick="addPeriodo()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo</button>
             <button type="button" class="btn btn-danger" onclick='pcancelar()'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
             <hr>
-            <div id="tablaperiodos">
-              <table class="table">
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Periodo</th>
-                    <th scope="col">Desde</th>
-                    <th scope="col">Hasta</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-      {% for periodo in periodos %}
-                  <tr>
-                    <td>{{periodo.id}}</td>
-                    <td>{{periodo.nombre_periodo}}</td>
-                    <td>{{periodo.inicio}}</td>
-                    <td>{{periodo.fin}}</td>
-                    <td>
-                      <button type="button" class="btn btn-primary" onclick='pmodificar({{periodo.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                      <button type="button" class="btn btn-danger" onclick='peliminar({{periodo.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                    </td>
-                  </tr>
-      {% else %}
-                  <tr>
-                    <td>
-                      <p>
-                        No hay periodos registrados
-                      </p>
-                    </td>
-                  </tr>
-      {% endfor %}
-                </tbody>
-              </table>
+            <div id="lista-periodos">
+
             </div>
         </div>
       </div>
     </div>
-{% if not s_periodos or t %}
   </div>
 <!-- IDEA: FIN PERIODOS -->
 
@@ -95,20 +60,7 @@
           <button id="btncarrera" onclick="calta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Carrera Nueva</button>
           <button type="button" class="btn btn-danger" onclick='ccancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
           <hr>
-          <div id="tablacarreras">
-            <table class="table">
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Periodo</th>
-                  <th scope="col">Desde</th>
-                  <th scope="col">Hasta</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
+          <div id="lista-carreras">
           </div>
         </div>
       </div>
@@ -148,19 +100,7 @@
             <button id="btnusuario" onclick="ualta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Usuario Nuevo</button>
             <button type="button" class="btn btn-danger" onclick='ucancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
             <hr>
-            <div id="tablausuarios">
-              <table class="table">
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">CI</th>
-                    <th scope="col">Nombre y apellido</th>
-                    <th scope="col">Tipo de Usuario</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
+            <div id="lista-usuarios">
             </div>
           </div>
         </div>
@@ -170,4 +110,9 @@
   </div>
 <!-- IDEA: FIN COORDINADORES Y ADMINISTRADORES  -->
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    cargalistas();
+  });
+</script>
 {% endif %}

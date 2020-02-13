@@ -75,16 +75,12 @@ var formV = function (nf) {
 var perfil = function() { cargadevistasimple('/perfil','body');};
 var materias = function() { cargadevistasimple('/materias','body');};
 var misclases = function () { cargadevistasimple('/misclases','body');};
-var administracion = function() {
-  const request = new XMLHttpRequest();
-  request.open('POST', 'administracion');
-  request.onload = () => {
-      document.getElementById('body').innerHTML = request.response;
-  };
-  request.send();
-  return false;
+var administracion = function() { cargadevistasimple('/administracion','body')};
+var cargalistas = function() {
+  cargadevistasimple('/listaperiodos','lista-periodos');
+  cargadevistasimple('/listausuarios','lista-usuarios');
+  cargadevistasimple('/listacarreras','lista-carreras');
 };
-
 
 //FIN Elementos cargados por el NAVBAR, perfil, materias, periodos
 

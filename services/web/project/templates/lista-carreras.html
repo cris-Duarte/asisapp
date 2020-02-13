@@ -1,0 +1,31 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre de la Carrera</th>
+      <th scope="col">Encargado</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for carrera in carreras %}
+    <tr>
+      <td>{{carrera.id}}</td>
+      <td>{{carrera.nombre_carrera}}</td>
+      <td>{{carrera.coordinador}}</td>
+      <td>
+        <button type="button" class="btn btn-primary" onclick='cmodificar({{carrera.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-danger" onclick='celiminar({{carrera.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+      </td>
+    </tr>
+{% else %}
+    <tr>
+      <td>
+        <p>
+          No hay carreras registradas
+        </p>
+      </td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
