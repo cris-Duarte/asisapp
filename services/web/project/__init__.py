@@ -255,7 +255,7 @@ def administracion():
 def listacarreras():
     carreras = db.session.query(Carrera)\
     .join(Usuario)\
-    .filter(Carrera.coordinador==Usuario.id)\
+    .filter(Carrera.responsable==Usuario.id)\
     .filter(Carrera.activo == True)\
     .all()
     return render_template('lista-carreras.html',carreras=carreras)
@@ -620,6 +620,7 @@ class Carrera(db.Model):
     nombre_carrera = db.Column(db.String(30), nullable=False)
     materias = db.relationship('Materia', backref='carreras', lazy=True)
     responsable = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=True)
+    activo = db.Column(db.Boolean(), default=True, nullable=False)
 
 class Usuario(db.Model):
     __tablename__ = "usuarios"
