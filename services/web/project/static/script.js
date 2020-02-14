@@ -73,7 +73,6 @@ var formV = function (nf) {
 
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
 var perfil = function() { cargadevistasimple('/perfil','body');};
-var materias = function() { cargadevistasimple('/materias','body');};
 var misclases = function () { cargadevistasimple('/misclases','body');};
 var administracion = function() {
   const request = new XMLHttpRequest();
@@ -83,6 +82,16 @@ var administracion = function() {
       cargadevistasimple('/listaperiodos','lista-periodos');
       cargadevistasimple('/listausuarios','lista-usuarios');
       cargadevistasimple('/listacarreras','lista-carreras');
+  };
+  request.send();
+  return false;
+};
+var materias = function() {
+  const request = new XMLHttpRequest();
+  request.open('POST','/materias');
+  request.onload = () => {
+      document.getElementById('body').innerHTML = request.response;
+      cargadevistasimple('/listamaterias','lista-materias');
   };
   request.send();
   return false;
@@ -112,7 +121,7 @@ var cantidad_alumnos = function(m) {
 // FIN UTILITARIOS
 // INICIO DE ALTA DE DOCENTES
 var dcon = function () {
-  f = formV('.form-docente')
+  f = formV('.form-docente');
   if (f != false){
     const request = new XMLHttpRequest();
     request.open('POST', '/docentes');
@@ -217,50 +226,39 @@ var pcancelar = function () {
 // FIN DE ADMINISTRACION DE PERIODOS
 // INICIO DE ADMINISTRACION DE MATERIAS
 var malta = function(id) {
-    const request = new XMLHttpRequest();
-    const data = new FormData();
-    data.append('mnombre', document.getElementById('mnombre').value);
-    data.append('mcodigo', document.getElementById('mcodigo').value);
-
-    let e = document.getElementById('mcurso');
-    data.append('mcurso', e.options[e.selectedIndex].value);
-
-    let f = document.getElementById('mseccion');
-    data.append('mseccion', f.options[f.selectedIndex].value);
-
-    let g = document.getElementById('mcarrera');
-    data.append('mcarrera', g.options[g.selectedIndex].value);
-
-    let h = document.getElementById('mdocente');
-    data.append('mdocente', h.options[h.selectedIndex].value);
-
-    if (id == null){
-      data.append('alta',true);
-    } else {
-      data.append('a_modificar',true);
-      data.append('mid',id);
-    }
-    request.open('POST', '/materias');
-    request.onload = () => {
-      if (id != null){
-        mcancelar();
+    m = formV('.form-materia');
+    if ( f != false ) {
+      data = m;
+      const request = new XMLHttpRequest();
+      if (id == null){
+        data.append('alta',true);
+      } else {
+        data.append('modificar',true);
+        data.append('mid',id);
       }
-      document.getElementById('tablaconsulta').innerHTML = request.response;
-    };
-    request.send(data);
-
-    return false;
+      request.open('POST', '/listamaterias');
+      request.onload = () => {
+        if (id != null){
+          mcancelar();
+        }
+        document.getElementById('lista-materias').innerHTML = request.response;
+      };
+      request.send(data);
+      return false;
+    } else {
+      start('danger','Por favor complete todos los campos');
+    }
 
 };
 var meliminar = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
-  data.append('mbaja', true);
+  data.append('baja', true);
   data.append('mid',id);
-  request.open('POST', '/materias');
+  request.open('POST', '/listamaterias');
 
   request.onload = () => {
-    document.getElementById('tablaconsulta').innerHTML = request.response;
+    document.getElementById('lista-materias').innerHTML = request.response;
   };
   request.send(data);
 
@@ -270,14 +268,14 @@ var meliminar = function(id) {
 var mmodificar = function(id) {
   const request = new XMLHttpRequest();
   const data = new FormData();
-  data.append('modificacion', true);
+  data.append('mod', true);
   data.append('mid',id);
-  request.open('POST', '/materias');
+  request.open('POST', '/listamaterias');
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
     document.getElementById('mnombre').value = respuesta.nombre;
     document.getElementById('mcodigo').value = respuesta.codigo;
-    document.getElementById(`${respuesta.curso}`).selected = true;
+    document.getElementById(`curso${respuesta.curso}`).selected = true;
     document.getElementById(`${respuesta.seccion}`).selected = true;
     document.getElementById(`carrera${respuesta.carrera}`).selected = true;
     document.getElementById(`docente${respuesta.docente}`).selected = true;

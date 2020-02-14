@@ -141,20 +141,23 @@ def perfil():
 @app.route("/materias", methods=['POST'])
 @login_required
 def materias():
-    s_materias = False
-    up = False
+    cursos = Cursos.query.all()
+    carreras = Carrera.query.all()
+    usuarios = Usuario.query.filter_by(activo=True).all()
+    return render_template("materias.html", carreras=carreras, usuarios=usuarios,cursos=cursos)
+
+@app.route("/listamaterias", methods=['POST'])
+@login_required
+def listamaterias():
     if request.form.get('alta'):
         m = Materia(nombre=request.form.get('mnombre'), codigo=request.form.get('mcodigo'), curso=request.form.get('mcurso'), seccion=request.form.get('mseccion'), carrera=int(request.form.get('mcarrera')), docente=int(request.form.get('mdocente')), activo = True)
         db.session.add(m)
         db.session.commit()
-        s_materias = True
-    if request.form.get('mbaja'):
+    if request.form.get('baja'):
         m = Materia.query.get(int(request.form.get('mid')))
         m.activo = False
         db.session.commit()
-        s_materias = True
-
-    if request.form.get('a_modificar'):
+    if request.form.get('modificar'):
         m = Materia.query.get(request.form.get('mid'))
         m.nombre = request.form.get('mnombre')
         m.codigo = request.form.get('mcodigo')
@@ -163,9 +166,7 @@ def materias():
         m.carrera = int(request.form.get('mcarrera'))
         m.docente = int(request.form.get('mdocente'))
         db.session.commit()
-        s_materias = True
-
-    if request.form.get('modificacion'):
+    if request.form.get('mod'):
         m = Materia.query.get(int(request.form.get('mid')))
         return jsonify({
         "id":m.id,
@@ -177,15 +178,12 @@ def materias():
         "docente":m.docente
         })
     else:
-        carreras = Carrera.query.all()
         materias = db.session.query(Materia)\
             .join(Carrera)\
             .filter(Materia.activo == True)\
             .order_by(Materia.id.asc())\
             .all()
-        """materias = Materia.query.filter_by(activo=True).all()"""
-        usuarios = Usuario.query.filter_by(activo=True).all()
-        return render_template("materias.html", carreras=carreras, usuarios=usuarios, materias=materias, s_materias=s_materias, up=up)
+        return render_template('lista-materias.html',materias=materias)
 
 @app.route("/detallemateria", methods=['POST'])
 @login_required
@@ -578,14 +576,20 @@ class TipoUsuario(db.Model):
     descripcion = db.Column(db.String(60), nullable=False)
     tipos = db.relationship('Usuario', backref='tipos', lazy=True)
 
+class Curso(db.Model):
+    __tablename__ = "cursos"
+    id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(60), nullable=False)
+    materias = db.relationship('Curso', backref='cursomateria', lazy=True)
+
 class Materia(db.Model):
     __tablename__ = "materias"
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100),nullable=False)
     codigo = db.Column(db.String(20),nullable=False)
-    curso = db.Column(db.String(10),nullable=False)
     seccion = db.Column(db.String(10),nullable=False)
     cantidad = db.Column(db.Integer, default=0, nullable=False)
+    curso = db.Column(db.Integer, db.ForeignKey("cursos.id"))
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"))
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)

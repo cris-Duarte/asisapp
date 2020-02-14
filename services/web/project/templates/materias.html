@@ -1,4 +1,4 @@
-{% if not s_materias %}
+
 <div class="panel-group" id="acordeonMaterias" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingOne">
@@ -10,23 +10,22 @@
     </div>
     <div id="registroMaterias" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
     <div class="panel-body">
-      <input class="form-control" type="text" placeholder="Nombre de la Materia" id="mnombre">
-      <input class="form-control" type="text" placeholder="Código de la Materia" id="mcodigo">
+      <input class="form-control form-materia" type="text" placeholder="Nombre de la Materia" id="mnombre">
+      <input class="form-control form-materia" type="text" placeholder="Código de la Materia" id="mcodigo">
       <div class="input-group">
           <span class="input-group-addon" id="basic-addon3">Curso</span>
-          <select class="form-control" id="mcurso">
+          <select class="form-control form-materia" id="mcurso">
               <option class="falta_valor" value="falta_valor">Elija una opción</option>
-              <option value="1ro" id="1ro">Primero</option>
-              <option value="2do" id="2do">Segundo</option>
-              <option value="3ro" id="3ro">Tercero</option>
-              <option value="4to" id="4to">Cuarto</option>
-              <option value="5to" id="5to">Quinto</option>
-              <option value="6to" id="6to">Sexto</option>
+              {% for curso in cursos %}
+              <option value="{{curso.id}}" id="curso{{curso.id}}">{{curso.descripcion}}</option>
+              {% else %}
+              <option value="falta_valor">No hay cursos</option>
+              {% endfor %}
           </select>
         </div>
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon4">Sección</span>
-          <select class="form-control" id="mseccion">
+          <select class="form-control form-materia" id="mseccion">
               <option class="falta_valor" value="falta_valor">Elija una opción</option>
               <option value="A" id="A">A</option>
               <option value="B" id="B">B</option>
@@ -37,7 +36,7 @@
 
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Carreras</span>
-            <select class="form-control" id="mcarrera" data-form="tipo">
+            <select class="form-control form-materia" id="mcarrera" data-form="tipo">
               <option class="falta_valor" value="falta_valor">Elija una opción</option>
                 {% for carrera in carreras %}
                     <option value="{{ carrera.id }}" id='carrera{{ carrera.id }}'>{{ carrera.nombre_carrera }}</option>
@@ -47,7 +46,7 @@
 
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Docente</span>
-            <select class="form-control" id="mdocente">
+            <select class="form-control form-materia" id="mdocente">
               <option class="falta_valor" value="falta_valor">Elija una opción</option>
                 {% for usuario in usuarios %}
                     <option value="{{ usuario.id }}" id='docente{{ usuario.id }}'>{{ usuario.nombre }} {{ usuario.apellido }}</option>
@@ -61,56 +60,10 @@
       </div>
     </div>
 </div>
+<div id="lista-materias">
 
-<div class="panel-group" id="acordeonListaMaterias" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#acordeonListaMaterias" href="#listaMaterias" aria-expanded="true" aria-controls="collapseTwo">
-          Listado de Materias
-        </a>
-      </h4>
-    </div>
-    <div id="listaMaterias" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        <div id="tablaconsulta">
-  {% endif %}
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Materia</th>
-                <th scope="col">Código</th>
-                <th scope="col">Curso y Carrera</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-        {% for materia in materias %}
-              <tr>
-                <th scope="row">{{ materia.id }}</th>
-                <td>{{ materia.nombre }}</td>
-                <td>{{ materia.codigo }}</td>
-                <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carreras['nombre_carrera'] }}</td>            <td>
-                  <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
-                  <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                  <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                </td>
-              </tr>
-          {% else %}
-              <td> No hay materias </td>
-          {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-
-      <div id="mensaje">
-
-      </div>
-      <div id="auxBox1">
-
-      </div>
+<div id="mensaje">
+</div>
+<div id="auxBox1">
+</div>

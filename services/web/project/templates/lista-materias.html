@@ -1,0 +1,42 @@
+<div class="panel-group" id="acordeonListaMaterias" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#acordeonListaMaterias" href="#listaMaterias" aria-expanded="true" aria-controls="collapseTwo">
+          Listado de Materias
+        </a>
+      </h4>
+    </div>
+    <div id="listaMaterias" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Materia</th>
+              <th scope="col">Código</th>
+              <th scope="col">Curso y Carrera</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+      {% for materia in materias %}
+            <tr>
+              <th scope="row">{{ materia.id }}</th>
+              <td>{{ materia.nombre }}</td>
+              <td>{{ materia.codigo }}</td>
+              <td>{{ materia.curso }} {{ materia.seccion }}, {{ materia.carreras['nombre_carrera'] }}</td>            <td>
+                <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+        {% else %}
+            <td> No hay materias </td>
+        {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
