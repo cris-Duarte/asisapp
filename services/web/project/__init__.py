@@ -141,7 +141,7 @@ def perfil():
 @app.route("/materias", methods=['POST'])
 @login_required
 def materias():
-    cursos = Cursos.query.all()
+    cursos = Curso.query.all()
     carreras = Carrera.query.all()
     usuarios = Usuario.query.filter_by(activo=True).all()
     return render_template("materias.html", carreras=carreras, usuarios=usuarios,cursos=cursos)
@@ -179,7 +179,7 @@ def listamaterias():
         })
     else:
         materias = db.session.query(Materia)\
-            .join(Carrera)\
+            .join(Carrera, Curso)\
             .filter(Materia.activo == True)\
             .order_by(Materia.id.asc())\
             .all()
@@ -262,24 +262,24 @@ def listacarreras():
 @app.route("/listaperiodos", methods=['POST'])
 @login_required
 def listaperiodos():
-    if request.form.get('altaperiodo'):
+    if request.form.get('alta'):
         p = Periodo(\
         nombre_periodo=request.form.get('pnombre'),\
         inicio=request.form.get('pfechad'),\
         fin=request.form.get('pfechah'))
         db.session.add(p)
         db.session.commit()
-    if request.form.get('bajaperiodo'):
+    if request.form.get('baja'):
         p = Periodo.query.get(int(request.form.get('pid')))
         p.activo = False
         db.session.commit()
-    if request.form.get('guardarmodperiodo'):
+    if request.form.get('mod'):
         p = Periodo.query.get(int(request.form.get('pid')))
         p.nombre_periodo=request.form.get('pnombre')
         p.inicio=request.form.get('pfechad')
         p.fin=request.form.get('pfechah')
         db.session.commit()
-    if request.form.get('modperiodo'):
+    if request.form.get('modificacion'):
         p = Periodo.query.get(int(request.form.get('pid')))
         return jsonify({
         "id":p.id,
@@ -580,7 +580,7 @@ class Curso(db.Model):
     __tablename__ = "cursos"
     id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(60), nullable=False)
-    materias = db.relationship('Curso', backref='cursomateria', lazy=True)
+    materias = db.relationship('Materia', backref='cursomateria', lazy=True)
 
 class Materia(db.Model):
     __tablename__ = "materias"

@@ -11,18 +11,18 @@
       </div>
       <div id="periodos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
         <div class="panel-body">
-          <input class="form-control" type="text" placeholder="Descripcion del Periodo" id="pnombre">
+          <input class="form-control form-periodo" type="text" placeholder="Descripcion del Periodo" id="pnombre">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">
                 Inicio:
               </span>
-            <input class="form-control" type="date" id="pfechad">
+            <input class="form-control form-periodo" type="date" id="pfechad">
             </div>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon2">
                 Fin:
               </span>
-              <input class="form-control" type="date" id="pfechah">
+              <input class="form-control form-periodo" type="date" id="pfechah">
             </div>
             <button id="btnPeriodo" onclick="addPeriodo()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo</button>
             <button type="button" class="btn btn-danger" onclick='pcancelar()'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>

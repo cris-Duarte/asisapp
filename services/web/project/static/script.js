@@ -31,13 +31,17 @@ class FormP {
   }
 };
 
-var cargadevistasimple = function(u,d) {
+var cargadevistasimple = function(u,d,data) {
   const request = new XMLHttpRequest();
   request.open('POST',u);
   request.onload = () => {
       document.getElementById(d).innerHTML = request.response;
   };
-  request.send();
+  if ( data == false ) {
+    request.send();
+  } else {
+    request.send(data);
+  }
   return false;
 };
 var formV = function (nf) {
@@ -45,7 +49,7 @@ var formV = function (nf) {
    var data = new FormData();
    var opt = document.querySelectorAll(nf);
    for (var i = 0; i < opt.length; i++) {
-     if (opt[i].type == 'text' || opt[i].type == 'number' || opt[i].type == 'email' || opt[i].type == 'password') {
+     if (opt[i].type == 'text' || opt[i].type == 'number' || opt[i].type == 'email' || opt[i].type == 'password' || opt[i].type == 'date') {
        if (opt[i].value == ""){
          bandera = false;
        } else {
@@ -63,7 +67,7 @@ var formV = function (nf) {
        console.log(opt[i].id);
      }
    }
-   if (bandera) {
+   if (bandera != false) {
      return data;
    } else {
      return false;
@@ -72,16 +76,16 @@ var formV = function (nf) {
  }
 
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
-var perfil = function() { cargadevistasimple('/perfil','body');};
-var misclases = function () { cargadevistasimple('/misclases','body');};
+var perfil = function() { cargadevistasimple('/perfil','body',false);};
+var misclases = function () { cargadevistasimple('/misclases','body',false);};
 var administracion = function() {
   const request = new XMLHttpRequest();
   request.open('POST','/administracion');
   request.onload = () => {
       document.getElementById('body').innerHTML = request.response;
-      cargadevistasimple('/listaperiodos','lista-periodos');
-      cargadevistasimple('/listausuarios','lista-usuarios');
-      cargadevistasimple('/listacarreras','lista-carreras');
+      cargadevistasimple('/listaperiodos','lista-periodos',false);
+      cargadevistasimple('/listausuarios','lista-usuarios',false);
+      cargadevistasimple('/listacarreras','lista-carreras',false);
   };
   request.send();
   return false;
@@ -91,7 +95,7 @@ var materias = function() {
   request.open('POST','/materias');
   request.onload = () => {
       document.getElementById('body').innerHTML = request.response;
-      cargadevistasimple('/listamaterias','lista-materias');
+      cargadevistasimple('/listamaterias','lista-materias',false);
   };
   request.send();
   return false;
@@ -159,47 +163,36 @@ var verificard = function (v) {
 //FIN DE ALTA DE DOCENTES
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
-  const data = new FormData();
-  data.append('pnombre',document.getElementById('pnombre').value);
-  data.append('pfechad',document.getElementById('pfechad').value);
-  data.append('pfechah',document.getElementById('pfechah').value);
-  if (id != null){
-    data.append('pid',id);
-    data.append('guardarmodperiodo',true);
+  p = formV('.form-periodo');
+  if ( p != false ) {
+    data = p;
+    if (id != null){
+      data.append('pid',id);
+      data.append('mod',true);
+    } else {
+      data.append('alta',true);
+    }
+    cargadevistasimple('/listaperiodos','lista-periodos',data);
+    pcancelar();
+
   } else {
-    data.append('altaperiodo',true);
+    start('danger','Por favor complete todos los campos');
   }
-  const request = new XMLHttpRequest();
-  request.open('POST', '/listaperiodos');
-  request.onload = () => {
-  document.getElementById('lista-periodos').innerHTML = request.response;
-  };
-  request.send(data);
-
-  return false;
-
 };
 var peliminar = function (pid) {
   const data = new FormData();
   data.append('admin-periodos',true);
   data.append('pid',pid);
-  data.append('bajaperiodo',true);
-  const request = new XMLHttpRequest();
-  request.open('POST', 'administracion');
-  request.onload = () => {
-    document.getElementById('admin-periodos').innerHTML = request.response;
-  };
-  request.send(data);
-
-  return false;
+  data.append('baja',true);
+  cargadevistasimple('/listaperiodos','listaperiodos',data);
 };
 var pmodificar = function (pid) {
   const data = new FormData();
   data.append('admin-periodos',true);
   data.append('pid',pid);
-  data.append('modperiodo',true);
+  data.append('modificacion',true);
   const request = new XMLHttpRequest();
-  request.open('POST', 'administracion');
+  request.open('POST', '/listaperiodos');
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
     document.getElementById('pnombre').value = respuesta.nombre;
@@ -227,7 +220,7 @@ var pcancelar = function () {
 // INICIO DE ADMINISTRACION DE MATERIAS
 var malta = function(id) {
     m = formV('.form-materia');
-    if ( f != false ) {
+    if ( m != false ) {
       data = m;
       const request = new XMLHttpRequest();
       if (id == null){
