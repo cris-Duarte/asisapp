@@ -6,36 +6,52 @@ class FormP {
   constructor (nombre_grupo) {
     this.nombre_grupo = nombre_grupo;
     this.bandera = true;
+    this.btn = false;
+    this.data = new FormData();
   }
   // Método
   formV () {
-    var data = new FormData();
-    var opt = document.querySelectorAll(this.nombre_grupo);
-    for (var i = 0; i < opt.length - 1; i++) {
-      if (opt[i].type == 'text'){
-        if (opt[i].value == ''){
-          this.bandera = false;
-        } else {
-          data.append(opt[i].id,opt[i].value);
-        }
-      } else if (opt[i].type == 'select-one'){
-        let e = opt[i]
-        if (e.selectedIndex == 0){
-          this.bandera = false;
-        } else {
-          data.append(e.id, e.options[e.selectedIndex].value);
-        }
-      }
-    }
-    return data;
-  }
+    var bandera = true;
+     var opt = document.querySelectorAll(this.nombre_grupo);
+     for (var i = 0; i < opt.length; i++) {
+       if (opt[i].type == 'text' || opt[i].type == 'number' || opt[i].type == 'email' || opt[i].type == 'password' || opt[i].type == 'date') {
+         if (opt[i].value == ""){
+           this.bandera = false;
+         } else {
+           this.data.append(opt[i].id,opt[i].value);
+           console.log(opt[i].id+" "+opt[i].value);
+         }
+       } else if (opt[i].type == 'select-one'){
+         let e = opt[i]
+         if (e.selectedIndex == 0){
+           this.bandera = false;
+         } else {
+           this.data.append(e.id, e.options[e.selectedIndex].value);
+         }
+       } else if (opt[i].type == 'button') {
+         this.btn = opt[i];
+       }
+     }
+   }
 };
-
-var cargadevistasimple = function(u,d,data) {
+var vaciarform = function (nf) {
+  var opt = document.querySelectorAll(nf);
+  for (var i = 0; i < opt.length; i++) {
+    if (opt[i].type == 'text' || opt[i].type == 'number' || opt[i].type == 'email' || opt[i].type == 'password' || opt[i].type == 'date') {
+      opt[i].value = "";
+    } else if (opt[i].type == 'select-one') {
+      opt[i].firstElementChild.selected = true;
+    }
+  }
+}
+var cargadevistasimple = function(u,d,data,cancelar) {
   const request = new XMLHttpRequest();
   request.open('POST',u);
   request.onload = () => {
       document.getElementById(d).innerHTML = request.response;
+      if (cancelar == 'p') {
+        pcancelar();
+      }
   };
   if ( data == false ) {
     request.send();
@@ -54,7 +70,6 @@ var formV = function (nf) {
          bandera = false;
        } else {
          data.append(opt[i].id,opt[i].value);
-         console.log(opt[i].id+" "+opt[i].value);
        }
      } else if (opt[i].type == 'select-one'){
        let e = opt[i]
@@ -72,7 +87,6 @@ var formV = function (nf) {
    } else {
      return false;
    }
-   return data;
  }
 
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
@@ -163,17 +177,19 @@ var verificard = function (v) {
 //FIN DE ALTA DE DOCENTES
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
-  p = formV('.form-periodo');
-  if ( p != false ) {
-    data = p;
+  p = new FormP('.form-periodo');
+  p.formV();
+  if (p.bandera) {
+    data = p.data;
     if (id != null){
       data.append('pid',id);
       data.append('mod',true);
+      cargadevistasimple('/listaperiodos','lista-periodos',data,'p');
     } else {
+
       data.append('alta',true);
+      cargadevistasimple('/listaperiodos','lista-periodos',data,false);
     }
-    cargadevistasimple('/listaperiodos','lista-periodos',data);
-    pcancelar();
 
   } else {
     start('danger','Por favor complete todos los campos');
@@ -184,7 +200,7 @@ var peliminar = function (pid) {
   data.append('admin-periodos',true);
   data.append('pid',pid);
   data.append('baja',true);
-  cargadevistasimple('/listaperiodos','listaperiodos',data);
+  cargadevistasimple('/listaperiodos','lista-periodos',data);
 };
 var pmodificar = function (pid) {
   const data = new FormData();
@@ -208,14 +224,13 @@ var pmodificar = function (pid) {
   return false;
 };
 var pcancelar = function () {
-  document.getElementById('pnombre').value = "";
-  document.getElementById('pfechad').value = "";
-  document.getElementById('pfechah').value = "";
+  vaciarform('.form-periodo');
   btn = document.getElementById('btnPeriodo');
   btn.removeAttribute("onclick");
   btn.setAttribute("onclick","addPeriodo()");
   btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo';
 };
+
 // FIN DE ADMINISTRACION DE PERIODOS
 // INICIO DE ADMINISTRACION DE MATERIAS
 var malta = function(id) {
@@ -283,14 +298,7 @@ var mmodificar = function(id) {
   return false;
 };
 var mcancelar = function () {
-
-  document.getElementById('mnombre').value = "";
-  document.getElementById('mcodigo').value = "";
-  document.getElementById('mcurso').firstElementChild.selected = true;
-  document.getElementById('mseccion').firstElementChild.selected = true;
-  document.getElementById('mcarrera').firstElementChild.selected = true;
-  document.getElementById('mdocente').firstElementChild.selected = true;
-
+  vaciarform('.form-materia');
   b = document.getElementById('btnmateria');
   b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Materia Nueva";
   b.removeAttribute("onclick");
