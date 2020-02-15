@@ -1,4 +1,5 @@
 from flask.cli import FlaskGroup
+import csv
 from project import *
 
 cli = FlaskGroup(app)
@@ -34,7 +35,20 @@ def seed_db():
     db.session.add(Carrera(nombre_carrera="Ingeniería Comercial",responsable=2))
     db.session.commit()
 
+@cli.command("desdearchivo")
+def desdearchivo():
+    f = open("usuarios.csv")
+    reader = csv.reader(f)
+    for n, a, e, t in reader:
+        u = Usuario(\
+        nombre=n,\
+        apellido=a,\
+        email=e,\
+        activo=True,\
+        tipo=t)
+        db.session.add(u)
 
+    db.session.commit()
 
 
 if __name__ == "__main__":
