@@ -4,7 +4,9 @@ from sqlalchemy import and_, or_
 from flask_login import LoginManager,login_user,logout_user,login_required, current_user
 from flask_bootstrap import Bootstrap
 from datetime import datetime, date, timedelta
+from flask_googlelogin import GoogleLogin
 import calendar
+
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -12,10 +14,58 @@ app.secret_key = b'\x9f\xa5\xb3\xaa\xfa\x8f\xdc\xe4;\xdbf_\x9a\xd2\x1dP'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "ingresar"
+googlelogin = GoogleLogin(app, login_manager)
+
+def get_google_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(CLIENT_ID, token=token)
+    if state:
+        return OAuth2Session(CLIENT_ID, state=state, redirect_uri=REDIRECT_URI)
+    oauth = OAuth2Session(CLIENT_ID, redirect_uri=REDIRECT_URI, scope=SCOPE)
+    return oauth
+
+@app.route('/gCallback')
+def callback():
+    # Redirect user to home page if already logged in.
+    if current_user is not None and current_user.is_authenticated():
+        return redirect(url_for('dashboard'))
+    if 'error' in request.args:
+        if request.args.get('error') == 'access_denied':
+            return 'Acceso denegado.'
+        return 'Error encontrado.'
+    if 'code' not in request.args and 'state' not in request.args:
+        return redirect(url_for('ingresar'))
+    else:
+        # Execution reaches here when user has successfully authenticated our app.
+        google = get_google_auth(state=session['oauth_state'])
+        try:
+            token = google.fetch_token(TOKEN_URI, client_secret=CLIENT_SECRET, authorization_response=request.url)
+        except HTTPError:
+            return 'Error HTTP.'
+        google = get_google_auth(token=token)
+        resp = google.get(USER_INFO)
+        if resp.status_code == 200:
+            user_data = resp.json()
+            email = user_data['email']
+            usuario = Usuario.query.filter_by(email=email).first()
+            if user is None:
+                user = Usuario()
+                user.email = email
+                user.name = user_data['name']
+                user.tokens = json.dumps(token)
+                user.avatar = user_data['picture']
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+            else:
+                login_user(usuario)
+            return redirect(url_for('dashboard'))
+        return 'No se pudo optener su información.'
 
 @app.route("/")
 def index():
     return render_template('registroalumnos.html')
+
 
 @app.route("/registrodocentes")
 def registrodocentes():
@@ -53,10 +103,12 @@ def docentes():
 
 @app.route("/ingresar")
 def ingresar():
-    if current_user.is_active:
+    if current_user.is_authenticated():
         return redirect(url_for('dashboard'))
-    else:
-        return render_template("ingresar.html")
+    google = get_google_auth()
+    auth_url, state = google.authorization_url(AUTH_URI, access_type='offline')
+    session['oauth_state'] = state
+    return render_template('ingresar.html',auth_url=auth_url)
 
 @login_manager.user_loader
 def load_user(id):
@@ -635,7 +687,9 @@ class Usuario(db.Model):
     email = db.Column(db.String(128), nullable=False)
     telefono = db.Column(db.String(15), default='****', nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
-    con = db.Column(db.String(200), default='****', nullable=False)
+    avatar = db.Column(db.String(200))
+    tokens = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     tipo = db.Column(db.Integer, db.ForeignKey("tipo_usuario.id"), nullable=False)
     responsables = db.relationship('Carrera', backref='responsables', lazy=True)
     docentes = db.relationship('Materia', backref='docentes', lazy=True)
