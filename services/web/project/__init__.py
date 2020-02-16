@@ -7,6 +7,7 @@ from datetime import datetime, date, timedelta
 import calendar
 import json
 import os
+from FlaskGoogleLogin import *
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -15,12 +16,27 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "ingresar"
 
+googlelogin = GoogleLogin(app)
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
 
 ## Google Login Try
-
+@app.route('/gCallback')
+@googlelogin.oauth2callback
+def create_or_update_user(token, userinfo, **params):
+    user = Usuario.filter_by(email=userinfo['email']).first()
+    if user:
+        user.name = userinfo['name']
+        user.avatar = userinfo['picture']
+    else:
+        user = User(google_id=userinfo['id'],
+                    name=userinfo['name'],
+                    avatar=userinfo['picture'])
+    db.session.add(user)
+    db.session.flush()
+    login_user(user)
+    return redirect(url_for('dashboard'))
 
 ## Login System LEGACY
 @app.route("/ingresar")
@@ -642,6 +658,9 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(60), nullable=False)
     apellido = db.Column(db.String(60), nullable=False)
+    name = db.Column(db.String(80))
+    avatar = db.Column(db.String(200))
+    tokens = db.Column(db.Text)
     ci = db.Column(db.Integer, default=0,nullable=False)
     email = db.Column(db.String(128), nullable=False)
     telefono = db.Column(db.String(15), default='****', nullable=False)
