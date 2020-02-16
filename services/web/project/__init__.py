@@ -5,6 +5,10 @@ from flask_login import LoginManager,login_user,logout_user,login_required, curr
 from flask_bootstrap import Bootstrap
 from datetime import datetime, date, timedelta
 import calendar
+import json
+import os
+from oauthlib.oauth2 import WebApplicationClient
+import requests
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -12,6 +16,14 @@ app.secret_key = b'\x9f\xa5\xb3\xaa\xfa\x8f\xdc\xe4;\xdbf_\x9a\xd2\x1dP'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "ingresar"
+
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
+client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
+def get_google_provider_cfg():
+    return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 @app.route("/")
 def index():
