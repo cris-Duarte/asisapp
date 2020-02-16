@@ -7,8 +7,6 @@ from datetime import datetime, date, timedelta
 import calendar
 import json
 import os
-from oauthlib.oauth2 import WebApplicationClient
-import requests
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -20,10 +18,37 @@ login_manager.login_view = "ingresar"
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
-def get_google_provider_cfg():
-    return requests.get(GOOGLE_DISCOVERY_URL).json()
+## Login System
+@app.route("/ingresar")
+def ingresar():
+    if current_user.is_active:
+        return redirect(url_for('dashboard'))
+    else:
+        return render_template("ingresar.html")
+
+@login_manager.user_loader
+def load_user(id):
+    return Usuario.query.get(int(id))
+
+@app.route("/login", methods=['POST'])
+def login():
+    email = request.form.get("correo")
+    c = request.form.get('c')
+    u = Usuario.query.filter(and_(Usuario.email == email, Usuario.con == c)).first()
+    if not u or u is None:
+        return render_template("dashboard.html",mensaje="Error de acceso: Correo Electrónico o Contraseña incorrectos")
+    else:
+        u = load_user(u.id)
+        login_user(u,remember=True, duration=None, force=False, fresh=True)
+        return redirect(url_for('dashboard'), code=303)
+
+@app.route("/salir")
+def salir():
+    logout_user()
+    return redirect(url_for('ingresar'))
+
+## FIN LOGIN SYSTEM
 
 @app.route("/")
 def index():
@@ -63,33 +88,10 @@ def docentes():
             'estado':'aun_no'
             })
 
-@app.route("/ingresar")
-def ingresar():
-    if current_user.is_active:
-        return redirect(url_for('dashboard'))
-    else:
-        return render_template("ingresar.html")
-
-@login_manager.user_loader
-def load_user(id):
-    return Usuario.query.get(int(id))
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
     return render_template("dashboard.html")
-
-@app.route("/login", methods=['POST'])
-def login():
-    email = request.form.get("correo")
-    c = request.form.get('c')
-    u = Usuario.query.filter(and_(Usuario.email == email, Usuario.con == c)).first()
-    if not u or u is None:
-        return render_template("dashboard.html",mensaje="Error de acceso: Correo Electrónico o Contraseña incorrectos")
-    else:
-        u = load_user(u.id)
-        login_user(u,remember=True, duration=None, force=False, fresh=True)
-        return redirect(url_for('dashboard'), code=303)
 
 @app.route("/misclases", methods=['POST'])
 @login_required
@@ -313,12 +315,6 @@ def listausuarios():
     .filter(Usuario.activo == True)\
     .all()
     return render_template('lista-usuarios.html',usuarios=usuarios)
-
-@app.route("/salir")
-def salir():
-    logout_user()
-    return redirect(url_for('ingresar'))
-
 
 @app.route("/alumnos", methods=['POST'])
 @login_required
