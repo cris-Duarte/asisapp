@@ -7,7 +7,9 @@ from datetime import datetime, date, timedelta
 import calendar
 import json
 import os
-from FlaskGoogleLogin import *
+from FlaskGoogleLogin import GoogleLogin
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -22,21 +24,36 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
 
 ## Google Login Try
-@app.route('/gCallback')
-@googlelogin.oauth2callback
-def create_or_update_user(token, userinfo, **params):
-    user = Usuario.filter_by(email=userinfo['email']).first()
-    if user:
-        user.name = userinfo['name']
-        user.avatar = userinfo['picture']
+
+@app.route("/")
+def loging():
+    if current_user.is_active:
+        return redirect(url_for('dashboard'))
     else:
-        user = User(google_id=userinfo['id'],
-                    name=userinfo['name'],
-                    avatar=userinfo['picture'])
-    db.session.add(user)
-    db.session.flush()
-    login_user(user)
-    return redirect(url_for('dashboard'))
+        return render_template("login.html",g=GOOGLE_CLIENT_ID)
+
+
+@app.route('/gCallback', methods=['POST'])
+def create_or_update_user():
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Wrong issuer.')
+        userid = idinfo['email']
+    except ValueError:
+            # Invalid token
+            pass
+
+    user = Usuario.filter_by(email=userinfo['userid']).first()
+    if user:
+        db.session.add(user)
+        db.session.flush()
+        login_user(user)
+        return redirect(url_for('dashboard'))
+    else:
+        return 'Hubo un problema con la autenticacion'
+
 
 ## Login System LEGACY
 @app.route("/ingresar")
@@ -69,8 +86,8 @@ def salir():
 
 ## FIN LOGIN SYSTEM
 
-@app.route("/")
-def index():
+@app.route("/registroalumnos")
+def registroalumnos():
     return render_template('registroalumnos.html')
 
 @app.route("/registrodocentes")

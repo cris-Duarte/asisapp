@@ -1,0 +1,51 @@
+{% extends "bootstrap/base.html" %}
+
+{% block metas %}
+<meta name="google-signin-client_id" content="{{g}}">
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="{{url_for('static', filename='login.js')}}"></script>
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='style_V1.css')}}">
+{% endblock %}
+
+{% block html_attribs %} lang="es"{% endblock %}
+
+
+{% block title %}
+  Entrar
+{% endblock %}
+
+{% block content %}
+
+<div id="loginModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h5 class="modal-title">Sistema de Control de Asistencia</h5>
+      </div>
+      <div class="modal-body">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      </div>
+      <div class="modal-footer">
+        <a href="">¿Olvidó su contraseña?, contacte con el administrador</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    $('#loginModal').modal('show');
+  });
+</script>
+{% endblock %}

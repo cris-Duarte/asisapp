@@ -4,8 +4,8 @@ Flask-GoogleLogin
 
 from base64 import (urlsafe_b64encode as b64encode,
                     urlsafe_b64decode as b64decode)
-from urllib import urlencode
-from urlparse import parse_qsl
+from urllib.parse import urlencode
+from urllib.parse import parse_qsl
 from functools import wraps
 
 from flask import request, redirect, abort, current_app, url_for
