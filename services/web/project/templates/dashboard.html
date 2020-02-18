@@ -1,9 +1,13 @@
 {% extends "bootstrap/base.html" %}
 
+
+
 {% block scripts %}
 {{super()}}
 <script src="{{url_for('static', filename='script.js')}}"></script>
 <script src="{{url_for('static', filename='jquery.toaster.js')}}"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 {% endblock %}
 
 {% block styles %}
@@ -11,6 +15,10 @@
   <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 {% endblock %}
 
+{% block metas %}
+  {{super()}}
+<meta name="google-signin-client_id" content="{{g}}">
+{% endblock %}
 {% block html_attribs %} lang="es"{% endblock %}
 
 
@@ -46,7 +54,7 @@
         <li role="presentation"><a href="#" data-toggle="pill" onclick="materias()">Materias</a></li>
         <li role="presentation"><a href="#" data-toggle="pill" onclick="administracion()">Administración</a></li>
         <li role="presentation"><a href="#" data-toggle="pill" onclick="">Perfil</a></li>
-        <li role="presentation"><a href="{{ url_for('salir') }}">Cerrar Sesión</a></li>
+        <li role="presentation"><a role="button" href="{{url_for('salir')}}">Cerrar Sesión</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

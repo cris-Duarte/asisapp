@@ -37,8 +37,17 @@
                   <tr>
                     <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
                     <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
-                    <td>{{ inscripcion.inscripcion_alumnos.asistencia }} %</td>
-                    <td>acciones</td>
+                    <td>{% if inscripcion.inscripcion_alumnos.asistencia <= 60 %}
+                      <p class="label label-danger label-inline">{{inscripcion.inscripcion_alumnos.asistencia}} %</p>
+                      {% else %}
+                        {{inscripcion.inscripcion_alumnos.asistencia}} %
+                      {% endif %}
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-xs">
+                        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                      </button>
+                    </td>
                   </tr>
                   {% else %}
                   <tr>

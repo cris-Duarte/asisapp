@@ -115,6 +115,21 @@ var materias = function() {
   return false;
 };
 
+var salir = function() {
+
+  /*var ga = gapi.auth2.getAuthInstance();
+  ga.grantOfflineAccess();
+    ga.signOut().then(function () {
+      console.log('User signed out.');
+    });*/
+  const request = new XMLHttpRequest();
+  request.open('POST','/salir');
+  request.onload = () => {
+
+  };
+  request.send();
+  return false;
+};
 
 //FIN Elementos cargados por el NAVBAR, perfil, materias, periodos
 

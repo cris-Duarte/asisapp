@@ -9,8 +9,10 @@ def create_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+    seed_db()
+    desdearchivo()
 
-@cli.command("seed_db")
+
 def seed_db():
     db.session.add(TipoUsuario(descripcion="Administrador"))
     db.session.add(TipoUsuario(descripcion="Coordinador"))
@@ -35,7 +37,7 @@ def seed_db():
     db.session.add(Carrera(nombre_carrera="Ingeniería Comercial",responsable=2))
     db.session.commit()
 
-@cli.command("desdearchivo")
+
 def desdearchivo():
     f = open("usuarios.csv")
     reader = csv.reader(f)

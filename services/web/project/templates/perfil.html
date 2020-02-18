@@ -14,7 +14,7 @@
   <div class="bs-callout bs-callout-primary"">
     <div class="caja_materias">
       <h4 class="nombre_materia">{{ clases_hoy.Materia.nombre }} <span class="label label-primary">Código: {{ clases_hoy.Materia.codigo }}</span></h4>
-      <h5><span class="label label-primary">Curso:</span> {{ clases_hoy.Materia.curso }} {{ clases_hoy.Materia.seccion }}</h5>
+      <h5><span class="label label-primary">Curso:</span> {{ clases_hoy.Materia.cursomateria.descripcion }} {{ clases_hoy.Materia.seccion }}</h5>
       <h5><span class="label label-primary">Carrera:</span> {{ clases_hoy.Carrera.nombre_carrera }}</h5>
       <h5><span class="label label-primary">Sala:</span> {{ clases_hoy.Horario.sala }}</h5>
       <h5><span class="label label-primary">Horario:</span> {{ clases_hoy.Horario.dia }}, de {{ clases_hoy.Horario.desde }} a {{ clases_hoy.Horario.hasta }} horas. {{ clases_hoy.Periodo.nombre_periodo }}</h5>

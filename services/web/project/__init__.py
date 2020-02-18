@@ -25,35 +25,29 @@ GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configur
 
 ## Google Login Try
 
-@app.route("/")
-def loging():
+@app.route("/gLogin")
+def gLogin():
     if current_user.is_active:
         return redirect(url_for('dashboard'))
     else:
         return render_template("login.html",g=GOOGLE_CLIENT_ID)
 
-
 @app.route('/gCallback', methods=['POST'])
 def create_or_update_user():
-    try:
-        # Specify the CLIENT_ID of the app that accesses the backend:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            raise ValueError('Wrong issuer.')
-        userid = idinfo['email']
-    except ValueError:
-            # Invalid token
-            pass
-
-    user = Usuario.filter_by(email=userinfo['userid']).first()
+    token = request.form.get('idtoken')
+    idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+    if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+        mensaje = 'Wrong issuer.'
+    user = Usuario.query.filter_by(email=idinfo['email']).first()
     if user:
         db.session.add(user)
         db.session.flush()
-        login_user(user)
+        u = load_user(user.id)
+        login_user(user,remember=True, force=False, fresh=True)
+
         return redirect(url_for('dashboard'))
     else:
-        return 'Hubo un problema con la autenticacion'
-
+        return 'Hubo un problema con la autenticacion'+mensaje
 
 ## Login System LEGACY
 @app.route("/ingresar")
@@ -76,7 +70,7 @@ def login():
         return render_template("dashboard.html",mensaje="Error de acceso: Correo Electrónico o Contraseña incorrectos")
     else:
         u = load_user(u.id)
-        login_user(u,remember=True, duration=None, force=False, fresh=True)
+        login_user(u,remember=True, force=False, fresh=True)
         return redirect(url_for('dashboard'), code=303)
 
 @app.route("/salir")
@@ -86,8 +80,8 @@ def salir():
 
 ## FIN LOGIN SYSTEM
 
-@app.route("/registroalumnos")
-def registroalumnos():
+@app.route("/")
+def index():
     return render_template('registroalumnos.html')
 
 @app.route("/registrodocentes")
@@ -124,10 +118,10 @@ def docentes():
             'estado':'aun_no'
             })
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+    return render_template("dashboard.html",g=GOOGLE_CLIENT_ID)
 
 @app.route("/misclases", methods=['POST'])
 @login_required
