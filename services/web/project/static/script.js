@@ -197,6 +197,61 @@ var verificard = function (v) {
   return false;
 }
 //FIN DE ALTA DE DOCENTES
+
+// INICIO DE ADMINISTRACION DE USUARIOS
+var ausuario = function (id) {
+  p = new FormP('.form-usuario');
+  p.formV();
+  if (p.bandera) {
+    data = p.data;
+    if (id != null){
+      data.append('uid',id);
+      data.append('mod',true);
+      cargadevistasimple('/listausuarios','lista-usuarios',data,'p');
+    } else {
+
+      data.append('alta',true);
+      cargadevistasimple('/listausuarios','lista-usuarios',data,false);
+    }
+
+  } else {
+    start('danger','Por favor complete todos los campos');
+  }
+};
+var aeliminar = function (pid) {
+  const data = new FormData();
+  data.append('uid',pid);
+  data.append('baja',true);
+  cargadevistasimple('/listausuarios','lista-usuarios',data);
+};
+var amodificar = function (pid) {
+  const data = new FormData();
+  data.append('uid',pid);
+  data.append('modificacion',true);
+  const request = new XMLHttpRequest();
+  request.open('POST', '/listausuarios');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    document.getElementById('pnombre').value = respuesta.nombre;
+    document.getElementById('pfechad').value = respuesta.inicio;
+    document.getElementById('pfechah').value = respuesta.fin;
+    b = document.getElementById('btnPeriodo');
+    b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
+    b.removeAttribute("onclick");
+    b.setAttribute("onclick",`ausuario(${respuesta.id})`);
+  };
+  request.send(data);
+
+  return false;
+};
+var acancelar = function () {
+  vaciarform('.form-usuarios');
+  btn = document.getElementById('btnusuario');
+  btn.removeAttribute("onclick");
+  btn.setAttribute("onclick","ausuario()");
+  btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Usuario Nuevo';
+};
+// FIN DE ADMINISTRACION DE USUARIOS
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
   p = new FormP('.form-periodo');
@@ -304,7 +359,6 @@ var mmodificar = function(id) {
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
     document.getElementById('mnombre').value = respuesta.nombre;
-    document.getElementById('mcodigo').value = respuesta.codigo;
     document.getElementById(`curso${respuesta.curso}`).selected = true;
     document.getElementById(`${respuesta.seccion}`).selected = true;
     document.getElementById(`carrera${respuesta.carrera}`).selected = true;

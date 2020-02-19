@@ -3,7 +3,7 @@
     <tr>
       <th scope="col">C.I.</th>
       <th scope="col">Nombre y Apellido</th>
-      <th scope="col">Telefono</th>
+      <th scope="col">Email</th>
       <th scope="col">Tipo de Usuario</th>
       <th scope="col">Acciones</th>
     </tr>
@@ -13,7 +13,7 @@
     <tr>
       <td>{{usuario.ci}}</td>
       <td>{{usuario.apellido}}, {{usuario.nombre}}</td>
-      <td>{{usuario.telefono}}</td>
+      <td>{{usuario.email}}</td>
       <td>{{usuario.tipos.descripcion}}</td>
       <td>
         <button type="button" class="btn btn-primary" onclick='umodificar({{usuario.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>

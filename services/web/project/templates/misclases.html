@@ -12,53 +12,55 @@
       <div class="panel-group" id="carrera{{clase.id}}-padre" role="tablist" aria-multiselectable="true">
         <div class="panel-body panel-interno">
           {% for materia in clase.materias %}
-          <!-- IDEA:  -->
-          <div class="panel panel-success">
-            <div class="panel-heading" role="tab" id="heading{{ materia.nombre }}">
-              <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera{{clase.id}}-padre" href="#materia{{ materia.id }}" aria-expanded="false" aria-controls="collapseThree">
-                  {{ materia.nombre }} - {{ materia.curso }} Curso - Seccion {{ materia.seccion }}
-                </a>
-              </h4>
-            </div>
-            <div id="materia{{ materia.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-              <div class="panel-body panel-interno">
-                <table class="table">
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col"># Ci</th>
-                    <th scope="col">Alumno</th>
-                    <th scope="col">% Asistencia</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for inscripcion in materia.inscriptos %}
-                  <tr>
-                    <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
-                    <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
-                    <td>{% if inscripcion.asistencia <= 60 %}
-                      <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
-                      {% else %}
-                        <p class="label label-success label-inline">{{inscripcion.asistencia}} %</p>
-                      {% endif %}
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-danger btn-xs">
-                        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
-                      </button>
-                    </td>
-                  </tr>
-                  {% else %}
-                  <tr>
-                    <td>No hay alumnos inscriptos aún</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-                </table>
+            {% if materia.docente == current_user.id %}
+            <!-- IDEA:  -->
+            <div class="panel panel-success">
+              <div class="panel-heading" role="tab" id="heading{{ materia.nombre }}">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera{{clase.id}}-padre" href="#materia{{ materia.id }}" aria-expanded="false" aria-controls="collapseThree">
+                    {{ materia.nombre }} - {{ materia.cursomateria.descripcion }} {{ materia.seccion }}
+                  </a>
+                </h4>
+              </div>
+              <div id="materia{{ materia.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body panel-interno">
+                  <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col"># Ci</th>
+                      <th scope="col">Alumno</th>
+                      <th scope="col">% Asistencia</th>
+                      <th scope="col">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for inscripcion in materia.inscriptos %}
+                    <tr>
+                      <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
+                      <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
+                      <td>{% if inscripcion.asistencia <= 60 %}
+                        <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
+                        {% else %}
+                          <p class="label label-success label-inline">{{inscripcion.asistencia}} %</p>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger btn-xs">
+                          <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                        </button>
+                      </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                      <td>No hay alumnos inscriptos aún</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
+            {% endif %}
           {% endfor %}
           <!-- IDEA:  -->
         </div>

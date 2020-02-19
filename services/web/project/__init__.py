@@ -10,6 +10,8 @@ import os
 from FlaskGoogleLogin import GoogleLogin
 from google.oauth2 import id_token
 from google.auth.transport import requests
+import string
+import random
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -194,7 +196,14 @@ def materias():
 @login_required
 def listamaterias():
     if request.form.get('alta'):
-        m = Materia(nombre=request.form.get('mnombre'), codigo=request.form.get('mcodigo'), curso=request.form.get('mcurso'), seccion=request.form.get('mseccion'), carrera=int(request.form.get('mcarrera')), docente=int(request.form.get('mdocente')), activo = True)
+        m = Materia(\
+        nombre=request.form.get('mnombre'),\
+        codigo=codigo(),\
+        curso=request.form.get('mcurso'),\
+        seccion=request.form.get('mseccion'),\
+        carrera=int(request.form.get('mcarrera')),\
+        docente=int(request.form.get('mdocente')), \
+        activo = True)
         db.session.add(m)
         db.session.commit()
     if request.form.get('baja'):
@@ -204,7 +213,6 @@ def listamaterias():
     if request.form.get('modificar'):
         m = Materia.query.get(request.form.get('mid'))
         m.nombre = request.form.get('mnombre')
-        m.codigo = request.form.get('mcodigo')
         m.curso = request.form.get('mcurso')
         m.seccion = request.form.get('mseccion')
         m.carrera = int(request.form.get('mcarrera'))
@@ -215,7 +223,6 @@ def listamaterias():
         return jsonify({
         "id":m.id,
         "nombre":m.nombre,
-        "codigo":m.codigo,
         "curso":m.curso,
         "seccion":m.seccion,
         "carrera":m.carrera,
@@ -296,9 +303,7 @@ def administracion():
 @app.route("/listacarreras", methods=['POST'])
 @login_required
 def listacarreras():
-    carreras = db.session.query(Carrera)\
-    .join(Usuario)\
-    .filter(Carrera.responsable==Usuario.id)\
+    carreras = Carrera.query\
     .filter(Carrera.activo == True)\
     .all()
     return render_template('lista-carreras.html',carreras=carreras)
@@ -355,7 +360,7 @@ def alumnos():
         return str(c)
 
     if request.form.get('verificarMateria'):
-        m = db.session.query(Materia, Carrera, Usuario)\
+        m = db.session.query(Materia, Carrera, Usuario, Curso)\
         .filter(Materia.carrera == Carrera.id)\
         .filter(Materia.docente == Usuario.id)\
         .filter(Materia.codigo == request.form.get('v'))\
@@ -363,7 +368,7 @@ def alumnos():
         if m:
             return jsonify({
               "Materia": m.Materia.nombre,
-              "Curso": m.Materia.curso,
+              "Curso": m.Materia.cursomateria.descripcion,
               "Seccion": m.Materia.seccion,
               "Carrera": m.Carrera.nombre_carrera,
               "Docente": m.Usuario.nombre + " " + m.Usuario.apellido,
@@ -493,6 +498,18 @@ def listar():
             "mensaje":"Las clases de "+d.diasdeclases.horariosmateria.nombre+" de los "+d.diasdeclases.dia+" son de "+d.diasdeclases.desde+" a "+d.diasdeclases.hasta+" horas.",
             "resultado":"error"
         })
+
+
+## CLASES Y FUNCIONES
+
+def codigo():
+    b = True
+    while(b):
+        c = ''.join(random.sample((string.ascii_uppercase+string.digits),4))
+        m = Materia.query.filter_by(codigo=c).count()
+        if m == 0:
+            b = False
+    return c
 
 def dias_clases(c,h,dia_clase,fi,ff):
     sgt = datetime.strptime(fi,"%Y-%m-%d")
