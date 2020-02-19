@@ -16,7 +16,7 @@ Bootstrap(app)
 app.secret_key = b'\x9f\xa5\xb3\xaa\xfa\x8f\xdc\xe4;\xdbf_\x9a\xd2\x1dP'
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "ingresar"
+login_manager.login_view = "gLogin"
 
 googlelogin = GoogleLogin(app)
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
@@ -73,7 +73,7 @@ def login():
         login_user(u,remember=True, force=False, fresh=True)
         return redirect(url_for('dashboard'), code=303)
 
-@app.route("/salir")
+@app.route("/salir", methods=['POST'])
 def salir():
     logout_user()
     return redirect(url_for('ingresar'))
