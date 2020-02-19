@@ -1,0 +1,60 @@
+<div class="jumbotron">
+  <div class="container">
+    <h1>Hola {% if current_user.tipo == 3 %}Prof.
+      {% endif %}
+      {{ current_user.nombre }} {{ current_user.apellido }}</h1>
+      <h3><span class="label label-success">{{ ahora }}</span></h3>
+      <h3><span class="label label-success">{{ hora }} horas</span></h3>
+    <p><a class="btn btn-primary btn-lg" href="#clases_semana" role="button">Ver Clases de hoy</a></p>
+  </div>
+</div>
+<h3><span class="label label-primary">Clases de Hoy</span></h3>
+<div class="clases_hoy">
+  {% for clases_hoy in clase_hoy %}
+  <div class="bs-callout bs-callout-primary"">
+    <div class="caja_materias">
+      <h4 class="nombre_materia">{{ clases_hoy.Materia.nombre }} <span class="label label-primary">Código: {{ clases_hoy.Materia.codigo }}</span></h4>
+      <h5><span class="label label-primary">Curso:</span> {{ clases_hoy.Materia.cursomateria.descripcion }} {{ clases_hoy.Materia.seccion }}</h5>
+      <h5><span class="label label-primary">Carrera:</span> {{ clases_hoy.Carrera.nombre_carrera }}</h5>
+      <h5><span class="label label-primary">Sala:</span> {{ clases_hoy.Horario.sala }}</h5>
+      <h5><span class="label label-primary">Horario:</span> {{ clases_hoy.Horario.dia }}, de {{ clases_hoy.Horario.desde }} a {{ clases_hoy.Horario.hasta }} horas. {{ clases_hoy.Periodo.nombre_periodo }}</h5>
+      <h3><span class="label label-info" onclick="cantidad_alumnos({{ clases_hoy[0].id }})"><span class="cant_a{{ clases_hoy[0].id }}">{{ clases_hoy.Materia.cantidad }}</span> alumnos registrados  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></h3>
+
+    </div>
+    <a class="btn btn-primary btn-lg btn-llamar" href="{{ url_for('lista', d=clases_hoy.Horario.diadeclase) }}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> Llamar lista</a>
+  </div>
+  {% else %}
+    <div class="bs-callout bs-callout-warning"">
+    <h4>No tiene ninguna clase para el día de hoy</h4>
+    <p>Si cree que esto es un error, por favor, contacte con su coordinador</p>
+  </div>
+  {% endfor %}
+</div>
+<h3><span class="label label-default">Clases para la semana</span></h3>
+<div class="clases_hoy">
+  {% for clases_semana in clase_semana %}
+  <div class="bs-callout bs-callout-default"">
+    <div class="caja_materias">
+      <h4 class="nombre_materia">{{ clases_semana[0].nombre }} <span class="label label-default">Código: {{ clases_semana[0].codigo }}</span></h4>
+      <h5><span class="label label-default">Curso:</span> {{ clases_semana[0].curso }} {{ clases_semana[0].seccion }}</h5>
+      <h5><span class="label label-default">Carrera:</span> {{ clases_semana[1].nombre_carrera }}</h5>
+      <h5><span class="label label-default">Sala:</span> {{ clases_semana[2].sala }}</h5>
+      <h5><span class="label label-default">Horario:</span> {{ clases_semana[2].dia }}, de {{ clases_semana[2].desde }} a {{ clases_semana[2].hasta }} horas. {{ clases_semana[3].nombre_periodo }}</h5>
+      <h3>
+        <span class="label label-info" onclick="cantidad_alumnos({{ clases_semana[0].id }})">
+          <span class="cant_a{{ clases_semana[0].id }}">{{ clases_semana[0].cantidad }}
+        </span>
+        alumnos registrados
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true">
+        </span>
+      </span>
+    </h3>
+    </div>
+  </div>
+  {% else %}
+    <div class="bs-callout bs-callout-warning"">
+    <h4>No tiene ninguna clase para el resto de la semana</h4>
+    <p>Si cree que esto es un error, por favor, contacte con su coordinador</p>
+  </div>
+  {% endfor %}
+</div>
