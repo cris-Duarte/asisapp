@@ -37,10 +37,10 @@
                   <tr>
                     <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
                     <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
-                    <td>{% if inscripcion.inscripcion_alumnos.asistencia <= 60 %}
-                      <p class="label label-danger label-inline">{{inscripcion.inscripcion_alumnos.asistencia}} %</p>
+                    <td>{% if inscripcion.asistencia <= 60 %}
+                      <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
                       {% else %}
-                        {{inscripcion.inscripcion_alumnos.asistencia}} %
+                        <p class="label label-success label-inline">{{inscripcion.asistencia}} %</p>
                       {% endif %}
                     </td>
                     <td>

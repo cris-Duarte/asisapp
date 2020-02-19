@@ -41,18 +41,6 @@ var actualizarcantidad = function (vi) {
   c.innerHTML = i+" de "+a+" Alumnos llamados"
 }
 
-//.dataset.id;
-
-var s = function () {
-
-};
-
-var a = function () {
-
-};
-
-
-
 var siguiente = function () {
   if (indice_actual < alumnos.length - 2  ) {
     indice_actual++;

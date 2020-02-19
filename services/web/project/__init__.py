@@ -144,7 +144,7 @@ def misclases():
                     a = calcularasistencia(inscripcion.inscripcion_alumnos.id,d,materia.id)
                 else:
                     a = 0
-                inscripcion.inscripcion_alumnos.asistencia = a
+                inscripcion.asistencia = a
 
     return render_template('misclases.html',clases=clases)
 
@@ -728,8 +728,8 @@ class Alumno(db.Model):
     nombre = db.Column(db.String(60), nullable=False)
     apellido = db.Column(db.String(60), nullable=False)
     ci = db.Column(db.Integer, default=0,nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    telefono = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(128))
+    telefono = db.Column(db.String(15))
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     con = db.Column(db.String(200), nullable=False)
     inscriptos = db.relationship('Inscripcion', backref='inscripcion_alumnos', lazy=True)
