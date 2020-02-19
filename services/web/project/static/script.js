@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   perfil();
+
 });
 // CLASES
 class FormP {
@@ -115,20 +116,26 @@ var materias = function() {
   return false;
 };
 
+
+function init() {
+  gapi.load('auth2', function() {
+    gapi.auth2.init();
+    /* Ready. Make a call to gapi.auth2.init or some other API */
+  });
+  console.log('init ok');
+}
 var salir = function() {
-
-  /*var ga = gapi.auth2.getAuthInstance();
-  ga.grantOfflineAccess();
-    ga.signOut().then(function () {
-      console.log('User signed out.');
-    });*/
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.grantOfflineAccess();
+    auth2.signOut().then(function () {
+      auth2.disconnect();
+    });
   const request = new XMLHttpRequest();
-  request.open('POST','/salir');
-  request.onload = () => {
-
-  };
+  request.open('POST','/salir',false);
+    request.onload = () => {
+      location.reload();
+    };
   request.send();
-  return false;
 };
 
 //FIN Elementos cargados por el NAVBAR, perfil, materias, periodos

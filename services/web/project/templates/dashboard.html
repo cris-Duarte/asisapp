@@ -6,7 +6,7 @@
 {{super()}}
 <script src="{{url_for('static', filename='script.js')}}"></script>
 <script src="{{url_for('static', filename='jquery.toaster.js')}}"></script>
-<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 
 {% endblock %}
 
@@ -28,48 +28,43 @@
 
 {% block content %}
 
-{% if current_user.is_authenticated %}
+  {% if current_user.is_authenticated %}
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Gestión de Asistencia</a>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Gestión de Asistencia</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+          <ul class="nav nav-pills">
+            <li role="presentation" class="active"><a href="#" data-toggle="pill" onclick="perfil()">Inicio</a></li>
+            <li role="presentation"><a href="#" data-toggle="pill" onclick="misclases()">Mis Clases</a></li>
+            <li role="presentation" class="dropdown">
+            <li role="presentation"><a href="#" data-toggle="pill">Consultas</a></li>
+            <li role="presentation"><a href="#" data-toggle="pill" onclick="materias()">Materias</a></li>
+            <li role="presentation"><a href="#" data-toggle="pill" onclick="administracion()">Administración</a></li>
+            <li role="presentation"><a href="#" data-toggle="pill" onclick="">Perfil</a></li>
+            <li role="presentation"><a role="button" onclick="salir()">Cerrar Sesión</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div id="body">
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-      <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="#" data-toggle="pill" onclick="perfil()">Inicio</a></li>
-        <li role="presentation"><a href="#" data-toggle="pill" onclick="misclases()">Mis Clases</a></li>
-        <li role="presentation" class="dropdown">
-        <li role="presentation"><a href="#" data-toggle="pill">Consultas</a></li>
-        <li role="presentation"><a href="#" data-toggle="pill" onclick="materias()">Materias</a></li>
-        <li role="presentation"><a href="#" data-toggle="pill" onclick="administracion()">Administración</a></li>
-        <li role="presentation"><a href="#" data-toggle="pill" onclick="">Perfil</a></li>
-        <li role="presentation"><a role="button" href="{{url_for('salir')}}">Cerrar Sesión</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-<div id="body">
-
-</div>
-
-
-{% else %}
-
-<div class="alert alert-warning" role="alert">
-   Por favor vaya a <a href="{{ url_for('ingresar')}}">el panel de ingreso</a> para poder entrar
-</div>
-
-{% endif %}
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+       Por favor vaya a <a href="{{ url_for('ingresar')}}">el panel de ingreso</a> para poder entrar
+    </div>
+  {% endif %}
 {% endblock %}
