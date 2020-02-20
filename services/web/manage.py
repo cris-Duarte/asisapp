@@ -11,7 +11,8 @@ def create_db():
     db.session.commit()
     seed_db()
     usuarios()
-    cargaalumnos()
+    cargaalumno()
+    cargamateria()
 
 
 def seed_db():
@@ -54,7 +55,7 @@ def usuarios():
 
     db.session.commit()
 
-def cargaalumnos():
+def cargaalumno():
     f = open("alumnos.csv")
     reader = csv.reader(f)
     for ci, n, a in reader:
@@ -66,6 +67,20 @@ def cargaalumnos():
         db.session.add(a)
 
     db.session.commit()
+
+def cargamateria():
+    f = open("materias.csv")
+    reader = csv.reader(f)
+    for n, cu, s, ca in reader:
+        m = Materia(\
+        nombre=n,\
+        codigo=codigo(),\
+        curso=cu,\
+        seccion=s,\
+        carrera=ca)
+        db.session.add(m)
+        db.session.commit()
+
 
 if __name__ == "__main__":
     cli()
