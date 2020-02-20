@@ -220,13 +220,17 @@ def listamaterias():
         db.session.commit()
     if request.form.get('mod'):
         m = Materia.query.get(int(request.form.get('mid')))
+        if not m.docente:
+            d = 0
+        else:
+            d = m.docente
         return jsonify({
         "id":m.id,
         "nombre":m.nombre,
         "curso":m.curso,
         "seccion":m.seccion,
         "carrera":m.carrera,
-        "docente":m.docente
+        "docente":d
         })
     else:
         materias = db.session.query(Materia)\

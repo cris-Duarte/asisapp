@@ -362,8 +362,9 @@ var mmodificar = function(id) {
     document.getElementById(`curso${respuesta.curso}`).selected = true;
     document.getElementById(`${respuesta.seccion}`).selected = true;
     document.getElementById(`carrera${respuesta.carrera}`).selected = true;
-    document.getElementById(`docente${respuesta.docente}`).selected = true;
-
+    if (respuesta.docente != 0){
+      document.getElementById(`docente${respuesta.docente}`).selected = true;
+    }
     b = document.getElementById('btnmateria');
     b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
     b.removeAttribute("onclick");
