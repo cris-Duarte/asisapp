@@ -24,7 +24,7 @@ googlelogin = GoogleLogin(app)
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
-
+## 5432 - 1337 - 5000
 ## Google Login Try
 
 @app.route("/gLogin")
@@ -479,7 +479,10 @@ def alumnos():
     if request.form.get('alta_alumno'):
         a = Alumno.query.filter_by(ci=request.form.get('aci')).first()
         if a:
-            m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
+            a.telefono = request.form.get('atelefono')
+            a.email = request.form.get('aemail')
+            db.session.commit()
+            m = Materia.query.filter_by(codigo=request.form.get('mcodigo')).first()
             c = Inscripcion.query\
             .filter(Inscripcion.materia == m.id)\
             .filter(Inscripcion.alumno ==a.id)\
@@ -499,6 +502,7 @@ def alumnos():
                     "clase":'alert-success',
                     "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
                     })
+
         else:
             a = Alumno(\
             nombre=request.form.get('anombre'),\

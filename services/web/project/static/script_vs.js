@@ -1,36 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fa = document.querySelectorAll('.form-alumno')
-  for (var i = 0; i < fa.length; i++) {
-  fa[i].disabled = true;
-}
+  document.getElementById('anombre').disabled = true;
+  document.getElementById('aapellido').disabled = true;
+  document.getElementById('atelefono').disabled = true;
+  document.getElementById('aemail').disabled = true;
   document.getElementById('infoproceso').style.display = 'none'
 });
 
-
 var acon = function () {
-  const data = new FormData();
-  const request = new XMLHttpRequest();
-  data.append('cmateria',document.getElementById('mcodigo').value);
-  data.append('anombre',document.getElementById('anombre').value);
-  data.append('aapellido',document.getElementById('aapellido').value);
-  data.append('aci',document.getElementById('aci').value);
-  data.append('aemail',document.getElementById('aemail').value);
-  data.append('atelefono',document.getElementById('atelefono').value);
-  data.append('alta_alumno',true);
-  request.open('POST', '/alumnos');
-
-  request.onload = () => {
-    const data = JSON.parse(request.responseText);
-    e = document.getElementById('infoproceso');
-    e.className = '';
-    e.classList.add('alert');
-    e.classList.add(data.clase);
-    e.innerHTML = data.mensaje;
-    document.getElementById('infoproceso').style.display = 'inline-block'
-
-  };
-  request.send(data);
-  return false;
+  p = new FormP('.form-alumno');
+  p.formV();
+  if (p.bandera) {
+    const request = new XMLHttpRequest();
+    data = p.data;
+    data.append('alta_alumno',true)
+    request.open('POST', '/alumnos');
+    request.onload = () => {
+      const respuesta = JSON.parse(request.responseText);
+      e = document.getElementById('infoproceso');
+      e.className = '';
+      e.classList.add('alert');
+      e.classList.add(respuesta.clase);
+      e.innerHTML = respuesta.mensaje;
+      document.getElementById('infoproceso').style.display = 'inline-block'
+    };
+    request.send(data);
+    return false;
+  } else {
+    start('danger','Por favor complete todos los campos');
+  }
 };
 
 var verificarm = function () {
@@ -73,13 +70,13 @@ var verificara = function () {
       const data = JSON.parse(request.responseText);
       if (data.registro == "listo") {
         document.getElementById('anombre').value = data.nombre;
+        document.getElementById('anombre').disabled = true;
         document.getElementById('aapellido').value = data.apellido;
+        document.getElementById('aapellido').disabled = true;
         document.getElementById('aemail').value = data.email;
         document.getElementById('atelefono').value = data.telefono;
-        fa = document.querySelectorAll('.form-alumno');
-        for (var i = 0; i < fa.length; i++) {
-          fa[i].disabled = true;
-        }
+        document.getElementById('aemail').disabled = false;
+        document.getElementById('atelefono').disabled = false;
         }else{
             document.getElementById('infoalumno').innerHTML = '<span class="label label-warning label-inline">Por favor completa los siguientes campos</span>';
             fa = document.querySelectorAll('.form-alumno');
@@ -92,4 +89,37 @@ var verificara = function () {
 
     return false;
   }
+};
+
+class FormP {
+  constructor (nombre_grupo) {
+    this.nombre_grupo = nombre_grupo;
+    this.bandera = true;
+    this.btn = false;
+    this.data = new FormData();
+  }
+  // Método
+  formV () {
+    var bandera = true;
+     var opt = document.querySelectorAll(this.nombre_grupo);
+     for (var i = 0; i < opt.length; i++) {
+       if (opt[i].type == 'text' || opt[i].type == 'number' || opt[i].type == 'email' || opt[i].type == 'password' || opt[i].type == 'date') {
+         if (opt[i].value == ""){
+           this.bandera = false;
+         } else {
+           this.data.append(opt[i].id,opt[i].value);
+           console.log(opt[i].id+" "+opt[i].value);
+         }
+       } else if (opt[i].type == 'select-one'){
+         let e = opt[i]
+         if (e.selectedIndex == 0){
+           this.bandera = false;
+         } else {
+           this.data.append(e.id, e.options[e.selectedIndex].value);
+         }
+       } else if (opt[i].type == 'button') {
+         this.btn = opt[i];
+       }
+     }
+   }
 };
