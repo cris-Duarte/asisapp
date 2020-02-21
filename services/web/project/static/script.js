@@ -52,6 +52,10 @@ var cargadevistasimple = function(u,d,data,cancelar) {
       document.getElementById(d).innerHTML = request.response;
       if (cancelar == 'p') {
         pcancelar();
+      } else if ( cancelar == 'u') {
+        ucancelar();
+      } else if ( cancelar == 'c') {
+        ccancelar();
       }
   };
   if ( data == false ) {
@@ -61,6 +65,7 @@ var cargadevistasimple = function(u,d,data,cancelar) {
   }
   return false;
 };
+
 var formV = function (nf) {
   var bandera = true;
    var data = new FormData();
@@ -93,6 +98,7 @@ var formV = function (nf) {
 // Elementos cargados por el NAVBAR, perfil, materias, periodos
 var perfil = function() { cargadevistasimple('/perfil','body',false);};
 var misclases = function () { cargadevistasimple('/misclases','body',false);};
+var usuario = function () { cargadevistasimple('/usuario','body',false);};
 var administracion = function() {
   const request = new XMLHttpRequest();
   request.open('POST','/administracion');
@@ -157,7 +163,27 @@ var cantidad_alumnos = function(m) {
   request.send(data);
   return false;
 };
-
+var editarinfo = function() {
+  info = document.querySelectorAll('.form-info');
+  for (i=0 ; i < info.length ; i++ ){
+    info[i].disabled = false;
+  }
+  b = document.getElementById('btneditarinfo');
+  b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Información";
+  b.removeAttribute("onclick");
+  b.setAttribute("onclick",'guardarinfo()');
+}
+var guardarinfo = function() {
+  p = new FormP('.form-info');
+  p.formV();
+  if (p.bandera) {
+    data = p.data;
+    data.append('mod',true);
+    cargadevistasimple('/usuario','body',data,false);
+  } else {
+    start('danger','Por favor complete todos los campos');
+  }
+}
 // FIN UTILITARIOS
 // INICIO DE ALTA DE DOCENTES
 var dcon = function () {
@@ -207,7 +233,7 @@ var ausuario = function (id) {
     if (id != null){
       data.append('uid',id);
       data.append('mod',true);
-      cargadevistasimple('/listausuarios','lista-usuarios',data,'p');
+      cargadevistasimple('/listausuarios','lista-usuarios',data,'u');
     } else {
 
       data.append('alta',true);
@@ -218,24 +244,27 @@ var ausuario = function (id) {
     start('danger','Por favor complete todos los campos');
   }
 };
-var aeliminar = function (pid) {
+var ueliminar = function (uid) {
   const data = new FormData();
-  data.append('uid',pid);
+  data.append('uid',uid);
   data.append('baja',true);
   cargadevistasimple('/listausuarios','lista-usuarios',data);
 };
-var amodificar = function (pid) {
+var umodificar = function (uid) {
   const data = new FormData();
-  data.append('uid',pid);
+  data.append('uid',uid);
   data.append('modificacion',true);
   const request = new XMLHttpRequest();
   request.open('POST', '/listausuarios');
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
-    document.getElementById('pnombre').value = respuesta.nombre;
-    document.getElementById('pfechad').value = respuesta.inicio;
-    document.getElementById('pfechah').value = respuesta.fin;
-    b = document.getElementById('btnPeriodo');
+    document.getElementById('unombre').value = respuesta.nombre;
+    document.getElementById('uapellido').value = respuesta.apellido;
+    document.getElementById('uci').value = respuesta.ci;
+    document.getElementById('uemail').value = respuesta.email;
+    document.getElementById('utelefono').value = respuesta.telefono;
+    document.getElementById(`usuario${respuesta.tipo}`).selected = true;
+    b = document.getElementById('btnusuario');
     b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
     b.removeAttribute("onclick");
     b.setAttribute("onclick",`ausuario(${respuesta.id})`);
@@ -244,14 +273,71 @@ var amodificar = function (pid) {
 
   return false;
 };
-var acancelar = function () {
-  vaciarform('.form-usuarios');
+var ucancelar = function () {
+  vaciarform('.form-usuario');
   btn = document.getElementById('btnusuario');
   btn.removeAttribute("onclick");
   btn.setAttribute("onclick","ausuario()");
   btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Usuario Nuevo';
 };
 // FIN DE ADMINISTRACION DE USUARIOS
+
+// INICIO ADMINISTRACION DE CARRERAS
+var calta = function (id) {
+  p = new FormP('.form-carrera');
+  p.formV();
+  if (p.bandera) {
+    data = p.data;
+    if (id != null){
+      data.append('cid',id);
+      data.append('mod',true);
+      cargadevistasimple('/listacarreras','lista-carreras',data,'c');
+    } else {
+
+      data.append('alta',true);
+      cargadevistasimple('/listacarreras','lista-carreras',data,false);
+    }
+
+  } else {
+    start('danger','Por favor complete todos los campos');
+  }
+};
+var celiminar = function (uid) {
+  const data = new FormData();
+  data.append('cid',uid);
+  data.append('baja',true);
+  cargadevistasimple('/listacarreras','lista-carreras',data);
+};
+var cmodificar = function (uid) {
+  const data = new FormData();
+  data.append('cid',uid);
+  data.append('modificacion',true);
+  const request = new XMLHttpRequest();
+  request.open('POST', '/listacarreras');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    document.getElementById('cnombre').value = respuesta.nombre;
+    if (respuesta.coordinador != 0){
+    document.getElementById(`coord${respuesta.coordinador}`).selected = true;
+    }
+    b = document.getElementById('btncarrera');
+    b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
+    b.removeAttribute("onclick");
+    b.setAttribute("onclick",`calta(${respuesta.id})`);
+  };
+  request.send(data);
+
+  return false;
+};
+var ccancelar = function () {
+  vaciarform('.form-carrera');
+  btn = document.getElementById('btncarrera');
+  btn.removeAttribute("onclick");
+  btn.setAttribute("onclick","calta()");
+  btn.innerHTML = '<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Carrera Nueva';
+};
+// FIN DE ADMINISTRACION DE CARRERAS
+
 // INICIO DE ADMINISTRACION DE PERIODOS
 var addPeriodo = function (id) {
   p = new FormP('.form-periodo');

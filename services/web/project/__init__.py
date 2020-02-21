@@ -184,6 +184,23 @@ def perfil():
 
     return render_template("perfil.html",clase_hoy=clase_hoy,clase_semana=clase_semana,ahora=t.fecha(),hora=t.hora())
 
+@app.route("/usuario", methods=['POST'])
+@login_required
+def usuario():
+    if request.form.get('mod'):
+        ui = Usuario.query.get(current_user.id)
+        ui.nombre = request.form.get('inombre')
+        ui.apellido = request.form.get('iapellido')
+        ui.ci = request.form.get('ici')
+        ui.email = request.form.get('iemail')
+        ui.telefono = request.form.get('itelefono')
+        db.session.commit()
+    u = db.session.query(Usuario)\
+    .join(TipoUsuario)\
+    .filter(Usuario.id==current_user.id)\
+    .first()
+    return render_template('usuario.html',u=u)
+
 @app.route("/materias", methods=['POST'])
 @login_required
 def materias():
@@ -307,10 +324,37 @@ def administracion():
 @app.route("/listacarreras", methods=['POST'])
 @login_required
 def listacarreras():
-    carreras = Carrera.query\
-    .filter(Carrera.activo == True)\
-    .all()
-    return render_template('lista-carreras.html',carreras=carreras)
+    if request.form.get('alta'):
+        c = Carrera(\
+        nombre_carrera=request.form.get('cnombre'),\
+        responsable=request.form.get('ccoordinador'))
+        db.session.add(c)
+        db.session.commit()
+    if request.form.get('baja'):
+        c = Carrera.query.get(int(request.form.get('cid')))
+        c.activo = False
+        db.session.commit()
+    if request.form.get('mod'):
+        u = Carrera.query.get(int(request.form.get('cid')))
+        u.nombre_carrera=request.form.get('cnombre')
+        u.responsable=request.form.get('ccoordinador')
+        db.session.commit()
+    if request.form.get('modificacion'):
+        u = Carrera.query.get(int(request.form.get('cid')))
+        if not u.responsable:
+            coord = 0
+        else:
+            coord = u.responsable
+        return jsonify({
+        "id":u.id,
+        "nombre":u.nombre_carrera,
+        "coordinador":coord
+        })
+    else:
+        carreras = Carrera.query\
+        .filter(Carrera.activo == True)\
+        .all()
+        return render_template('lista-carreras.html',carreras=carreras)
 
 @app.route("/listaperiodos", methods=['POST'])
 @login_required
@@ -349,11 +393,46 @@ def listaperiodos():
 @app.route("/listausuarios", methods=['POST'])
 @login_required
 def listausuarios():
-    usuarios = db.session.query(Usuario)\
-    .join(TipoUsuario)\
-    .filter(Usuario.activo == True)\
-    .all()
-    return render_template('lista-usuarios.html',usuarios=usuarios)
+    if request.form.get('alta'):
+        u = Usuario(\
+        nombre=request.form.get('unombre'),\
+        apellido=request.form.get('uapellido'),\
+        ci=request.form.get('uci'),\
+        email=request.form.get('uemail'),\
+        tipo=request.form.get('utipo'),\
+        telefono=request.form.get('utelefono'))
+        db.session.add(u)
+        db.session.commit()
+    if request.form.get('baja'):
+        u = Usuario.query.get(int(request.form.get('uid')))
+        u.activo = False
+        db.session.commit()
+    if request.form.get('mod'):
+        u = Usuario.query.get(int(request.form.get('uid')))
+        u.nombre=request.form.get('unombre')
+        u.apellido=request.form.get('uapellido')
+        u.ci=request.form.get('uci')
+        u.tipo=request.form.get('utipo')
+        u.email=request.form.get('uemail')
+        u.telefono=request.form.get('utelefono')
+        db.session.commit()
+    if request.form.get('modificacion'):
+        u = Usuario.query.get(int(request.form.get('uid')))
+        return jsonify({
+        "id":u.id,
+        "nombre":u.nombre,
+        "apellido":u.apellido,
+        "ci":u.ci,
+        "tipo":u.tipo,
+        "telefono":u.telefono,
+        "email":u.email
+        })
+    else:
+        usuarios = db.session.query(Usuario)\
+        .join(TipoUsuario)\
+        .filter(Usuario.activo == True)\
+        .all()
+        return render_template('lista-usuarios.html',usuarios=usuarios)
 
 @app.route("/alumnos", methods=['POST'])
 @login_required

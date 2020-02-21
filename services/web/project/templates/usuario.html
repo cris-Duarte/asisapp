@@ -1,0 +1,29 @@
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    {{u.tipos.descripcion}}, {{u.nombre}}
+  </div>
+  <div class="panel-body">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">Nombres</span>
+      <input class="form-control form-info" type="text" id="inombre" value="{{u.nombre}}" disabled>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon2">Apellidos</span>
+      <input class="form-control form-info" type="text" id="iapellido" value="{{u.apellido}}" disabled>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon3">Nro. de CI</span>
+      <input class="form-control form-info" type="number" id="ici" value="{{u.ci}}" disabled>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon4">Email</span>
+      <input class="form-control form-info" type="email" id="iemail" value="{{u.email}}" disabled>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon5">Nro. de Telefono</span>
+      <input class="form-control form-info" type="text" id="itelefono" value="{{u.telefono}}" disabled>
+    </div>
+    <button id='btneditarinfo' onclick="editarinfo()" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Editar</button>
+  </div>
+</div>
