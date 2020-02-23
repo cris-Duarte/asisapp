@@ -6,6 +6,58 @@ body {
   margin-bottom: 5px;
 }
 
+.btn_try {
+  background-color: transparent;
+  border: 3px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  text-align: center;
+  display: inline-block;
+  font-weight: 600;
+  color: #000000;
+  border-color: #ffff00;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-rendering: auto;
+  font-family: inherit;
+}
+.btn-secundario {
+  border: 3px solid transparent;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: .50rem;
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+.btn-principal {
+  border: 3px solid transparent;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: .50rem;
+  color: #000000;
+  background-color: #ffff00;
+  border-color: #000000;
+}
+
+.jumbotron-custom {
+    background-image: url("/static/cover.jpg");
+    background-color: #17234E;
+    margin-top: 0;
+    min-height: 50%;
+    background-repeat: no-repeat;
+    background-position: top;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+.title-custom {
+  filter: drop-shadow(0 0 0.3rem white);
+  color: #ffff00;
+
+}
+
 .panel-admin{
   margin-bottom: 5px;
 }

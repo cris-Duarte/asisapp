@@ -40,15 +40,18 @@
         </button>
         <a class="navbar-brand" href="#">Gestión de Asistencia</a>
       </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li role="presentation" class="active"><a href="#" data-toggle="pill" onclick="perfil()">Inicio</a></li>
           <li role="presentation"><a href="#" data-toggle="pill" onclick="misclases()">Mis Clases</a></li>
           <li role="presentation" class="dropdown">
+          {% if current_user.tipo == 2 or current_user.tipo == 1 %}
           <li role="presentation"><a href="#" data-toggle="pill">Consultas</a></li>
           <li role="presentation"><a href="#" data-toggle="pill" onclick="materias()">Materias</a></li>
+          {% endif %}
+          {% if current_user.tipo == 1 %}
           <li role="presentation"><a href="#" data-toggle="pill" onclick="administracion()">Administración</a></li>
+          {% endif %}
           <li role="presentation"><a href="#" data-toggle="pill" onclick="usuario()">Perfil</a></li>
           <li role="presentation"><a role="button" onclick="salir()">Cerrar Sesión</a></li>
         </ul>

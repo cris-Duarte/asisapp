@@ -586,6 +586,12 @@ def listar():
             "resultado":"error"
         })
 
+"""
+@app.route("/detalumno/<int:d>", methods=['GET'])
+@login_required
+def detalumno(a):
+"""
+
 
 ## CLASES Y FUNCIONES
 

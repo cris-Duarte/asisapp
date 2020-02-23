@@ -1,11 +1,10 @@
-<div class="jumbotron">
+<div class="jumbotron jumbotron-custom">
   <div class="container">
-    <h1>Hola {% if current_user.tipo == 3 %}Prof.
+    <h1 class="title-custom">Hola {% if current_user.tipo == 3 %}Prof.
       {% endif %}
       {{ current_user.nombre }} {{ current_user.apellido }}</h1>
       <h3><span class="label label-success">{{ ahora }}</span></h3>
       <h3><span class="label label-success">{{ hora }} horas</span></h3>
-    <p><a class="btn btn-primary btn-lg" href="#clases_semana" role="button">Ver Clases de hoy</a></p>
   </div>
 </div>
 <h3><span class="label label-primary">Clases de Hoy</span></h3>
@@ -36,7 +35,7 @@
   <div class="bs-callout bs-callout-default"">
     <div class="caja_materias">
       <h4 class="nombre_materia">{{ clases_semana[0].nombre }} <span class="label label-default">Código: {{ clases_semana[0].codigo }}</span></h4>
-      <h5><span class="label label-default">Curso:</span> {{ clases_semana[0].curso }} {{ clases_semana[0].seccion }}</h5>
+      <h5><span class="label label-default">Curso:</span> {{ clases_semana[0].cursomateria.descripcion }} {{ clases_semana[0].seccion }}</h5>
       <h5><span class="label label-default">Carrera:</span> {{ clases_semana[1].nombre_carrera }}</h5>
       <h5><span class="label label-default">Sala:</span> {{ clases_semana[2].sala }}</h5>
       <h5><span class="label label-default">Horario:</span> {{ clases_semana[2].dia }}, de {{ clases_semana[2].desde }} a {{ clases_semana[2].hasta }} horas. {{ clases_semana[3].nombre_periodo }}</h5>

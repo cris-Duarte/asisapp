@@ -21,6 +21,7 @@
           </thead>
           <tbody>
       {% for materia in materias %}
+        {% if materia.carreras.responsable==current_user.id or current_user.tipo==1%}
             <tr>
               <th scope="row">{{ materia.id }}</th>
               <td>{{ materia.nombre }}</td>
@@ -31,6 +32,7 @@
                 <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
               </td>
             </tr>
+          {% endif %}
         {% else %}
             <td> No hay materias </td>
         {% endfor %}
