@@ -12,7 +12,7 @@
       <div class="panel-group" id="carrera{{clase.id}}-padre" role="tablist" aria-multiselectable="true">
         <div class="panel-body panel-interno">
           {% for materia in clase.materias %}
-            {% if materia.docente == current_user.id %}
+            {% if materia.docente == current_user.id and materia.actual %}
             <!-- IDEA:  -->
             <div class="panel panel-success">
               <div class="panel-heading" role="tab" id="heading{{ materia.nombre }}">

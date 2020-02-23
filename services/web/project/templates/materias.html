@@ -42,7 +42,17 @@
                 {% endfor %}
             </select>
           </div>
-
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon3">Periodo de Clases</span>
+            <select class="form-control form-materia" id="mperiodo">
+              <option value="falta_valor">Elija una opción</option>
+              {% for periodo in periodos %}
+              <option value="{{periodo.id}}" id="periodo{{periodo.id}}">{{periodo.nombre_periodo}}</option>
+              {% else %}
+              <option value="falta_valor">No hay periodos cargados</option>
+              {% endfor %}
+            </select>
+          </div>
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">Docente</span>
             <select class="form-control form-materia" id="mdocente">

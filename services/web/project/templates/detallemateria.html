@@ -18,6 +18,9 @@
             <tr>
               <td><h4>Docente:</h4></td><td><h4><span class="label label-primary">Prof. {{ m.docentes['nombre'] }} {{ m.docentes['apellido'] }}</h4></td>
             </tr>
+            <tr>
+              <td><h4>Periodo:</h4></td><td><h4><span class="label label-primary">{{ m.materiasperiodo.nombre_periodo }}</h4></td>
+            </tr>
           </table>
           <div id="mhorario">
   {% endif %}
@@ -27,7 +30,7 @@
               <tr>
               <td>
                 <h5>
-                  {{ horario.horariosperiodo.nombre_periodo }}. {{ horario.dia }}, de {{ horario.desde }} a {{ horario.hasta }} horas. Sala: {{ horario.sala }}  </h5>
+                  {{ horario.dia }}, de {{ horario.desde }} a {{ horario.hasta }} horas. Sala: {{ horario.sala }}  </h5>
               </td>
               <td>
                 <button type="button" class="btn btn-info btn-xs" onclick="hmodificar({{ horario.id }},{{ horario.materia }})">
@@ -61,7 +64,7 @@
             <div class="panel-body">
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon3">Día de Clase:</span>
-                <select class="form-control" id="hdia">
+                <select class="form-control form-horario" id="hdia">
                   <option class="falta_valor" value="falta_valor">Elija una opción</option>
                   <option value="Lunes" id="Lunes">Lunes</option>
                   <option value="Martes" id="Martes">Martes</option>
@@ -72,26 +75,15 @@
                 </select>
               </div>
               <div class="input-group">
-                <span class="input-group-addon" id="basic-addon3">Periodo de Clases</span>
-                <select class="form-control" id="hperiodo">
-                  <option value="falta_valor">Elija una opción</option>
-                  {% for periodo in periodos %}
-                  <option value="{{periodo.id}}" id="periodo{{periodo.id}}">{{periodo.nombre_periodo}}</option>
-                  {% else %}
-                  <option value="falta_valor">No hay periodos cargados</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group">
                 <span class="input-group-addon" id="basic-addon3">Horas de Clases</span>
                 <span class="input-group-addon" name="hhorad">Desde:</span>
-                <input class="form-control" type="time" id="hhorad">
+                <input class="form-control form-horario" type="time" id="hhorad">
                 <span class="input-group-addon" id="basic-addon3">Hasta:</span>
-                <input class="form-control" type="time" id="hhorah">
+                <input class="form-control form-horario" type="time" id="hhorah">
               </div>
               <div class="input-group">
                 <span class="input-group-addon" id="sala">Sala</span>
-                <input type="text" id="hsala" value="">
+                <input class="form-control form-horario" type="text" id="hsala" value="">
               </div>
               <button data-id="{{ m.id }}" onclick="addHorario({{m.id}})" class="btn btn-primary" type="button" id="btnhorario"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Horario Nuevo</button>
               <button type="button" class="btn btn-danger" onclick='hcancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>

@@ -412,6 +412,7 @@ var malta = function(id) {
         if (id != null){
           mcancelar();
         }
+        mcancelar();
         document.getElementById('lista-materias').innerHTML = request.response;
       };
       request.send(data);
@@ -451,6 +452,9 @@ var mmodificar = function(id) {
     if (respuesta.docente != 0){
       document.getElementById(`docente${respuesta.docente}`).selected = true;
     }
+    if (respuesta.periodo != 0){
+      document.getElementById(`periodo${respuesta.periodo}`).selected = true;
+    }
     b = document.getElementById('btnmateria');
     b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar modificacion";
     b.removeAttribute("onclick");
@@ -487,24 +491,28 @@ var minfo = function(id) {
 // FIN DE ADMINISTRACION DE MATERIAS
 // INICIO DE ADMINISTRACION DE HORARIOS
 var addHorario = function(mhid) {
-  const request = new XMLHttpRequest();
-  const data = new FormData();
-  data.append('mid',mhid);
-  e = document.getElementById('hdia');
-  data.append('hdia', e.options[e.selectedIndex].value);
-  e = document.getElementById('hperiodo');
-  data.append('hperiodo', e.options[e.selectedIndex].value);
-  data.append('hhorad', document.getElementById('hhorad').value);
-  data.append('hhorah', document.getElementById('hhorah').value);
-  data.append('hsala', document.getElementById('hsala').value);
-  data.append('halta',true);
-  request.open('POST', '/detallemateria');
-  request.onload = () => {
-    document.getElementById('mhorario').innerHTML = request.response;
-  };
-  request.send(data);
+  p = new FormP('.form-horario');
+  p.formV();
+  if (p.bandera) {
+    const request = new XMLHttpRequest();
+    const data = new FormData();
+    data.append('mid',mhid);
+    e = document.getElementById('hdia');
+    data.append('hdia', e.options[e.selectedIndex].value);
+    data.append('hhorad', document.getElementById('hhorad').value);
+    data.append('hhorah', document.getElementById('hhorah').value);
+    data.append('hsala', document.getElementById('hsala').value);
+    data.append('halta',true);
+    request.open('POST', '/detallemateria');
+    request.onload = () => {
+      document.getElementById('mhorario').innerHTML = request.response;
+    };
+    request.send(data);
 
-  return false;
+    return false;
+  } else {
+    start('danger','Por favor complete todos los campos');
+  }
 };
 var heliminar = function(hid , mid) {
   const request = new XMLHttpRequest();
@@ -529,8 +537,6 @@ var modHorario = function(hid) {
   data.append('mid',document.getElementById('btnhorario').dataset.id);
   e = document.getElementById('hdia');
   data.append('hdia',e.options[e.selectedIndex].value);
-  e = document.getElementById('hperiodo');
-  data.append('hperiodo', e.options[e.selectedIndex].value);
   data.append('hhorad', document.getElementById('hhorad').value);
   data.append('hhorah', document.getElementById('hhorah').value);
   data.append('hsala', document.getElementById('hsala').value);
@@ -557,7 +563,6 @@ var hmodificar = function(hid, mid) {
     document.getElementById('hhorad').value = respuesta.desde;
     document.getElementById('hhorah').value = respuesta.hasta;
     document.getElementById('hsala').value = respuesta.sala;
-    document.getElementById(`periodo${respuesta.periodo}`).selected = true;
     document.getElementById(`${respuesta.dia}`).selected = true;
 
 
@@ -579,7 +584,6 @@ var hcancelar = function (idm) {
   document.getElementById('hhorah').value = "";
   document.getElementById('hsala').value = "";
   document.getElementById('hdia').firstElementChild.selected = true;
-  document.getElementById('hperiodo').firstElementChild.selected = true;
 
   b = document.getElementById('btnhorario');
   b.innerHTML = "<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Guardar Horario Nueva";

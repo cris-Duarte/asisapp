@@ -43,6 +43,7 @@ var verificarm = function () {
       if (data.mensaje == "Ok") {
         const materiaInfo = `<p class="label label-info label-inline">Materia: ${data.Materia}</p>
                                   <p class="label label-info label-inline">Curso: ${data.Curso}, sección: ${data.Seccion}</p>
+                                  <p class="label label-info label-inline">Periodo: ${data.Periodo}</p>
                                   <p class="label label-info label-inline">Carrera: ${data.Carrera}</p>
                                   <p class="label label-info label-inline">Docente: ${data.Docente}</p>`;
               document.getElementById('infomateria').innerHTML = materiaInfo;

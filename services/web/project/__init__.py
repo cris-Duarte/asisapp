@@ -129,12 +129,15 @@ def dashboard():
 @login_required
 def misclases():
     clases = db.session.query(Carrera)\
-    .join(Materia, Inscripcion, Alumno)\
+    .join(Materia, Periodo, Inscripcion, Alumno)\
     .filter(Materia.docente==current_user.id)\
     .all()
-
+    t = Tiempo()
     for carrera in clases:
         for materia in carrera.materias:
+            if materia.periodo:
+                materia.actual = t.interfecha(materia.materiasperiodo.inicio,materia.materiasperiodo.fin)
+
             d = db.session.query(Diadeclase)\
             .join(Horario, Materia)\
             .filter(Materia.id==materia.id)\
@@ -157,7 +160,7 @@ def perfil():
     .filter(Materia.docente == current_user.id)\
     .filter(Materia.carrera==Carrera.id)\
     .filter(Materia.id==Horario.materia)\
-    .filter(Horario.periodo==Periodo.id)\
+    .filter(Materia.periodo==Periodo.id)\
     .filter(Materia.activo==True)\
     .filter(Horario.activo==True)\
     .all()
@@ -205,9 +208,10 @@ def usuario():
 @login_required
 def materias():
     cursos = Curso.query.all()
-    carreras = Carrera.query.all()
+    carreras = Carrera.query.filter_by(activo=True).all()
     usuarios = Usuario.query.filter_by(activo=True).all()
-    return render_template("materias.html", carreras=carreras, usuarios=usuarios,cursos=cursos)
+    periodos = Periodo.query.filter_by(activo=True).all()
+    return render_template("materias.html", carreras=carreras, usuarios=usuarios,cursos=cursos,periodos=periodos)
 
 @app.route("/listamaterias", methods=['POST'])
 @login_required
@@ -219,7 +223,8 @@ def listamaterias():
         curso=request.form.get('mcurso'),\
         seccion=request.form.get('mseccion'),\
         carrera=int(request.form.get('mcarrera')),\
-        docente=int(request.form.get('mdocente')), \
+        docente=int(request.form.get('mdocente')),\
+        periodo=request.form.get('mperiodo'),\
         activo = True)
         db.session.add(m)
         db.session.commit()
@@ -234,6 +239,7 @@ def listamaterias():
         m.seccion = request.form.get('mseccion')
         m.carrera = int(request.form.get('mcarrera'))
         m.docente = int(request.form.get('mdocente'))
+        m.periodo = request.form.get('mperiodo')
         db.session.commit()
     if request.form.get('mod'):
         m = Materia.query.get(int(request.form.get('mid')))
@@ -241,13 +247,18 @@ def listamaterias():
             d = 0
         else:
             d = m.docente
+        if not m.periodo:
+            p = 0
+        else:
+            p = m.periodo
         return jsonify({
         "id":m.id,
         "nombre":m.nombre,
         "curso":m.curso,
         "seccion":m.seccion,
         "carrera":m.carrera,
-        "docente":d
+        "docente":d,
+        "periodo":p
         })
     else:
         materias = db.session.query(Materia)\
@@ -266,13 +277,13 @@ def detallemateria():
         dia=request.form.get('hdia'),\
         desde=request.form.get('hhorad'),\
         hasta=request.form.get('hhorah'),\
-        periodo=request.form.get('hperiodo'),\
         sala=request.form.get('hsala'),\
         materia=int(request.form.get('mid')))
         db.session.add(h)
         db.session.commit()
         s_horarios = True
-        p = Periodo.query.get(int(request.form.get("hperiodo")))
+        pm = Materia.query.get(request.form.get('mid'))
+        p = Periodo.query.get(pm.periodo)
         dias_clases('alta',h.id,h.dia,p.inicio,p.fin)
     if request.form.get('hbaja'):
         h = Horario.query.get(int(request.form.get('hid')))
@@ -283,13 +294,13 @@ def detallemateria():
     if request.form.get('modHorario'):
         h = Horario.query.get(int(request.form.get('hid')))
         h.dia = request.form.get('hdia')
-        h.periodo = request.form.get('hperiodo')
         h.desde = request.form.get('hhorad')
         h.hasta = request.form.get('hhorah')
         h.sala = request.form.get('hsala')
         db.session.commit()
         s_horarios = True
-        p = Periodo.query.get(int(request.form.get("hperiodo")))
+        m = Materia.query.get(h.horariosmateria.id)
+        p = Periodo.query.get(m.periodo)
         dias_clases('mod',h.id,request.form.get('hdia'),p.inicio,p.fin)
 
     if request.form.get('hmodificacion'):
@@ -297,7 +308,6 @@ def detallemateria():
         return jsonify({
         "id":h.id,
         "dia":h.dia,
-        "periodo":h.periodo,
         "desde":h.desde,
         "hasta":h.hasta,
         "sala":h.sala
@@ -455,6 +465,7 @@ def alumnos():
               "Seccion": m.Materia.seccion,
               "Carrera": m.Carrera.nombre_carrera,
               "Docente": m.Usuario.nombre + " " + m.Usuario.apellido,
+              "Periodo": m.Materia.materiasperiodo.nombre_periodo,
               "mensaje":"Ok"
           })
         else:
@@ -482,10 +493,16 @@ def alumnos():
             a.telefono = request.form.get('atelefono')
             a.email = request.form.get('aemail')
             db.session.commit()
-            m = Materia.query.filter_by(codigo=request.form.get('mcodigo')).first()
+            m = db.session.query(Materia)\
+            .join(Horario)\
+            .filter(Materia.codigo==request.form.get('mcodigo'))\
+            .filter(Materia.activo==True)\
+            .filter(Horario.activo==True)\
+            .first()
             c = Inscripcion.query\
             .filter(Inscripcion.materia == m.id)\
-            .filter(Inscripcion.alumno ==a.id)\
+            .filter(Inscripcion.alumno == a.id)\
+            .filter(Inscripcion.periodo == m.periodo)\
             .all()
             if c:
                 return jsonify({
@@ -494,7 +511,11 @@ def alumnos():
                 })
             else:
                 t = Tiempo()
-                i = Inscripcion(materia=m.id,alumno=a.id,fecha=t.fecha())
+                i = Inscripcion(\
+                materia=m.id,\
+                alumno=a.id,\
+                fecha=t.fecha(),\
+                periodo=m.periodo)
                 m.cantidad += 1
                 q = db.session.add(i)
                 db.session.commit()
@@ -516,7 +537,7 @@ def alumnos():
             db.session.commit()
             m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
             t = Tiempo()
-            i = Inscripcion(materia=m.id,alumno=a.id, fecha=t.fecha())
+            i = Inscripcion(materia=m.id,alumno=a.id, fecha=t.fecha(),periodo=m.periodo)
             m.cantidad += 1
             q = db.session.add(i)
             db.session.commit()
@@ -529,10 +550,10 @@ def alumnos():
 @login_required
 def lista(d):
     diadeclase = Diadeclase.query.get(d)
-
     alumnos = db.session.query(Inscripcion)\
     .join(Alumno)\
     .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
+    .filter(Inscripcion.periodo==diadeclase.diasdeclases.horariosmateria.periodo)\
     .all()
     t = Tiempo()
     ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
@@ -741,6 +762,7 @@ class Materia(db.Model):
     carrera = db.Column(db.Integer, db.ForeignKey("carreras.id"))
     docente = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     activo  = db.Column(db.Boolean(), default=True, nullable=False)
+    periodo = db.Column(db.Integer, db.ForeignKey("periodos.id"))
     inscriptos = db.relationship('Inscripcion', backref='inscripcion_materia', lazy=True)
     horariosmateria = db.relationship('Horario', backref='horariosmateria', lazy=True)
 
@@ -754,7 +776,6 @@ class Horario(db.Model):
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     diasdeclases = db.relationship('Diadeclase', backref='diasdeclases', lazy=True)
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
-    periodo = db.Column(db.Integer, db.ForeignKey("periodos.id"), nullable=False)
 
 class Periodo(db.Model):
     __tablename__ = "periodos"
@@ -763,7 +784,8 @@ class Periodo(db.Model):
     inicio = db.Column(db.String(20), nullable=False)
     fin = db.Column(db.String(20), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
-    horariosperiodo = db.relationship('Horario', backref='horariosperiodo', lazy=True)
+    inscripcionesperiodo = db.relationship('Inscripcion', backref='inscripcionesperiodo', lazy=True)
+    matierasperiodo = db.relationship('Materia', backref='materiasperiodo', lazy=True)
 
 class Carrera(db.Model):
     __tablename__ = "carreras"
@@ -812,6 +834,7 @@ class Inscripcion(db.Model):
     materia = db.Column(db.Integer, db.ForeignKey("materias.id"), nullable=False)
     alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id"), nullable=False)
     fecha = db.Column(db.String(50), nullable=False)
+    periodo = db.Column(db.Integer, db.ForeignKey("periodos.id"), nullable=False)
     activo = db.Column(db.Boolean(), default=True, nullable=False)
 
 class Diadeclase(db.Model):
