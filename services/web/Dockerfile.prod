@@ -19,7 +19,7 @@ RUN apk update \
 
 # lint
 RUN pip install --upgrade pip
-RUN pip install --upgrade google-api-python-client
+#RUN pip install --upgrade google-api-python-client
 #RUN pip install flake8
 #COPY . /usr/src/app/
 #RUN flake8 --ignore=E501,F401 .
