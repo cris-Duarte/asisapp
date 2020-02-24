@@ -20,7 +20,6 @@ class FormP {
            this.bandera = false;
          } else {
            this.data.append(opt[i].id,opt[i].value);
-           console.log(opt[i].id+" "+opt[i].value);
          }
        } else if (opt[i].type == 'select-one'){
          let e = opt[i]
@@ -128,7 +127,7 @@ function init() {
     gapi.auth2.init();
     /* Ready. Make a call to gapi.auth2.init or some other API */
   });
-  console.log('init ok');
+
 }
 var salir = function() {
   var auth2 = gapi.auth2.getAuthInstance();

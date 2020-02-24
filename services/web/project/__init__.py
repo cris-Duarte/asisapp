@@ -482,9 +482,7 @@ def alumnos():
             return ({
               "registro":"listo",
               "nombre":a.nombre,
-              "apellido":a.apellido,
-              "email":a.email,
-              "telefono":a.telefono
+              "apellido":a.apellido
           })
         else:
             return jsonify({
@@ -494,9 +492,6 @@ def alumnos():
     if request.form.get('alta_alumno'):
         a = Alumno.query.filter_by(ci=request.form.get('aci')).first()
         if a:
-            a.telefono = request.form.get('atelefono')
-            a.email = request.form.get('aemail')
-            db.session.commit()
             m = db.session.query(Materia)\
             .join(Horario)\
             .filter(Materia.codigo==request.form.get('mcodigo'))\
@@ -534,8 +529,6 @@ def alumnos():
             apellido=request.form.get('aapellido'),\
             ci=request.form.get('aci'),\
             con=request.form.get('aci'),\
-            email=request.form.get('aemail'),\
-            telefono=request.form.get('atelefono'),\
             activo=True)
             db.session.add(a)
             db.session.commit()
@@ -866,8 +859,6 @@ class Alumno(db.Model):
     nombre = db.Column(db.String(60), nullable=False)
     apellido = db.Column(db.String(60), nullable=False)
     ci = db.Column(db.Integer, default=0,nullable=False)
-    email = db.Column(db.String(128))
-    telefono = db.Column(db.String(15))
     activo = db.Column(db.Boolean(), default=True, nullable=False)
     con = db.Column(db.String(200), nullable=False)
     inscriptos = db.relationship('Inscripcion', backref='inscripcion_alumnos', lazy=True)

@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('anombre').disabled = true;
   document.getElementById('aapellido').disabled = true;
-  document.getElementById('atelefono').disabled = true;
-  document.getElementById('aemail').disabled = true;
   document.getElementById('infoproceso').style.display = 'none'
 });
 
@@ -74,10 +72,6 @@ var verificara = function () {
         document.getElementById('anombre').disabled = true;
         document.getElementById('aapellido').value = data.apellido;
         document.getElementById('aapellido').disabled = true;
-        document.getElementById('aemail').value = data.email;
-        document.getElementById('atelefono').value = data.telefono;
-        document.getElementById('aemail').disabled = false;
-        document.getElementById('atelefono').disabled = false;
         }else{
             document.getElementById('infoalumno').innerHTML = '<span class="label label-warning label-inline">Por favor completa los siguientes campos</span>';
             fa = document.querySelectorAll('.form-alumno');
@@ -109,7 +103,6 @@ class FormP {
            this.bandera = false;
          } else {
            this.data.append(opt[i].id,opt[i].value);
-           console.log(opt[i].id+" "+opt[i].value);
          }
        } else if (opt[i].type == 'select-one'){
          let e = opt[i]
