@@ -30,11 +30,11 @@ GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configur
 @app.route("/gLogin")
 def gLogin():
     if current_user.is_active:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for(':1337/dashboard'))
     else:
         return render_template("login.html",g=GOOGLE_CLIENT_ID)
 
-@app.route('/gCallback', methods=['POST'])
+@app.route(':1337/gCallback', methods=['POST'])
 def create_or_update_user():
     token = request.form.get('idtoken')
     idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
@@ -47,7 +47,7 @@ def create_or_update_user():
         u = load_user(user.id)
         login_user(user,remember=True, force=False, fresh=True)
 
-        return redirect(url_for('dashboard'))
+        return redirect(url_for(':1337/dashboard'))
     else:
         return 'Hubo un problema con la autenticacion'+mensaje
 
@@ -55,7 +55,7 @@ def create_or_update_user():
 @app.route("/ingresar")
 def ingresar():
     if current_user.is_active:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for(':1337/dashboard'))
     else:
         return render_template("ingresar.html")
 
@@ -73,12 +73,12 @@ def login():
     else:
         u = load_user(u.id)
         login_user(u,remember=True, force=False, fresh=True)
-        return redirect(url_for('dashboard'), code=303)
+        return redirect(url_for(':1337/dashboard'), code=303)
 
 @app.route("/salir", methods=['POST'])
 def salir():
     logout_user()
-    return redirect(url_for('ingresar'))
+    return redirect(url_for(':1337/ingresar'))
 
 ## FIN LOGIN SYSTEM
 
