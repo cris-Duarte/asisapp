@@ -30,7 +30,7 @@ GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configur
 @app.route("/gLogin")
 def gLogin():
     if current_user.is_active:
-        return redirect(url_for(':1337/dashboard'))
+        return redirect(url_for('dashboard'))
     else:
         return render_template("login.html",g=GOOGLE_CLIENT_ID)
 
