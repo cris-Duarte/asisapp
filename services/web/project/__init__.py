@@ -34,7 +34,7 @@ def gLogin():
     else:
         return render_template("login.html",g=GOOGLE_CLIENT_ID)
 
-@app.route(':1337/gCallback', methods=['POST'])
+@app.route('/gCallback', methods=['POST'])
 def create_or_update_user():
     token = request.form.get('idtoken')
     idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
