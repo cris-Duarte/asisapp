@@ -131,6 +131,7 @@ def misclases():
     clases = db.session.query(Carrera)\
     .join(Materia, Periodo, Inscripcion, Alumno)\
     .filter(Materia.docente==current_user.id)\
+    .order_by(Alumno.apellido.asc())\
     .all()
     t = Tiempo()
     for carrera in clases:
@@ -363,6 +364,7 @@ def listacarreras():
     else:
         carreras = Carrera.query\
         .filter(Carrera.activo == True)\
+        .order_by(Carrera.id.asc())\
         .all()
         return render_template('lista-carreras.html',carreras=carreras)
 
@@ -397,6 +399,7 @@ def listaperiodos():
     else:
         periodos = Periodo.query\
         .filter(Periodo.activo==True)\
+        .order_by(Periodo.id.asc())\
         .all()
         return render_template('lista-periodos.html',periodos=periodos)
 
@@ -441,6 +444,7 @@ def listausuarios():
         usuarios = db.session.query(Usuario)\
         .join(TipoUsuario)\
         .filter(Usuario.activo == True)\
+        .order_by(Usuario.id.asc())\
         .all()
         return render_template('lista-usuarios.html',usuarios=usuarios)
 
@@ -554,6 +558,7 @@ def lista(d):
     .join(Alumno)\
     .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
     .filter(Inscripcion.periodo==diadeclase.diasdeclases.horariosmateria.periodo)\
+    .order_by(Alumno.apellido.asc())\
     .all()
     t = Tiempo()
     ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)

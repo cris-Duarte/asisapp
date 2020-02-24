@@ -9,12 +9,8 @@ def create_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
-    seed_db()
-    usuarios()
-    cargaalumno()
-    cargamateria()
 
-
+@cli.command("seed_db")
 def seed_db():
     db.session.add(TipoUsuario(descripcion="Administrador"))
     db.session.add(TipoUsuario(descripcion="Coordinador"))
@@ -41,6 +37,7 @@ def seed_db():
     db.session.add(Carrera(nombre_carrera="Ingeniería Comercial"))
     db.session.commit()
 
+@cli.command("usuarios")
 def usuarios():
     f = open("usuarios.csv")
     reader = csv.reader(f)
@@ -55,6 +52,7 @@ def usuarios():
 
     db.session.commit()
 
+@cli.command("cargaalumno")
 def cargaalumno():
     f = open("alumnos.csv")
     reader = csv.reader(f)
@@ -68,6 +66,7 @@ def cargaalumno():
 
     db.session.commit()
 
+@cli.command("cargamateria")
 def cargamateria():
     f = open("materias.csv")
     reader = csv.reader(f)
