@@ -5,7 +5,7 @@ services:
   nginx:
     build: ./services/nginx
     ports:
-      - 1337:81
+      - 1337:1337
     depends_on:
       - web
   web:
