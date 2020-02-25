@@ -17,10 +17,14 @@
       <h5><span class="label label-primary">Carrera:</span> {{ clases_hoy.Carrera.nombre_carrera }}</h5>
       <h5><span class="label label-primary">Sala:</span> {{ clases_hoy.Horario.sala }}</h5>
       <h5><span class="label label-primary">Horario:</span> {{ clases_hoy.Horario.dia }}, de {{ clases_hoy.Horario.desde }} a {{ clases_hoy.Horario.hasta }} horas. {{ clases_hoy.Periodo.nombre_periodo }}</h5>
-      <h3><span class="label label-info" onclick="cantidad_alumnos({{ clases_hoy[0].id }})"><span class="cant_a{{ clases_hoy[0].id }}">{{ clases_hoy.Materia.cantidad }}</span> alumnos registrados  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></h3>
+      <h4><span class="label label-info" onclick="cantidad_alumnos({{ clases_hoy[0].id }})"><span class="cant_a{{ clases_hoy[0].id }}">{{ clases_hoy.Materia.cantidad }}</span> alumnos registrados  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></h4>
 
     </div>
-    <a class="btn btn-primary btn-lg btn-llamar" href="{{ url_for('lista', d=clases_hoy.Horario.diadeclase) }}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> Llamar lista</a>
+    <br>
+    <div id="btn-principales" class="btn-group-justified" role="group" aria-label="...">
+      <a role="button" class="btn btn-default" onclick="registroAlumnos('{{ clases_hoy.Materia.codigo }}')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Anotar Alumnos</a>
+      <a class="btn btn-primary" href="{{ url_for('lista', d=clases_hoy.Horario.diadeclase) }}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> Llamar Lista</a>
+    </div>
   </div>
   {% else %}
     <div class="bs-callout bs-callout-warning"">
@@ -57,3 +61,28 @@
   </div>
   {% endfor %}
 </div>
+
+<div id="regAlumno" class="modal" tabindex="-1" role="dialog" >
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="panel panel-primary panel-interno">
+        <div class="panel-heading">Anotar Alumno</div>
+
+        <div id='infoproceso' class="alert " role="alert">
+
+        </div>
+          <input class="form-control form-alumno" type="text" placeholder="Código de Clase" id="mcodigo" onblur="verificarm()" required>
+          <div id="infomateria"></div>
+          <input class="form-control form-alumno" type="number" placeholder="Nro de Cédula" id="aci" onblur="verificara()" required>
+          <div id="infoalumno">
+          </div>
+          <input class="form-control form-alumno" type="text" placeholder="Nombres" id="anombre">
+          <input class="form-control form-alumno" type="text" placeholder="Apellidos" id="aapellido">
+          <button id='btnAltaAlumno' onclick="acon()" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enviar</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>
+      </div>
+    </div>
+  </div>

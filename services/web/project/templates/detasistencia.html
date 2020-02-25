@@ -1,0 +1,17 @@
+<div class="panel-group" id="acordeonMateriasAlumno" role="tablist" aria-multiselectable="true">
+  {% for materia in materias %}
+  <div class="panel panel-primary">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#acordeonMateriasAlumno" href="#listaMaterias" aria-expanded="true" aria-controls="collapseTwo">
+          {{materia.nombre}}
+        </a>
+      </h4>
+    </div>
+    <div id="materia{{}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+
+      </div>
+    </div>
+    {% endfor %}
+</div>

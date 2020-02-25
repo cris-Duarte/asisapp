@@ -49,7 +49,7 @@ def create_or_update_user():
 
         return redirect(url_for('dashboard'))
     else:
-        return 'Hubo un problema con la autenticacion'+mensaje
+        return render_template('error.html')
 
 ## Login System LEGACY
 @app.route("/ingresar")
@@ -81,10 +81,26 @@ def salir():
     return redirect(url_for('ingresar'))
 
 ## FIN LOGIN SYSTEM
-
+"""
 @app.route("/")
 def index():
-    return render_template('registroalumnos.html')
+    return render_template('consultaalumnos.html')
+
+@app.route("/detasistencia", methods=['POST'])
+def detasistencia():
+    ci = request.form.get('ci')
+    a = db.session.query(Materia)\
+    .join(Inscripcion,  Alumno)\
+    .filter(Alumno.ci==6367577)\
+    .filter(Alumno.activo==True)\
+    .filter(Materia.activo==True)\
+    .all()
+
+    for materia in a:
+
+
+    return render_template('detasistencia.html',ci=ci)
+
 
 @app.route("/registrodocentes")
 def registrodocentes():
@@ -120,6 +136,7 @@ def docentes():
             'estado':'aun_no'
             })
 
+"""
 @app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
@@ -613,6 +630,18 @@ def detalumno(a):
 
 
 ## CLASES Y FUNCIONES
+def acron(a):
+    if (a=='Presente'):
+        v = 'P'
+    elif (a=='Ausente'):
+        v = 'A'
+    elif (a=='Justificado - Trabajo'):
+        v = 'JT'
+    elif (a=='Justificado - Salud'):
+        v = 'JS'
+    elif (a=='Justificado - Otro'):
+        v = 'JO'
+    return v
 
 def codigo():
     b = True
