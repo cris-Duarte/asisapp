@@ -148,6 +148,7 @@ def misclases():
     clases = db.session.query(Carrera)\
     .join(Materia, Periodo, Inscripcion, Alumno)\
     .filter(Materia.docente==current_user.id)\
+    .filter(Materia.activo==True)\
     .order_by(Alumno.apellido.asc())\
     .all()
     t = Tiempo()
