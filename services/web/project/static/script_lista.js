@@ -127,3 +127,21 @@ var listar = function (idc,condicion) {
   siguiente();
 }
 }
+
+// CONSULTA DETALLADA DE ASISTENCIA
+var consultaDetallada = function (alumno,materia,asistencia) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('alumno',alumno);
+  data.append('materia',materia);
+  data.append('asistencia',asistencia);
+  request.open('POST', '/detalleasistencia');
+  request.onload = () => {
+    document.getElementById('respuestaDetalle').innerHTML = request.response;
+    $('#detAlumno').modal('show');
+  };
+  request.send(data);
+
+  return false;
+};
+// FIN CONSULTA DETALLADA DE ASISTENCIA

@@ -759,7 +759,7 @@ var adminInscripcion = function(i,con) {
     t.children[0].className = '';
     t.children[1].className = '';
     t.children[2].className = '';
-    b.className = 'btn btn-danger';
+    b.className = 'btn btn-danger btn-xs';
     b.innerHTML = "<span class='glyphicon glyphicon-remove-sign' aria-hidden='true'></span>";
     b.removeAttribute("onclick");
     b.setAttribute("onclick","adminInscripcion("+i+",'rm')");
@@ -769,7 +769,7 @@ var adminInscripcion = function(i,con) {
     t.children[0].className = 'noactivo';
     t.children[1].className = 'noactivo';
     t.children[2].className = 'noactivo';
-    b.className = 'btn btn-primary';
+    b.className = 'btn btn-primary btn-xs';
     b.innerHTML = "<span class='glyphicon glyphicon-ok-sign' aria-hidden='true'></span>";
     b.removeAttribute("onclick");
     b.setAttribute("onclick","adminInscripcion("+i+",'ok')");
@@ -790,3 +790,21 @@ var mostrarLista = function(m) {
   cargadevistasimple('/listasistencia','lista'+m,data,false);
 };
 // FIN LISTAS DE ASISTENCIA
+
+// CONSULTA DETALLADA DE ASISTENCIA
+var consultaDetallada = function (alumno,materia,asistencia) {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  data.append('alumno',alumno);
+  data.append('materia',materia);
+  data.append('asistencia',asistencia);
+  request.open('POST', '/detalleasistencia');
+  request.onload = () => {
+    document.getElementById('respuestaDetalle').innerHTML = request.response;
+    $('#detAlumno').modal('show');
+  };
+  request.send(data);
+
+  return false;
+};
+// FIN CONSULTA DETALLADA DE ASISTENCIA

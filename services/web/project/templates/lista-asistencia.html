@@ -12,7 +12,7 @@
     <tr id="ti{{inscripcion.id}}">
       {% if inscripcion.activo %}
       <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
-      <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
+      <td><a role="button" onclick="consultaDetallada({{inscripcion.inscripcion_alumnos.ci}},{{inscripcion.materia}},{{inscripcion.asistencia}})">{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</a></td>
       <td>
         {% if inscripcion.asistencia <= 60 %}
         <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
@@ -21,7 +21,7 @@
         {% endif %}
       </td>
       <td>
-        <button id='i{{inscripcion.id}}' onclick="adminInscripcion({{inscripcion.id}},'rm')"  type="button" class="btn btn-danger">
+        <button id='i{{inscripcion.id}}' onclick="adminInscripcion({{inscripcion.id}},'rm')"  type="button" class="btn btn-danger btn-xs">
           <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
         </button>
       </td>
@@ -36,7 +36,7 @@
         {% endif %}
       </td>
       <td>
-        <button id='i{{inscripcion.id}}' onclick="adminInscripcion({{inscripcion.id}},'ok')" type="button" class="btn btn-primary">
+        <button id='i{{inscripcion.id}}' onclick="adminInscripcion({{inscripcion.id}},'ok')" type="button" class="btn btn-primary  btn-xs">
           <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
         </button>
       </td>

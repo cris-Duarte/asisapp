@@ -1,0 +1,50 @@
+{% if a >= 60 %}
+  <div class="panel panel-success panel-interno">
+{% else %}
+  <div class="panel panel-danger panel-interno">
+{% endif %}
+  <div id="tituloDetalleAlumno" class="panel-heading">{{alumno.nombre}} {{alumno.apellido}}</div>
+  <div class="panel-body">
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Ent.</th>
+          <th scope="col">Sal.</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in dias %}
+          <tr>
+            <td>{{d.fecha_simple}}</td>
+            <td>
+              {% if d.entrada == 'P' %}
+              <span class="label label-success">{{d.entrada}}</span>
+              {% else %}
+                {% if d.entrada == 'A'%}
+                <span class="label label-danger">{{d.entrada}}</span
+                {% else %}
+                <span class="label label-default">{{d.entrada}}</span>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td>
+              {% if d.entrada == 'P' %}
+              <span class="label label-success">{{d.salida}}</span>
+              {% else %}
+                {% if d.entrada == 'A'%}
+                <span class="label label-danger">{{d.salida}}</span
+                {% else %}
+              <span class="label label-default">{{d.salida}}</span>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td>No se encontró información</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+  </div>
+</div>

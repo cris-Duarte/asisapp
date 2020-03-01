@@ -112,23 +112,46 @@ def listaclases():
 @app.route("/")
 def index():
     return render_template('consultaalumnos.html')
-
-@app.route("/detasistencia", methods=['POST'])
-def detasistencia():
-    ci = request.form.get('ci')
-    a = db.session.query(Materia)\
-    .join(Inscripcion,  Alumno)\
-    .filter(Alumno.ci==6367577)\
-    .filter(Alumno.activo==True)\
-    .filter(Materia.activo==True)\
+"""
+@app.route("/detalleasistencia", methods=['POST'])
+def detalleasistencia():
+    ci = request.form.get('alumno')
+    materia = request.form.get('materia')
+    d = db.session.query(Diadeclase)\
+    .join(Horario, Materia)\
+    .filter(Diadeclase.activo==True)\
+    .filter(Materia.id==materia)\
+    .order_by(Diadeclase.fecha.asc())\
     .all()
+    a = Alumno.query.filter_by(ci=ci).first()
+    for dia in d:
+        f = fecha_simple(dia.fecha)
+        dia.fecha_simple = f
+        e = Asistencia.query\
+        .filter(and_(Asistencia.alumno==a.id,Asistencia.diadeclase==dia.id))
+        if e.all():
+            if e.count() == 1:
+                ea = e.first()
+                dia.entrada = acron(e.condicion)
+                dia.salida = ''
+            else:
+                ea = e.all()
+                if e[0].tipo == 'Entrada':
+                    dia.entrada = acron(e[0].condicion)
+                    dia.salida = acron(e[1].condicion)
+                else:
+                    dia.entrada = acron(e[1].condicion)
+                    dia.salida = acron(e[0].condicion)
+        else:
+            t = Tiempo()
+            c = datetime.strptime(dia.fecha,"%Y-%m-%d %H:%M:%S")
+            if c < t.fecha_com():
+                dia.entrada = 'A'
+                dia.salida = 'A'
 
-    for materia in a:
+    return render_template('detalleasistencia.html',alumno=a,dias=d,a=int(request.form.get('asistencia')))
 
-
-    return render_template('detasistencia.html',ci=ci)
-
-
+"""
 @app.route("/registrodocentes")
 def registrodocentes():
     return render_template('registrodocentes.html')
@@ -162,8 +185,8 @@ def docentes():
             return jsonify({
             'estado':'aun_no'
             })
-
 """
+
 @app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
@@ -753,6 +776,14 @@ def fecha_hr(fecha):
     resultado = "{}, {} de {} del {}".format(dia, numero_dia, mes, anho)
     return resultado
 
+def fecha_simple(fecha):
+    f = datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+    numero_dia = f.day
+    mes = f.month
+    anho = f.year
+    resultado = "{} - {} - {}".format(numero_dia, mes, anho)
+    return resultado
+
 def calculardias(m):
     d = db.session.query(Diadeclase)\
     .join(Horario, Materia)\
@@ -949,6 +980,7 @@ class Diadeclase(db.Model):
     llamados = db.Column(db.Integer, default=0,nullable=False)
     asistentes = db.Column(db.Float(), default=0,nullable=False)
     activo = db.Column(db.Boolean(), default=True)
+    diasasistencias = db.relationship('Asistencia', backref='diasasistencias', lazy=True)
 
 class Asistencia(db.Model):
     __tablename__= "asistencias"
