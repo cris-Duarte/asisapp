@@ -596,6 +596,7 @@ def alumnos():
 @login_required
 def lista(d):
     diadeclase = Diadeclase.query.get(d)
+    diadeclase.hr = fecha_hr(diadeclase.fecha)
     alumnos = db.session.query(Inscripcion)\
     .join(Alumno)\
     .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
@@ -604,7 +605,6 @@ def lista(d):
     .all()
     t = Tiempo()
     ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
-
     return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
 
 @app.route("/listar", methods=['POST'])
@@ -722,6 +722,17 @@ def dias_clases(c,h,dia_clase,fi,ff):
             db.session.commit()
             fecha_clase = fecha_clase + timedelta(days=7)
     return True
+
+def fecha_hr(fecha):
+    f = datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+    meses = ("Enero", "Febrero", "Marzo", "Abri", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+    dias = ("Lunes", "Martes","Miercoles","Jueves","Viernes","Sabado","Domingo")
+    numero_dia = f.day
+    mes = meses[f.month - 1]
+    dia = dias[f.isoweekday() - 1]
+    anho = f.year
+    resultado = "{}, {} de {} del {}".format(dia, numero_dia, mes, anho)
+    return resultado
 
 def calcularasistencia(a,tc,m):
     alumno = db.session.query(Asistencia)\
