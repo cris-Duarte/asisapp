@@ -10,14 +10,16 @@
   </thead>
   <tbody>
 {% for lista in listas %}
-    {% if lista.activo == False %}
-    <tr class="noactivo">
-    {% else %}
     <tr>
-    {% endif %}
+    {% if lista.activo == False %}
+      <td class="noactivo">{{lista.id}}</td>
+      <td class="noactivo">{{lista.fecha}}</td>
+      <td class="noactivo">{{lista.diasdeclases.horariosmateria.nombre}}</td>
+    {% else %}
       <td>{{lista.id}}</td>
       <td>{{lista.fecha}}</td>
       <td>{{lista.diasdeclases.horariosmateria.nombre}}</td>
+    {% endif %}
       <td>
         {% if lista.activo == False %}
         <button type="button" class="btn btn-primary nopaco" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
