@@ -93,7 +93,7 @@ def listaclases():
     if request.form.get('codigo'):
         listas = Materia.query\
         .filter(Materia.codigo==request.form.get('codigo'))\
-        .all()
+        .first()
         b = 'c'
     return render_template('lista-clases.html',listas=listas,b=b)
 

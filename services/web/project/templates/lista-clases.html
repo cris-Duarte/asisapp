@@ -33,6 +33,36 @@
 
 {% endif %}
 {% if b == 'c' %}
-
-
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Materia</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for horario in listas.horariosmateria %}
+      {% for lista in horario.diasdeclases %}
+        <tr>
+          <td>{{lista.id}}</td>
+          <td>{{lista.fecha}}</td>
+          <td>{{listas.nombre}}</td>
+          <td>
+            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td>
+            <p>
+              No dias de clases
+            </p>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+  </tbody>
 {% endif %}
