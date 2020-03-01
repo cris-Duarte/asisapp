@@ -129,12 +129,14 @@ var listar = function (idc,condicion) {
 }
 
 // CONSULTA DETALLADA DE ASISTENCIA
-var consultaDetallada = function (alumno,materia,asistencia) {
+var detalle = function () {
+  a = document.getElementById('actual');
+  alumno = a.firstElementChild.dataset.id;
+  materia = a.firstElementChild.dataset.mat;
   const request = new XMLHttpRequest();
   const data = new FormData();
-  data.append('alumno',alumno);
+  data.append('ida',alumno);
   data.append('materia',materia);
-  data.append('asistencia',asistencia);
   request.open('POST', '/detalleasistencia');
   request.onload = () => {
     document.getElementById('respuestaDetalle').innerHTML = request.response;

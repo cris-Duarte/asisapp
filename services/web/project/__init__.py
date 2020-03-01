@@ -115,7 +115,6 @@ def index():
 """
 @app.route("/detalleasistencia", methods=['POST'])
 def detalleasistencia():
-    ci = request.form.get('alumno')
     materia = request.form.get('materia')
     d = db.session.query(Diadeclase)\
     .join(Horario, Materia)\
@@ -123,7 +122,12 @@ def detalleasistencia():
     .filter(Materia.id==materia)\
     .order_by(Diadeclase.fecha.asc())\
     .all()
-    a = Alumno.query.filter_by(ci=ci).first()
+    if request.form.get('alumno'):
+        ci = request.form.get('alumno')
+        a = Alumno.query.filter_by(ci=ci).first()
+    else:
+        id = request.form.get('ida')
+        a = Alumno.query.get(id)
     for dia in d:
         f = fecha_simple(dia.fecha)
         dia.fecha_simple = f
@@ -132,7 +136,7 @@ def detalleasistencia():
         if e.all():
             if e.count() == 1:
                 ea = e.first()
-                dia.entrada = acron(e.condicion)
+                dia.entrada = acron(ea.condicion)
                 dia.salida = ''
             else:
                 ea = e.all()

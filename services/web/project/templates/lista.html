@@ -51,7 +51,7 @@
         <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
         <p class="alumno label label-info label-alumno" style='display:none;'>Inicio de Lista</p>
       {% for alumno in alumnos %}
-        <p class="alumno label label-default label-alumno" data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+        <p class="alumno label label-default label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
       {% else %}
         <p class="label label-warning label-alumno">No hay alumnos registrados</p>
         <script>
@@ -61,7 +61,7 @@
       <p class="alumno label label-info label-alumno" style='display:none;'>Fin de Lista</p>
       <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
       <span id="anterior" onclick="atras()"></span>
-      <span id="actual"></span>
+      <span id="actual" onclick="detalle()"></span>
       <span id="siguiente" onclick="siguiente()"></span>
       </div>
       <div id="btn-principales" class="btn-group-justified" role="group" aria-label="...">
@@ -100,6 +100,21 @@
             <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver
           </a>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detAlumno" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-lg" data-dismiss="modal" name="button">&times</button>
+        <h4>Detalle de Asistencia</h4>
+      </div>
+      <div id="respuestaDetalle" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>
       </div>
     </div>
   </div>
