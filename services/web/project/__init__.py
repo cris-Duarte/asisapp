@@ -81,6 +81,22 @@ def salir():
     return redirect(url_for('ingresar'))
 
 ## FIN LOGIN SYSTEM
+
+@app.route("/listaclases", methods=['POST'])
+def listaclases():
+    if request.form.get('fecha'):
+        f = datetime.strptime(request.form.get('fecha'),"%Y-%m-%d")
+        listas = Diadeclase.query\
+        .filter(Diadeclase.fecha==str(f))\
+        .all()
+        b = 'f'
+    if request.form.get('codigo'):
+        listas = Materia.query\
+        .filter(Materia.codigo==request.form.get('codigo'))\
+        .all()
+        b = 'c'
+    return render_template('lista-clases.html',listas=listas,b=b)
+
 """
 @app.route("/")
 def index():
@@ -872,6 +888,7 @@ class Diadeclase(db.Model):
     fecha = db.Column(db.String(50), nullable=False)
     llamados = db.Column(db.Integer, default=0,nullable=False)
     asistentes = db.Column(db.Float(), default=0,nullable=False)
+    activo = db.Column(db.Boolean(), default=True)
 
 class Asistencia(db.Model):
     __tablename__= "asistencias"

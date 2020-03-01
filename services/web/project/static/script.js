@@ -686,3 +686,29 @@ var verificara = function () {
 
 
 // FIN DE VISTA DE REGISTRO DE USUArIOS
+
+// INICIO VISTAS DE DIAS DE CLASES
+var bfecha = function() {
+  f = document.getElementById('bfecha').value
+  if (f == ''){
+    start('danger','Espesifíque alguna fecha');
+  } else {
+    data = new FormData();
+    data.append('fecha',f);
+    cargadevistasimple('/listaclases','lista-clases',data,false);
+  }
+};
+
+var bcodigo = function() {
+  c = document.getElementById('bcodigo').value
+  if (c == ''){
+    start('danger','Ingrese algún código de materia');
+  } else {
+    data = new FormData();
+    data.append('codigo',c);
+    cargadevistasimple('/listaclases','lista-clases',data,false);
+  }
+};
+
+
+// INICIO VISTAS DE DIAS DE CLASES

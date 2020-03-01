@@ -103,4 +103,40 @@
       </div>
     </div>
 <!-- IDEA: FIN COORDINADORES Y ADMINISTRADORES  -->
+<!-- IDEA: INICIO DE ADMINISTRACION DE DIAS DE CLASES -->
+<div class="panel panel-default panel-admin">
+  <div class="panel-heading" role="tab" id="headingThree">
+    <h4 class="panel-title">
+      <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#diasdeclases" aria-expanded="true" aria-controls="collapseOne">
+        Administracion de Días de Clases
+      </a>
+    </h4>
+  </div>
+  <div id="diasdeclases" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+    <div class="panel-body">
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <input type="text" class="form-control" id="bcodigo" placeholder="Código de Clase">
+            <span class="input-group-btn">
+              <button onclick="bcodigo()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar Materia</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="input-group">
+            <input type="date" class="form-control" id="bfecha">
+            <span class="input-group-btn">
+              <button onclick="bfecha()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar por Fecha</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div><!-- /.row -->
+      <div id="lista-clases">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- IDEA: FIN DE ADMINISTRACION DE DIAS DE CLASES -->
 </div>
