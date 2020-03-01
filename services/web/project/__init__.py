@@ -178,8 +178,11 @@ def listasistencia():
     .filter(Materia.activo==True)\
     .first()
     d = calculardias(m.id)
-    for materia in m.inscriptos:
-        materia.asistencia = 0
+    for alumno in m.inscriptos:
+        if d>0 :
+            alumno.asistencia = calcularasistencia(alumno.alumno,d,m.id)
+        else:
+            alumno.asistencia = 0
     return render_template('lista-asistencia.html',m=m)
 
 @app.route("/misclases", methods=['POST'])
@@ -751,18 +754,19 @@ def fecha_hr(fecha):
     return resultado
 
 def calculardias(m):
-    d = db.session.query(Materia)\
-    .join(Horario, Diadeclase)\
+    d = db.session.query(Diadeclase)\
+    .join(Horario, Materia)\
     .filter(Materia.id==m)\
-    .first()
+    .all()
     t = Tiempo()
-    for horario in d.horariosmateria:
-        for dia in horario.diasdeclases:
-            clase = datetime.strptime(dia.fecha,"%Y-%m-%d %H:%M:%S")
-            h = datetime.strptime(horario.desde, "%H:%M")
-            clase = clase + h
-            print(clase)
-    return True
+    b = 0
+    for dia in d:
+        clase = datetime.strptime(dia.fecha,"%Y-%m-%d %H:%M:%S")
+        h = datetime.strptime(dia.diasdeclases.desde, "%H:%M")
+        clase = clase + timedelta(hours=h.hour)
+        if clase < t.fecha_com():
+            b = b+1
+    return b
 
 def calcularasistencia(a,tc,m):
     alumno = db.session.query(Asistencia)\
