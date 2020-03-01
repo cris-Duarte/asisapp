@@ -747,3 +747,39 @@ var habdia = function(d) {
 };
 
 // INICIO VISTAS DE DIAS DE CLASES
+// INICIO DE ADMINISTRACION DE INSCRIPCIONES
+var adminInscripcion = function(i,con) {
+  data = new FormData();
+  data.append('i',i);
+  b = document.getElementById('i'+i);
+  const request = new XMLHttpRequest();
+  if (con == 'ok'){
+    data.append('hab',true);
+    t = document.getElementById('ti'+i)
+    t.children[0].className = '';
+    t.children[1].className = '';
+    t.children[2].className = '';
+    b.className = 'btn btn-danger';
+    b.innerHTML = "<span class='glyphicon glyphicon-remove-sign' aria-hidden='true'></span>";
+    b.removeAttribute("onclick");
+    b.setAttribute("onclick","adminInscripcion("+i+",'rm')");
+  } else if(con == 'rm'){
+    data.append('des',true);
+    t = document.getElementById('ti'+i)
+    t.children[0].className = 'noactivo';
+    t.children[1].className = 'noactivo';
+    t.children[2].className = 'noactivo';
+    b.className = 'btn btn-primary';
+    b.innerHTML = "<span class='glyphicon glyphicon-ok-sign' aria-hidden='true'></span>";
+    b.removeAttribute("onclick");
+    b.setAttribute("onclick","adminInscripcion("+i+",'ok')");
+  }
+  request.open('POST','/adminInscripcion');
+  request.onload = () => {
+    const respuesta = JSON.parse(request.responseText);
+    start(`${respuesta.clase}`,`${respuesta.mensaje}`);
+  };
+  request.send(data);
+  return false;
+};
+// FIN DE ADMINISTRACION DE INSCRIPCIONES

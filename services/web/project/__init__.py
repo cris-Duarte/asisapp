@@ -601,6 +601,7 @@ def lista(d):
     .join(Alumno)\
     .filter(Inscripcion.materia==diadeclase.diasdeclases.horariosmateria.id)\
     .filter(Inscripcion.periodo==diadeclase.diasdeclases.horariosmateria.periodo)\
+    .filter(Inscripcion.activo==True)\
     .order_by(Alumno.apellido.asc())\
     .all()
     t = Tiempo()
@@ -653,6 +654,24 @@ def listar():
             "mensaje":"Las clases de "+d.diasdeclases.horariosmateria.nombre+" de los "+d.diasdeclases.dia+" son de "+d.diasdeclases.desde+" a "+d.diasdeclases.hasta+" horas.",
             "resultado":"error"
         })
+
+@app.route("/adminInscripcion", methods=['POST'])
+@login_required
+def adminInscripcion():
+    i = Inscripcion.query.get(request.form.get('i'))
+    if request.form.get('des'):
+        i.activo = False
+        clase = 'danger'
+        mensaje = 'Se ha excluido a '+i.inscripcion_alumnos.nombre+' '+i.inscripcion_alumnos.apellido+' de la lista'
+    if request.form.get('hab'):
+        i.activo = True
+        clase = 'success'
+        mensaje = 'Se ha incluido a '+i.inscripcion_alumnos.nombre+' '+i.inscripcion_alumnos.apellido+' de la lista'
+    db.session.commit()
+    return jsonify({
+    'clase':clase,
+    'mensaje':mensaje
+    })
 
 """
 @app.route("/detalumno/<int:d>", methods=['GET'])
