@@ -114,7 +114,12 @@ svg {
   stroke-linejoin: round;
   fill: none;
 }
-
+.noactivo {
+  opacity: 0.5;
+}
+.noactivo .nopaco{
+  opacity: .5;
+}
 
 .panel-heading {
   text-align: center;
