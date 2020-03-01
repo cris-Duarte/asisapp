@@ -22,7 +22,8 @@
 {% block content %}
 
 {% if current_user.is_authenticated %}
-  {% if ahora %}
+  {% if ahora or current_user.tipo == 1 %}
+
   <div id="panel-lista" class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Lista de Asistencia - {{ dc.diasdeclases.horariosmateria.nombre }}</h3>

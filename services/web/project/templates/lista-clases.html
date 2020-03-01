@@ -10,13 +10,21 @@
   </thead>
   <tbody>
 {% for lista in listas %}
+    {% if lista.activo == False %}
+    <tr style="opacity:0.5;">
+    {% else %}
     <tr>
+    {% endif %}
       <td>{{lista.id}}</td>
       <td>{{lista.fecha}}</td>
       <td>{{lista.diasdeclases.horariosmateria.nombre}}</td>
       <td>
-        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+        {% if lista.activo == False %}
+        <button type="button" class="btn btn-primary" onclick="habdia({{lista.id}})" style="opacity:1;"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+        {% else %}
+        <a role="button" href="{{ url_for('lista', d=lista.id) }}" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
+        <button type="button" class="btn btn-danger" onclick="desdia({{lista.id}})"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+        {% endif %}
       </td>
     </tr>
 {% else %}
@@ -45,13 +53,21 @@
   <tbody>
     {% for horario in listas.horariosmateria %}
       {% for lista in horario.diasdeclases %}
+        {% if lista.activo == False %}
+        <tr style="opacity:0.5;">
+        {% else %}
         <tr>
+        {% endif %}
           <td>{{lista.id}}</td>
           <td>{{lista.fecha}}</td>
           <td>{{listas.nombre}}</td>
           <td>
-            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></button>
-            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+            {% if lista.activo == False %}
+            <button type="button" class="btn btn-primary" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+            {% else %}
+            <a role="button" href="{{ url_for('lista', d=lista.id) }}" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
+            <button type="button" class="btn btn-danger" onclick="desdia({{lista.id}})"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+            {% endif %}
           </td>
         </tr>
         {% else %}

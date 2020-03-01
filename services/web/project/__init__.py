@@ -84,15 +84,26 @@ def salir():
 
 @app.route("/listaclases", methods=['POST'])
 def listaclases():
+    if request.form.get('des'):
+        d = Diadeclase.query.get(str(request.form.get('dia')))
+        d.activo = False
+        db.session.commit()
+    if request.form.get('hab'):
+        d = Diadeclase.query.get(str(request.form.get('dia')))
+        d.activo = True
+        db.session.commit()
     if request.form.get('fecha'):
         f = datetime.strptime(request.form.get('fecha'),"%Y-%m-%d")
         listas = Diadeclase.query\
         .filter(Diadeclase.fecha==str(f))\
+        .order_by(Diadeclase.id.asc())\
         .all()
         b = 'f'
     if request.form.get('codigo'):
-        listas = Materia.query\
+        listas = db.session.query(Materia)\
+        .join(Horario,Diadeclase)\
         .filter(Materia.codigo==request.form.get('codigo'))\
+        .order_by(Diadeclase.id.asc())\
         .first()
         b = 'c'
     return render_template('lista-clases.html',listas=listas,b=b)
@@ -177,6 +188,7 @@ def misclases():
             .join(Horario, Materia)\
             .filter(Materia.id==materia.id)\
             .filter(Materia.activo==True)\
+            .filter(Diadeclase.activo==True)\
             .filter(Diadeclase.asistentes>0).count()
 
             for inscripcion in materia.inscriptos:
@@ -205,18 +217,21 @@ def perfil():
 
     for materia in mh:
         if t.interfecha(materia.Periodo.inicio,materia.Periodo.fin):
+            d = db.session.query(Diadeclase)\
+            .join(Horario)\
+            .filter(Horario.activo==True)\
+            .filter(Horario.id==Diadeclase.horario)\
+            .filter(Diadeclase.horario==materia.Horario.id)\
+            .filter(Diadeclase.fecha==str(t.s_fecha()))
+
             if t.eshoy(materia.Horario.dia):
-                d = db.session.query(Diadeclase)\
-                .join(Horario)\
-                .filter(Horario.activo==True)\
-                .filter(Horario.id==Diadeclase.horario)\
-                .filter(Diadeclase.horario==materia.Horario.id)\
-                .filter(Diadeclase.fecha==str(t.s_fecha()))
                 if d.count() == 1:
                     materia.Horario.diadeclase=d[0].id
+                    dia = d.firs()
                 else:
                     materia.Horario.diadeclase='Error con el id de clase'
-                clase_hoy.append(materia)
+                if dia.activo:
+                    clase_hoy.append(materia)
             else:
                 clase_semana.append(materia)
 
@@ -601,7 +616,7 @@ def listar():
     tipo = request.form.get('tipo')
     d = Diadeclase.query.get(diadeclase)
     t = Tiempo()
-    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha):
+    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha) or current_user.tipo==1:
         basis = Asistencia.query\
         .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
         .filter(Asistencia.tipo==tipo)

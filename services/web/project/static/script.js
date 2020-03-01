@@ -700,7 +700,7 @@ var bfecha = function() {
 };
 
 var bcodigo = function() {
-  c = document.getElementById('bcodigo').value
+  c = document.getElementById('bcodigo').value;
   if (c == ''){
     start('danger','Ingrese algún código de materia');
   } else {
@@ -710,5 +710,40 @@ var bcodigo = function() {
   }
 };
 
+var desdia = function(d) {
+  data = new FormData();
+  c = document.getElementById('bcodigo').value;
+  if (c == ''){
+    c = document.getElementById('bfecha').value;
+    if (c == ''){
+      start('danger','Especifique una fecha on un código');
+    } else {
+      data.append('fecha',c);
+    }
+  } else {
+    data.append('codigo',c);
+  }
+  data.append('des',true);
+  data.append('dia',d);
+  cargadevistasimple('/listaclases','lista-clases',data,false);
+};
+
+var habdia = function(d) {
+  data = new FormData();
+  c = document.getElementById('bcodigo').value;
+  if (c == ''){
+    c = document.getElementById('bfecha').value;
+    if (c == ''){
+      start('danger','Especifique una fecha on un código');
+    } else {
+      data.append('fecha',c);
+    }
+  } else {
+    data.append('codigo',c);
+  }
+  data.append('hab',true);
+  data.append('dia',d);
+  cargadevistasimple('/listaclases','lista-clases',data,false);
+};
 
 // INICIO VISTAS DE DIAS DE CLASES
