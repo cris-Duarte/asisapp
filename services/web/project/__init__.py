@@ -169,35 +169,32 @@ def docentes():
 def dashboard():
     return render_template("dashboard.html",g=GOOGLE_CLIENT_ID)
 
+@app.route("/listasistencia", methods=['POST'])
+@login_required
+def listasistencia():
+    m = db.session.query(Materia)\
+    .join(Inscripcion,Alumno)\
+    .filter(Materia.id==request.form.get('materia'))\
+    .filter(Materia.activo==True)\
+    .first()
+    d = calculardias(m.id)
+    for materia in m.inscriptos:
+        materia.asistencia = 0
+    return render_template('lista-asistencia.html',m=m)
+
 @app.route("/misclases", methods=['POST'])
 @login_required
 def misclases():
     clases = db.session.query(Carrera)\
-    .join(Materia, Periodo, Inscripcion, Alumno)\
+    .join(Materia, Periodo)\
     .filter(Materia.docente==current_user.id)\
     .filter(Materia.activo==True)\
-    .order_by(Alumno.apellido.asc())\
     .all()
     t = Tiempo()
     for carrera in clases:
         for materia in carrera.materias:
             if materia.periodo:
                 materia.actual = t.interfecha(materia.materiasperiodo.inicio,materia.materiasperiodo.fin)
-
-            d = db.session.query(Diadeclase)\
-            .join(Horario, Materia)\
-            .filter(Materia.id==materia.id)\
-            .filter(Materia.activo==True)\
-            .filter(Diadeclase.activo==True)\
-            .filter(Diadeclase.asistentes>0).count()
-
-            for inscripcion in materia.inscriptos:
-                if d > 0:
-                    a = calcularasistencia(inscripcion.inscripcion_alumnos.id,d,materia.id)
-                else:
-                    a = 0
-                inscripcion.asistencia = a
-
     return render_template('misclases.html',clases=clases)
 
 @app.route("/perfil", methods=['POST'])
@@ -752,6 +749,20 @@ def fecha_hr(fecha):
     anho = f.year
     resultado = "{}, {} de {} del {}".format(dia, numero_dia, mes, anho)
     return resultado
+
+def calculardias(m):
+    d = db.session.query(Materia)\
+    .join(Horario, Diadeclase)\
+    .filter(Materia.id==m)\
+    .first()
+    t = Tiempo()
+    for horario in d.horariosmateria:
+        for dia in horario.diasdeclases:
+            clase = datetime.strptime(dia.fecha,"%Y-%m-%d %H:%M:%S")
+            h = datetime.strptime(horario.desde, "%H:%M")
+            clase = clase + h
+            print(clase)
+    return True
 
 def calcularasistencia(a,tc,m):
     alumno = db.session.query(Asistencia)\

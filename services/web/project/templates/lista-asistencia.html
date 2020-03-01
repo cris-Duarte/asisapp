@@ -1,0 +1,51 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col"># Ci</th>
+      <th scope="col">Alumno</th>
+      <th scope="col">% Asistencia</th>
+      <th scope="col">Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for inscripcion in m.inscriptos %}
+    <tr id="ti{{inscripcion.id}}">
+      {% if inscripcion.activo %}
+      <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
+      <td>{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
+      <td>
+        {% if inscripcion.asistencia <= 60 %}
+        <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
+        {% else %}
+          <p class="label label-success label-inline">{{inscripcion.asistencia}} %</p>
+        {% endif %}
+      </td>
+      <td>
+        <button id='i{{inscripcion.id}}' onclick="adminInscripcion({{inscripcion.id}},'rm')"  type="button" class="btn btn-danger">
+          <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+        </button>
+      </td>
+      {% else %}
+      <td class="noactivo">{{ inscripcion.inscripcion_alumnos.ci }}</td>
+      <td class="noactivo">{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
+      <td class="noactivo">
+        {% if inscripcion.asistencia <= 60 %}
+        <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
+        {% else %}
+          <p class="label label-success label-inline">{{inscripcion.asistencia}} %</p>
+        {% endif %}
+      </td>
+      <td>
+        <button id='i{{inscripcion.id}}' onclick="adminInscripcion({{inscripcion.id}},'ok')" type="button" class="btn btn-primary">
+          <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        </button>
+      </td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr>
+      <td>No hay alumnos inscriptos aún</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

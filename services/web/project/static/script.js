@@ -783,3 +783,10 @@ var adminInscripcion = function(i,con) {
   return false;
 };
 // FIN DE ADMINISTRACION DE INSCRIPCIONES
+// LISTAS DE ASISTENCIA`
+var mostrarLista = function(m) {
+  data = new FormData()
+  data.append('materia',m);
+  cargadevistasimple('/listasistencia','lista'+m,data,false);
+};
+// FIN LISTAS DE ASISTENCIA
