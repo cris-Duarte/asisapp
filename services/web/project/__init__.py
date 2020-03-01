@@ -741,7 +741,7 @@ def calcularasistencia(a,tc,m):
     .filter(Alumno.id==a)\
     .filter(Asistencia.condicion=='Presente')\
     .count()
-    resultado = (alumno*50)/tc
+    resultado = round((alumno*50)/tc,2)
     return resultado
 
 class Tiempo():
