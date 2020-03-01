@@ -149,7 +149,7 @@ def detalleasistencia():
                 dia.entrada = 'A'
                 dia.salida = 'A'
 
-    return render_template('detalleasistencia.html',alumno=a,dias=d,a=int(request.form.get('asistencia')))
+    return render_template('detalleasistencia.html',alumno=a,dias=d)
 
 """
 @app.route("/registrodocentes")

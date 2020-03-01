@@ -12,7 +12,7 @@
     <tr id="ti{{inscripcion.id}}">
       {% if inscripcion.activo %}
       <td>{{ inscripcion.inscripcion_alumnos.ci }}</td>
-      <td><a role="button" onclick="consultaDetallada({{inscripcion.inscripcion_alumnos.ci}},{{inscripcion.materia}},{{inscripcion.asistencia}})">{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</a></td>
+      <td><a role="button" onclick="consultaDetallada({{inscripcion.inscripcion_alumnos.ci}},{{inscripcion.materia}})">{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</a></td>
       <td>
         {% if inscripcion.asistencia <= 60 %}
         <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>
@@ -27,7 +27,7 @@
       </td>
       {% else %}
       <td class="noactivo">{{ inscripcion.inscripcion_alumnos.ci }}</td>
-      <td class="noactivo">{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</td>
+      <td class="noactivo"><a role="button" onclick="consultaDetallada({{inscripcion.inscripcion_alumnos.ci}},{{inscripcion.materia}})">{{ inscripcion.inscripcion_alumnos.apellido }}, {{ inscripcion.inscripcion_alumnos.nombre }}</a></td>
       <td class="noactivo">
         {% if inscripcion.asistencia <= 60 %}
         <p class="label label-danger label-inline">{{inscripcion.asistencia}} %</p>

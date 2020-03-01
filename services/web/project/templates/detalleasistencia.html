@@ -1,8 +1,5 @@
-{% if a >= 60 %}
-  <div class="panel panel-success panel-interno">
-{% else %}
-  <div class="panel panel-danger panel-interno">
-{% endif %}
+
+  <div class="panel panel-primary panel-interno">
   <div id="tituloDetalleAlumno" class="panel-heading">{{alumno.nombre}} {{alumno.apellido}}</div>
   <div class="panel-body">
     <table class="table">
@@ -21,22 +18,14 @@
               {% if d.entrada == 'P' %}
               <span class="label label-success">{{d.entrada}}</span>
               {% else %}
-                {% if d.entrada == 'A'%}
-                <span class="label label-danger">{{d.entrada}}</span
-                {% else %}
-                <span class="label label-default">{{d.entrada}}</span>
-                {% endif %}
+              <span class="label label-danger">{{d.entrada}}</span
               {% endif %}
             </td>
             <td>
               {% if d.entrada == 'P' %}
               <span class="label label-success">{{d.salida}}</span>
               {% else %}
-                {% if d.entrada == 'A'%}
-                <span class="label label-danger">{{d.salida}}</span
-                {% else %}
-              <span class="label label-default">{{d.salida}}</span>
-                {% endif %}
+              <span class="label label-danger">{{d.salida}}</span
               {% endif %}
             </td>
           </tr>

@@ -792,12 +792,11 @@ var mostrarLista = function(m) {
 // FIN LISTAS DE ASISTENCIA
 
 // CONSULTA DETALLADA DE ASISTENCIA
-var consultaDetallada = function (alumno,materia,asistencia) {
+var consultaDetallada = function (alumno,materia) {
   const request = new XMLHttpRequest();
   const data = new FormData();
   data.append('alumno',alumno);
   data.append('materia',materia);
-  data.append('asistencia',asistencia);
   request.open('POST', '/detalleasistencia');
   request.onload = () => {
     document.getElementById('respuestaDetalle').innerHTML = request.response;
