@@ -1,0 +1,35 @@
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Fecha</th>
+        <th scope="col">Ent.</th>
+        <th scope="col">Sal.</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in dias %}
+        {% if d.valido %}
+          <tr>
+            <td>{{d.fecha_simple}}</td>
+            <td>
+              {% if d.entrada == 'P' %}
+              <span class="label label-success">{{d.entrada}}</span>
+              {% else %}
+              <span class="label label-danger">{{d.entrada}}</span
+              {% endif %}
+            </td>
+            <td>
+              {% if d.salida == 'P' %}
+              <span class="label label-success">{{d.salida}}</span>
+              {% else %}
+              <span class="label label-danger">{{d.salida}}</span
+              {% endif %}
+            </td>
+          </tr>
+        {% endif %}
+      {% else %}
+        <tr>
+          <td>No se encontró información</td>
+        </tr>
+      {% endfor %}
+    </tbody>

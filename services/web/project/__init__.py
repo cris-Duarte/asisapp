@@ -108,11 +108,11 @@ def listaclases():
         b = 'c'
     return render_template('lista-clases.html',listas=listas,b=b)
 
-"""
+
 @app.route("/")
 def index():
     return render_template('consultaalumnos.html')
-"""
+
 @app.route("/detalleasistencia", methods=['POST'])
 def detalleasistencia():
     materia = request.form.get('materia')
@@ -131,6 +131,7 @@ def detalleasistencia():
     for dia in d:
         f = fecha_simple(dia.fecha)
         dia.fecha_simple = f
+        dia.valido = fecha_valida(dia.fecha)
         e = Asistencia.query\
         .filter(and_(Asistencia.alumno==a.id,Asistencia.diadeclase==dia.id))
         if e.all():
@@ -152,8 +153,10 @@ def detalleasistencia():
             if c < t.fecha_com():
                 dia.entrada = 'A'
                 dia.salida = 'A'
-
-    return render_template('detalleasistencia.html',alumno=a,dias=d)
+    if request.form.get('vistaAlumno'):
+        return render_template('detalleAsistenciaAlumno.html',dias=d)
+    else:
+        return render_template('detalleasistencia.html',alumno=a,dias=d)
 
 """
 @app.route("/registrodocentes")
@@ -211,6 +214,26 @@ def listasistencia():
         else:
             alumno.asistencia = 0
     return render_template('lista-asistencia.html',m=m)
+
+@app.route("/detasistencia", methods=['POST'])
+def detasistencia():
+    ci = request.form.get('ci')
+    a = Alumno.query.filter_by(ci=ci).first()
+    materias = db.session.query(Materia)\
+    .join(Inscripcion)\
+    .filter(Inscripcion.activo==True)\
+    .filter(Inscripcion.alumno==a.id)\
+    .filter(Materia.activo==True)\
+    .all()
+    t = Tiempo()
+    for materia in materias:
+        d = calculardias(materia.id)
+        if d > 0:
+            materia.asistencia = calcularasistencia(a.id,d,materia.id)
+        if materia.periodo:
+            materia.actual = t.interfecha(materia.materiasperiodo.inicio,materia.materiasperiodo.fin)
+
+    return render_template('vistaMateriasAlumno.html',materias=materias,a=a.id)
 
 @app.route("/misclases", methods=['POST'])
 @login_required
@@ -780,6 +803,13 @@ def fecha_hr(fecha):
     resultado = "{}, {} de {} del {}".format(dia, numero_dia, mes, anho)
     return resultado
 
+def fecha_valida(fecha):
+    t = Tiempo()
+    f = datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+    if f <= t.fecha_com():
+        return True
+    else:
+        return False
 def fecha_simple(fecha):
     f = datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
     numero_dia = f.day
