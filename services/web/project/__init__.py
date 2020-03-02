@@ -207,12 +207,15 @@ def listasistencia():
     .filter(Materia.id==request.form.get('materia'))\
     .filter(Materia.activo==True)\
     .first()
-    d = calculardias(m.id)
-    for alumno in m.inscriptos:
-        if d>0 :
-            alumno.asistencia = calcularasistencia(alumno.alumno,d,m.id)
-        else:
-            alumno.asistencia = 0
+    if m:
+        d = calculardias(m.id)
+        for alumno in m.inscriptos:
+            if d>0 :
+                alumno.asistencia = calcularasistencia(alumno.alumno,d,m.id)
+            else:
+                alumno.asistencia = 0
+    else:
+        d = 0
     return render_template('lista-asistencia.html',m=m)
 
 @app.route("/detasistencia", methods=['POST'])
