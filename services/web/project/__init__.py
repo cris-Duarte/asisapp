@@ -277,7 +277,7 @@ def perfil():
             if t.eshoy(materia.Horario.dia):
                 if d.count() == 1:
                     materia.Horario.diadeclase=d[0].id
-                    dia = d.firs()
+                    dia = d.first()
                 else:
                     materia.Horario.diadeclase='Error con el id de clase'
                 if dia.activo:
@@ -286,6 +286,12 @@ def perfil():
                 clase_semana.append(materia)
 
     return render_template("perfil.html",clase_hoy=clase_hoy,clase_semana=clase_semana,ahora=t.fecha(),hora=t.hora())
+
+@app.route("/consultas", methods=['POST'])
+@login_required
+def consultas():
+
+    return render_template('consultas.html')
 
 @app.route("/usuario", methods=['POST'])
 @login_required
