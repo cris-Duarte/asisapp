@@ -98,6 +98,7 @@ var formV = function (nf) {
 var perfil = function() { cargadevistasimple('/perfil','body',false);};
 var misclases = function () { cargadevistasimple('/misclases','body',false);};
 var usuario = function () { cargadevistasimple('/usuario','body',false);};
+var consultas = function () { cargadevistasimple('/consultas','body',false);};
 var administracion = function() {
   const request = new XMLHttpRequest();
   request.open('POST','/administracion');

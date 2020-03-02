@@ -46,7 +46,7 @@
           <li role="presentation"><a href="#" data-toggle="pill" onclick="misclases()">Mis Clases</a></li>
           <li role="presentation" class="dropdown">
           {% if current_user.tipo == 2 or current_user.tipo == 1 %}
-          <li role="presentation"><a href="#" data-toggle="pill">Consultas</a></li>
+          <li role="presentation"><a href="#" data-toggle="pill" onclick="consultas()">Consultas</a></li>
           <li role="presentation"><a href="#" data-toggle="pill" onclick="materias()">Materias</a></li>
           {% endif %}
           {% if current_user.tipo == 1 %}

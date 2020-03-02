@@ -290,8 +290,34 @@ def perfil():
 @app.route("/consultas", methods=['POST'])
 @login_required
 def consultas():
+    g = [0,0,0,0,0,0]
+    t = Tiempo()
+    d = db.session.query(Diadeclase)\
+    .join(Horario, Materia)\
+    .all()
+    for dias in d:
+        if dias.fecha == str(t.s_fecha()):
+            g[0] = g[0] + 1
+            i = Inscripcion.query\
+            .filter(Inscripcion.materia==dias.diasdeclases.horariosmateria.id)\
+            .count()
+            g[1] = g[1] + i
+            a = Asistencia.query\
+            .filter(Asistencia.diadeclase==dias.id)\
+            .filter(Asistencia.tipo=='Entrada')\
+            .filter(Asistencia.condicion=='Presente')\
+            .count()
+            g[2] = g[2] + a
+            a = Asistencia.query\
+            .filter(Asistencia.diadeclase==dias.id)\
+            .filter(Asistencia.tipo=='Salida')\
+            .filter(Asistencia.condicion=='Presente')\
+            .count()
+            g[4] = g[4] + a
 
-    return render_template('consultas.html')
+    g[3] = round(g[2]*100/g[1],2)
+    g[5] = round(g[4]*100/g[1],2)
+    return render_template('consultas.html',g=g)
 
 @app.route("/usuario", methods=['POST'])
 @login_required
