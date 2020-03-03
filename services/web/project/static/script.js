@@ -606,6 +606,8 @@ var registroAlumnos = function (cm) {
 var acon = function () {
   p = new FormP('.form-alumno');
   p.formV();
+  document.getElementById('aapellido').value = '';
+  document.getElementById('anombre').value = '';
   if (p.bandera) {
     const request = new XMLHttpRequest();
     data = p.data;
@@ -620,6 +622,8 @@ var acon = function () {
       e.innerHTML = respuesta.mensaje;
       document.getElementById('infoproceso').style.display = 'inline-block'
     };
+    document.getElementById('anombre').value = '';
+    document.getElementById('aapellido').value = '';
     request.send(data);
     return false;
   } else {

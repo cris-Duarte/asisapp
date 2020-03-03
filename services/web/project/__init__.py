@@ -119,6 +119,8 @@ def detalleasistencia():
     d = db.session.query(Diadeclase)\
     .join(Horario, Materia)\
     .filter(Diadeclase.activo==True)\
+    .filter(Horario.activo==True)\
+    .filter(Materia.activo==True)\
     .filter(Materia.id==materia)\
     .order_by(Diadeclase.fecha.asc())\
     .all()
@@ -666,7 +668,8 @@ def alumnos():
             activo=True)
             db.session.add(a)
             db.session.commit()
-            m = Materia.query.filter_by(codigo=request.form.get('cmateria')).first()
+            a = Alumno.query.filter_by(ci=request.form.get('aci')).first()
+            m = Materia.query.filter_by(codigo=request.form.get('mcodigo')).first()
             t = Tiempo()
             i = Inscripcion(materia=m.id,alumno=a.id, fecha=t.fecha(),periodo=m.periodo)
             m.cantidad += 1
@@ -851,7 +854,10 @@ def fecha_simple(fecha):
 def calculardias(m):
     d = db.session.query(Diadeclase)\
     .join(Horario, Materia)\
+    .filter(Diadeclase.activo==True)\
     .filter(Materia.id==m)\
+    .filter(Materia.activo==True)\
+    .filter(Horario.activo==True)\
     .all()
     t = Tiempo()
     b = 0
@@ -866,6 +872,8 @@ def calculardias(m):
 def calcularasistencia(a,tc,m):
     alumno = db.session.query(Asistencia)\
     .join(Diadeclase, Horario, Materia, Alumno)\
+    .filter(Diadeclase.activo==True)\
+    .filter(Horario.activo==True)\
     .filter(Materia.id==m)\
     .filter(Alumno.id==a)\
     .filter(Asistencia.condicion=='Presente')\
