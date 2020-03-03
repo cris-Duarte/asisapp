@@ -712,16 +712,7 @@ def listar():
             asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo=tipo)
             db.session.add(asistencia)
             db.session.commit()
-            if condicion == 'Presente' or condicion != 'Ausente':
-                d.asistentes += 0.5
-                db.session.commit()
         else:
-            if asis.condicion == 'Presente' and condicion == 'Ausente':
-                d.asistentes -= 0.5
-                db.session.commit()
-            elif asis.condicion == 'Ausente' and condicion == 'Presente':
-                d.asistentes += 0.5
-                db.session.commit()
             asis.condicion = condicion
             db.session.commit()
 
