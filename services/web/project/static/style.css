@@ -5,7 +5,9 @@ body {
 .panel-group{
   margin-bottom: 5px;
 }
-
+.table{
+      margin-bottom: 0px
+}
 .btn_try {
   background-color: transparent;
   border: 3px solid transparent;

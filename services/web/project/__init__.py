@@ -295,13 +295,34 @@ def perfil():
 @app.route("/consultas", methods=['POST'])
 @login_required
 def consultas():
-    g = [0,0,0,0,0,0]
+    g = [0,0,0,0,0,0,'']
     t = Tiempo()
-    d = db.session.query(Diadeclase)\
-    .join(Horario, Materia)\
-    .all()
+    query = db.session.query(Diadeclase)\
+    .join(Horario, Materia)
+
+    if request.form.get('cfecha'):
+        fecha =  str(request.form.get('cfecha'))+" 00:00:00"
+        g[6] = str(fecha_hr(fecha))
+    else:
+        fecha = str(t.s_fecha())
+        g[6] = 'Hoy'
+    ccarrera = request.form.get('ccarrera')
+    if ccarrera:
+        query = query.filter(Materia.carrera==ccarrera)
+        carrera = Carrera.query.get(ccarrera)
+        g[6] = g[6]+' '+str(carrera.nombre_carrera)
+    ccurso =request.form.get('ccurso')
+    if ccurso:
+        query = query.filter(Materia.carrera==ccurso)
+        curso = Curso.query.get(ccurso).descripcion
+        g[6] = g[6]+' '+curso
+    if request.form.get('cseccion'):
+        query = query.filter(Materia.seccion==request.form.get('cseccion'))
+        g[6] = g[6]+' '+request.form.get('cseccion')
+
+    d = query.all()
     for dias in d:
-        if dias.fecha == str(t.s_fecha()):
+        if dias.fecha == fecha:
             g[0] = g[0] + 1
             i = Inscripcion.query\
             .filter(Inscripcion.materia==dias.diasdeclases.horariosmateria.id)\
@@ -319,10 +340,20 @@ def consultas():
             .filter(Asistencia.condicion=='Presente')\
             .count()
             g[4] = g[4] + a
-
-    g[3] = round(g[2]*100/g[1],2)
-    g[5] = round(g[4]*100/g[1],2)
-    return render_template('consultas.html',g=g)
+    if g[1] == 0:
+        g[3] = 0
+        g[5] = 0
+    else:
+        g[3] = round(g[2]*100/g[1],2)
+        g[5] = round(g[4]*100/g[1],2)
+    carreras = Carrera.query\
+    .filter_by(activo=True)\
+    .all()
+    cursos = Curso.query.all()
+    if request.form.get('consulta'):
+        return render_template('detconsultamin.html',g=g)
+    else:
+        return render_template('consultas.html',g=g,carreras=carreras,cursos=cursos)
 
 @app.route("/usuario", methods=['POST'])
 @login_required
@@ -692,6 +723,14 @@ def lista(d):
     .filter(Inscripcion.activo==True)\
     .order_by(Alumno.apellido.asc())\
     .all()
+    for a in alumnos:
+        asistencia = Asistencia.query\
+        .filter(Asistencia.alumno==a.alumno)\
+        .filter(Asistencia.diadeclase==diadeclase.id)\
+        .filter(Asistencia.tipo=='Entrada')\
+        .first()
+        if asistencia:
+            a.estadoentrada = acron(asistencia.condicion)
     t = Tiempo()
     ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
     return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())

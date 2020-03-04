@@ -812,3 +812,47 @@ var consultaDetallada = function (alumno,materia) {
   return false;
 };
 // FIN CONSULTA DETALLADA DE ASISTENCIA
+
+// CONSULTA GENERAL
+var consultadetgral = function () {
+  const request = new XMLHttpRequest();
+  const data = new FormData();
+  f = document.getElementById('cfecha').value;
+  s = document.getElementById('ccarrera');
+  ca = s.options[s.selectedIndex].value;
+  s = document.getElementById('ccurso');
+  cu = s.options[s.selectedIndex].value;
+  s = document.getElementById('cseccion');
+  se = s.options[s.selectedIndex].value;
+  if (f=='' && ca=='falta' && cu=='falta' && se=='falta') {
+    start('danger','Elija al menos una opción para filtar la información sobre la asistencia');
+  } else {
+    if ( f!=''){
+      data.append('cfecha',f);
+    }
+    if (ca!='falta') {
+      data.append('ccarrera',ca);
+    }
+    if (cu!='falta') {
+      data.append('ccurso',cu);
+    }
+    if (se!='falta') {
+      data.append('cseccion',se);
+    }
+    data.append('consulta',true);
+    request.open('POST', '/consultas');
+    request.onload = () => {
+      var contenedor = document.createElement('div');
+      contenedor.className = 'col-sm-4 col-md-4';
+      contenedor.innerHTML = request.response;
+
+      arbol = document.getElementById('listaconsulta');
+      arbol.insertBefore(contenedor, arbol.firstChild);
+    };
+    request.send(data);
+    return false;
+
+
+  }
+
+};

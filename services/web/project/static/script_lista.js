@@ -111,8 +111,8 @@ var listar = function (idc,condicion) {
         start('success','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.tipo}: ${respuesta.condicion}`);
         alumnos[indice_actual].className = 'alumno label label-success label-alumno';
       } else{
-        start('default','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.tipo}: ${respuesta.condicion}`);
-        alumnos[indice_actual].className = 'alumno label label-default label-alumno';
+        start('warning','<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ',`${respuesta.nombre} - ${respuesta.tipo}: ${respuesta.condicion}`);
+        alumnos[indice_actual].className = 'alumno label label-warning label-alumno';
       }
       actualizarcantidad(indice_actual - 1)
       siguiente();

@@ -51,7 +51,17 @@
         <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
         <p class="alumno label label-info label-alumno" style='display:none;'>Inicio de Lista</p>
       {% for alumno in alumnos %}
-        <p class="alumno label label-default label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+        {% if alumno.estadoentrada %}
+          {% if alumno.estadoentrada == 'P' %}
+            <p class="alumno label label-success label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+          {% elif alumno.estadoentrada == 'A' %}
+            <p class="alumno label label-danger label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+          {% else %}
+            <p class="alumno label label-warning label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+          {% endif %}
+        {% else %}
+          <p class="alumno label label-default label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+        {% endif %}
       {% else %}
         <p class="label label-warning label-alumno">No hay alumnos registrados</p>
         <script>
