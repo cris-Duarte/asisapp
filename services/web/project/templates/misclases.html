@@ -3,9 +3,9 @@
     <div class="panel panel-primary">
       <div class="panel-heading" role="tab" id="heading{{ clase.nombre_carrera }}">
         <h4 class="panel-title">
-          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera-parent{{ clase.id }}" href="#carrera{{clase.id}}" aria-expanded="false" aria-controls="collapseTwo">
-            {{ clase.nombre_carrera }}
-          </a>
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera-parent{{ clase.id }}" href="#carrera{{clase.id}}" aria-expanded="false" aria-controls="collapseTwo">
+              {{ clase.nombre_carrera }}
+            </a>
         </h4>
       </div>
       <div id="carrera{{clase.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -15,14 +15,18 @@
               {% if materia.docente == current_user.id and materia.actual %}
               <!-- IDEA:  -->
               <div class="panel panel-success">
-                <div class="panel-heading" role="tab" id="heading{{ materia.nombre }}">
-                  <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera{{clase.id}}-padre" href="#materia{{ materia.id }}" onclick="mostrarLista({{materia.id}})" aria-expanded="false" aria-controls="collapseThree">
-                      {{ materia.nombre }} - {{ materia.cursomateria.descripcion }} {{ materia.seccion }}
-                    </a>
-                  </h4>
-                </div>
+                  <div class="panel-heading" role="tab" id="heading{{ materia.nombre }}">
+                    <h4 class="panel-title">
+                      <a class="collapsed" role="button" data-toggle="collapse" data-parent="#carrera{{clase.id}}-padre" href="#materia{{ materia.id }}" onclick="mostrarLista({{materia.id}})" aria-expanded="false" aria-controls="collapseThree">
+                        {{ materia.nombre }} - {{ materia.cursomateria.descripcion }} {{ materia.seccion }}
+                      </a>
+                    </h4>
+                  </div>
                 <div id="materia{{ materia.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <br>
+                  <a class="btn btn-primary btn-lista-ext" role="button" href="{{ url_for('listacompleta', d=materia.id) }}" target="_blank">
+                    Ver Lista Extensa (para impresión)
+                  </a>
                   <div class="panel-body panel-interno">
                     <div id="lista{{materia.id}}">
 
