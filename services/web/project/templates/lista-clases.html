@@ -5,6 +5,7 @@
       <th scope="col">#</th>
       <th scope="col">Fecha</th>
       <th scope="col">Materia</th>
+      <th scope="col">Docente</th>
       <th scope="col">Acciones</th>
     </tr>
   </thead>
@@ -15,10 +16,12 @@
       <td class="noactivo">{{lista.id}}</td>
       <td class="noactivo">{{lista.fecha}}</td>
       <td class="noactivo">{{lista.diasdeclases.horariosmateria.nombre}}</td>
+      <td class="noactivo">{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
     {% else %}
       <td>{{lista.id}}</td>
       <td>{{lista.fecha}}</td>
       <td>{{lista.diasdeclases.horariosmateria.nombre}}</td>
+      <td>{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
     {% endif %}
       <td>
         {% if lista.activo == False %}
@@ -49,6 +52,7 @@
       <th scope="col">#</th>
       <th scope="col">Fecha</th>
       <th scope="col">Materia</th>
+      <th scope="col">Docente</th>
       <th scope="col">Acciones</th>
     </tr>
   </thead>
@@ -63,6 +67,7 @@
           <td>{{lista.id}}</td>
           <td>{{lista.fecha}}</td>
           <td>{{listas.nombre}}</td>
+          <td>{{listas.docentes.nombre}} {{listas.docentes.apellido}}</td>
           <td>
             {% if lista.activo == False %}
             <button type="button" class="btn btn-primary" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>

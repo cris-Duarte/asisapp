@@ -432,6 +432,7 @@ def listamaterias():
         materias = db.session.query(Materia)\
             .join(Carrera, Curso)\
             .filter(Materia.activo == True)\
+            .order_by(Materia.periodo.asc())\
             .order_by(Materia.id.asc())\
             .all()
         return render_template('lista-materias.html',materias=materias)

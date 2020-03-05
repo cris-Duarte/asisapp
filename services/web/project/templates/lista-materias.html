@@ -8,34 +8,63 @@
     </div>
     <div id="listaMaterias" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Materia</th>
-              <th scope="col">Código</th>
-              <th scope="col">Curso y Carrera</th>
-              <th scope="col">Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-      {% for materia in materias %}
-        {% if materia.carreras.responsable==current_user.id or current_user.tipo==1%}
-            <tr>
-              <th scope="row">{{ materia.id }}</th>
-              <td>{{ materia.nombre }}</td>
-              <td>{{ materia.codigo }}</td>
-              <td>{{ materia.cursomateria.descripcion }} {{ materia.seccion }}, {{ materia.carreras['nombre_carrera'] }}</td>            <td>
-                <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
-                <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-          {% endif %}
-        {% else %}
-            <td> No hay materias </td>
-        {% endfor %}
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Periodo</th>
+                <th scope="col">Horarios</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Código</th>
+                <th scope="col">Curso y Carrera</th>
+                <th scope="col">Docente</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+        {% for materia in materias %}
+          {% if materia.carreras.responsable==current_user.id or current_user.tipo==1%}
+              <tr>
+                <th scope="row">{{ materia.id }}</th>
+                <td>
+                  {% if materia.materiasperiodo.nombre_periodo %}
+                    <h4><span class="label label-primary">{{materia.materiasperiodo.nombre_periodo}}</span></h4>
+                  {% else %}
+                    Sin periodos asignados
+                  {% endif %}
+                </td>
+                <td>
+                  {% for horario in materia.horariosmateria %}
+                    {% if horario.activo %}
+                      {{horario.dia}}, {{horario.desde}} - {{horario.hasta}}<br>
+                    {% endif %}
+                  {% else %}
+                    Sin horarios asignados
+                  {% endfor %}
+                </td>
+                <td>{{ materia.nombre }}</td>
+                <td>{{ materia.codigo }}</td>
+                <td>{{ materia.cursomateria.descripcion }} {{ materia.seccion }}, {{ materia.carreras['nombre_carrera'] }}</td>
+                <td>
+                  {% if materia.docentes.nombre %}
+                    {{materia.docentes.nombre}} {{materia.docentes.apellido}}
+                  {% else %}
+                    Sin Docentes asignados
+                  {% endif %}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-info" onclick='minfo({{materia.id}})'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+                  <button type="button" class="btn btn-primary" onclick='mmodificar({{materia.id}})'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                  <button type="button" class="btn btn-danger" onclick='meliminar({{materia.id}})''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                </td>
+              </tr>
+            {% endif %}
+          {% else %}
+              <td> No hay materias </td>
+          {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
