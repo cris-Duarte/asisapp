@@ -1,0 +1,20 @@
+@media print {
+    .footer {
+        position: relative;
+        bottom: 2px;
+    {
+
+}
+
+
+@media print {
+  .wrapper {
+    height: 100%;
+  }
+}
+
+main::after {
+  content: "Copyright Ing. Cristhian Duarte";
+  display: block;
+  text-align: center;
+}

@@ -8,9 +8,6 @@ body {
 @-moz-document url-prefix() {
   fieldset { display: table-cell; }
 }
-.table{
-      margin-bottom: 0px
-}
 .btn_try {
   background-color: transparent;
   border: 3px solid transparent;

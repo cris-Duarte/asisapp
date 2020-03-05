@@ -1,0 +1,42 @@
+
+html, body {
+height: 100%;
+margin: 0;
+}
+
+.footer {
+height: 4em;
+}
+
+#unca {
+  width: 55px;
+  height: auto;
+  position:absolute;
+  left: 10px;
+  top: 0cm;
+}
+
+#fce {
+  width: 55px;
+  height: auto;
+  position:absolute;
+  right: 10px;
+  top: 0cm;
+}
+.table{
+      margin-bottom: 0px
+}
+
+.table-listacompleta {
+  font-size: 10px;
+  font-weight: 450;
+}
+header, footer, .titulolista, .footer {
+  text-align: center;
+}
+
+.h4header {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  font-weight: 500;
+}

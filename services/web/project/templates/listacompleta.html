@@ -1,0 +1,104 @@
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='script.js')}}"></script>
+<script src="{{url_for('static', filename='jquery.toaster.js')}}"></script>
+<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='style_listacompleta.css')}}">
+{% endblock %}
+
+{% block metas %}
+  {{super()}}
+<meta name="google-signin-client_id" content="{{g}}">
+{% endblock %}
+{% block html_attribs %} lang="es"{% endblock %}
+
+
+{% block title %}
+  Sistema de Gestión de Asistencia, Facultad de Ciencias Económicas, Universidad Nacional de Caaguazú
+{% endblock %}
+
+{% block content %}
+
+  {% if current_user.is_authenticated %}
+  <div class="wrapper">
+    <header>
+      <img id="unca" src="{{url_for('static', filename='unca.png')}}" alt="logo de la universidad">
+      <h4 class="h4header">UNIVERSIDAD NACIONAL DE CAAGUAZÚ</h4>
+      <h6 class="h4header">Creada por Res. C.S.U. N° 20 del 23 de diciembre 2008</h6>
+      <h4 class="h4header">FACULTAD DE CIENCIAS ECONÓMICAS</h4>
+      <h6 class="h4header">Misión: “Formar profesionales competentes, innovadores y comprometidos con el desarrollo económico y social”</h6>
+      <img id="fce" src="{{url_for('static', filename='fce.png')}}" alt="logo de la facultad">
+      <hr>
+    </header>
+
+    <h3 class="titulolista">Lista de Asistencia - {{ materia.nombre}}</h3>
+    <div class="row">
+    <h5 class="col-md-5 h4header">Carrera: {{ materia.carreras.nombre_carrera }}</h5>
+    <h5 class="col-md-7 h4header">Coordinador(a): {{ materia.carreras.responsables.nombre}}  {{ materia.carreras.responsables.apellido }}</h5>
+    <h5 class="col-md-12 h4header">Curso: {{ materia.cursomateria.descripcion }} {{materia.seccion}}</h5>
+    <h5 class="col-md-3 h4header">Periodo: {{ materia.materiasperiodo.nombre_periodo }}</h5>
+    <h5 class="col-md-9 h4header">Horario(s):
+      {% for horario in materia.horariosmateria %}
+        {{horario.dia}}, de {{horario.desde}} a {{horario.hasta}} -
+      {% else %}
+        Sin horarios asignados
+      {% endfor %}
+    </h5>
+    <h5 class="col-md-12 h4header">Docente: {{ materia.docentes.nombre }} {{ materia.docentes.apellido }}</h5>
+    </div>
+    <table class="table table-condensed table-bordered table-listacompleta">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" rowspan="2">CI</th>
+          <th scope="col" rowspan="2">Apellidos y Nombres</th>
+          {% for d in dias %}
+            <td scope="col" colspan="2">{{d.fecha_dia_mes}}</td>
+          {% else %}
+            Sin dias de clase
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for d in dias %}
+            <td scope="col" >E</td>
+            <td scope="col" >S</td>
+          {% else %}
+            Sin dias de clase
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+      {% for i in inscripciones %}
+      <tr>
+        <td>{{i.inscripcion_alumnos.ci}}</td>
+        <td>{{i.inscripcion_alumnos.apellido}} {{i.inscripcion_alumnos.nombre}}</td>
+        {% for dc in i.diasdeasistencias %}
+          <td>{{dc[0]}}</td>
+          <td>{{dc[1]}}</td>
+        {% else %}
+          <td></td>
+          <td></td>
+        {% endfor %}
+      </tr>
+      {% else %}
+      <tr>
+        <td>No hay alumnos inscriptos</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <div class="footer">
+      <hr>
+      <h6 class="h4header">Visión: “Ser una institución científica y tecnológica de impacto nacional e internacional generando oportunidades de desarrollo económico y social”</h6>
+      <h6 class="h4header">Dirección: Coronel Oviedo, Ruta Nº 8, Dr. Blas Garay, Km. 138 - Teléfono: (0521) 203836 - Web: www.fceunca.edu.py</h6>
+    </div>
+    {% endif %}
+
+  </div>
+{% endblock %}
