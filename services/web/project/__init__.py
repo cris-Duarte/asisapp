@@ -773,6 +773,7 @@ def listacompleta(d):
 @app.route("/lista/<int:d>", methods=['GET'])
 @login_required
 def lista(d):
+    s = False
     diadeclase = Diadeclase.query.get(d)
     diadeclase.hr = fecha_hr(diadeclase.fecha)
     alumnos = db.session.query(Inscripcion)\
@@ -789,10 +790,11 @@ def lista(d):
         .filter(Asistencia.tipo=='Entrada')\
         .first()
         if asistencia:
+            s = True
             a.estadoentrada = acron(asistencia.condicion)
     t = Tiempo()
     ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
-    return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora())
+    return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora(),s=s)
 
 @app.route("/listar", methods=['POST'])
 @login_required

@@ -39,7 +39,11 @@
         <span class="input-group-addon" id="basic-addon3">Llamar lista para: </span>
         <select class="form-control" id='asistipo' onchange="estado_inicial(true)" autofocus>
           <option value="Entrada">Entrada</option>
+          {% if s %}
+          <option value="Salida" selected>Salida</option>
+          {% else %}
           <option value="Salida">Salida</option>
+          {% endif %}
         </select>
       </div>
       <hr>
