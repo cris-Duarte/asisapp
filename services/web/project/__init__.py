@@ -141,9 +141,9 @@ def detalleasistencia():
                 ea = e.first()
                 if ea.tipo == 'Entrada':
                     dia.entrada = acron(ea.condicion)
-                    dia.salida = 'A'
+                    dia.salida = 'P'
                 else:
-                    dia.entrada = 'A'
+                    dia.entrada = 'P'
                     dia.salida = acron(ea.condicion)
             else:
                 ea = e.all()
