@@ -77,7 +77,7 @@
       {% for i in inscripciones %}
       <tr>
         <td>{{i.inscripcion_alumnos.ci}}</td>
-        <td>{{i.inscripcion_alumnos.apellido}} {{i.inscripcion_alumnos.nombre}}</td>
+        <td>{{i.inscripcion_alumnos.apellido}}, {{i.inscripcion_alumnos.nombre}}</td>
         {% for dc in i.diasdeasistencias %}
           <td>{{dc[0]}}</td>
           <td>{{dc[1]}}</td>
