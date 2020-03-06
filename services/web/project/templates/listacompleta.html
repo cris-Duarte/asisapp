@@ -63,6 +63,7 @@
           {% else %}
             Sin dias de clase
           {% endfor %}
+          <th scope="col" rowspan="2">%</th>
         </tr>
         <tr>
           {% for d in dias %}
@@ -85,6 +86,7 @@
           <td></td>
           <td></td>
         {% endfor %}
+        <td></td>
       </tr>
       {% else %}
       <tr>
