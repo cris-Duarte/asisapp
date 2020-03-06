@@ -317,7 +317,7 @@ def consultas():
         g[6] = g[6]+' '+str(carrera.nombre_carrera)
     ccurso =request.form.get('ccurso')
     if ccurso:
-        query = query.filter(Materia.carrera==ccurso)
+        query = query.filter(Materia.curso==ccurso)
         curso = Curso.query.get(ccurso).descripcion
         g[6] = g[6]+' '+curso
     if request.form.get('cseccion'):
