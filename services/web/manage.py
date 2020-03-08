@@ -66,6 +66,34 @@ def cargaalumno():
 
     db.session.commit()
 
+@cli.command("alumnosPrimero")
+def alumnosPrimero():
+    f = open("primero.csv")
+    reader = csv.reader(f)
+    for ci, n, a, carrera, seccion in reader:
+        a = Alumno(\
+        nombre=n,\
+        apellido=a,\
+        ci=ci,\
+        con=ci)
+        db.session.add(a)
+        db.session.commit()
+        materia = Materia.query\
+        .filter(Materia.carrera==carrera)\
+        .filter(Materia.seccion==seccion)\
+        .all()
+        t = Tiempo()
+        for m in materia:
+            i = Inscripcion(\
+            materia=m.id,\
+            alumno=a.id,\
+            fecha=t.fecha(),\
+            periodo=m.periodo)
+            m.cantidad += 1
+            q = db.session.add(i)
+            db.session.commit()
+
+
 @cli.command("cargamateria")
 def cargamateria():
     f = open("materias.csv")
