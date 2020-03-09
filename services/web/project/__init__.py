@@ -745,30 +745,28 @@ def listacompleta(d):
                 detdia = []
                 asis = Asistencia.query\
                 .filter(Asistencia.alumno==i.alumno)\
-                .filter(Asistencia.diadeclase==dia.id)\
-                .filter(Asistencia.tipo=='Entrada')
-                if asis.count()==1:
-                    asis = asis.first()
-                    entrada = acron(asis.condicion)
-                    detdia.append(entrada)
+                .filter(Asistencia.diadeclase==dia.id)
+                if asis.count()==2:
+                    if asis[0].tipo=='Entrada':
+                        detdia.append(acron(asis[0].condicion))
+                        detdia.append(acron(asis[1].condicion))
+                    else:
+                        detdia.append(acron(asis[1].condicion))
+                        detdia.append(acron(asis[0].condicion))
+                elif asis.count()==1:
+                    if asis[0].tipo=='Entrada':
+                        detdia.append(acron(asis[0].condicion))
+                        detdia.append('A')
+                    else:
+                        detdia.append('A')
+                        detdia.append(acron(asis[0].condicion))
                 else:
                     if fecha_valida(dia.fecha) and asis.count()==0:
                         detdia.append('A')
-                    else:
-                        detdia.append(' ')
-                asis = Asistencia.query\
-                .filter(Asistencia.alumno==i.alumno)\
-                .filter(Asistencia.diadeclase==dia.id)\
-                .filter(Asistencia.tipo=='Salida')
-                if asis.count()==1:
-                    asis = asis.first()
-                    salida = acron(asis.condicion)
-                    detdia.append(salida)
-                else:
-                    if fecha_valida(dia.fecha) and asis.count()==0:
                         detdia.append('A')
                     else:
                         detdia.append(' ')
+
                 diasdeasistencia.append(detdia)
         i.diasdeasistencias = diasdeasistencia
 

@@ -1,0 +1,55 @@
+def listacompleta(d):
+    materia = Materia.query.get(d)
+    inscripciones = db.session.query(Inscripcion)\
+    .join(Alumno)\
+    .filter(Inscripcion.activo==True)\
+    .filter(Inscripcion.materia==materia.id)\
+    .order_by(Alumno.apellido.asc())\
+    .all()
+    d = []
+    dias = db.session.query(Diadeclase)\
+    .join(Horario, Materia)\
+    .filter(Materia.id==materia.id)\
+    .order_by(Diadeclase.fecha.asc())\
+    .all()
+    for dia in dias:
+        if dia.diasdeclases.activo and dia.activo:
+            dm = fecha_dia_mes(dia.fecha)
+            dia.fecha_dia_mes = dm
+            d.append(dia)
+
+    for i in inscripciones:
+        diasdeasistencia = []
+        for dia in dias:
+            if dia.diasdeclases.activo and dia.activo:
+                detdia = []
+                asis = Asistencia.query\
+                .filter(Asistencia.alumno==i.alumno)\
+                .filter(Asistencia.diadeclase==dia.id)\
+                .filter(Asistencia.tipo=='Entrada')
+                if asis.count()==1:
+                    asis = asis.first()
+                    entrada = acron(asis.condicion)
+                    detdia.append(entrada)
+                else:
+                    if fecha_valida(dia.fecha) and asis.count()==0:
+                        detdia.append('A')
+                    else:
+                        detdia.append(' ')
+                asis = Asistencia.query\
+                .filter(Asistencia.alumno==i.alumno)\
+                .filter(Asistencia.diadeclase==dia.id)\
+                .filter(Asistencia.tipo=='Salida')
+                if asis.count()==1:
+                    asis = asis.first()
+                    salida = acron(asis.condicion)
+                    detdia.append(salida)
+                else:
+                    if fecha_valida(dia.fecha) and asis.count()==0:
+                        detdia.append('A')
+                    else:
+                        detdia.append(' ')
+                diasdeasistencia.append(detdia)
+        i.diasdeasistencias = diasdeasistencia
+
+    return render_template("listacompleta.html",materia=materia,inscripciones=inscripciones,dias=dias)
