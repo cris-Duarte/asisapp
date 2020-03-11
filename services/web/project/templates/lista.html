@@ -50,7 +50,8 @@
       <script>
           sin_alumnos = false;
       </script>
-      <h3 class="panel-title"><span id="cantidadalumnos" class="label-title label-primary">Alumnos</span></h3><br>
+      <h3 class="panel-title"><span id="cantidadalumnos" class="label-title label-primary">Alumnos</span></h3>
+      <br>
       <div id="listado">
         <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
         <p class="alumno label label-info label-alumno" style='display:none;'>Inicio de Lista</p>
@@ -78,6 +79,8 @@
       <span id="actual" onclick="detalle()"></span>
       <span id="siguiente" onclick="siguiente()"></span>
       </div>
+      <br>
+      <br>
       <div id="btn-principales" class="btn-group-justified" role="group" aria-label="...">
         <a role="button" class="btn btn-danger btn-lg" onclick="listar({{dc.id}},'Ausente')">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Ausente</a>
