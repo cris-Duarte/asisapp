@@ -4,7 +4,9 @@
       <th scope="col" rowspan="2">CI</th>
       <th scope="col" rowspan="2">Apellidos y Nombres</th>
       {% for d in dias %}
+        {% if d.activo %}
         <td scope="col" colspan="2">{{d.fecha_dia_mes}}</td>
+        {% endif %}
       {% else %}
         Sin dias de clase
       {% endfor %}
@@ -12,8 +14,10 @@
     </tr>
     <tr>
       {% for d in dias %}
-        <td scope="col" >E</td>
-        <td scope="col" >S</td>
+        {% if d.activo %}
+          <td scope="col" >E</td>
+          <td scope="col" >S</td>
+        {% endif %}
       {% else %}
         Sin dias de clase
       {% endfor %}
