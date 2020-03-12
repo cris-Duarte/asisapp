@@ -1,0 +1,42 @@
+<table class="table table-condensed table-bordered table-listacompleta">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col" rowspan="2">CI</th>
+      <th scope="col" rowspan="2">Apellidos y Nombres</th>
+      {% for d in dias %}
+        <td scope="col" colspan="2">{{d.fecha_dia_mes}}</td>
+      {% else %}
+        Sin dias de clase
+      {% endfor %}
+      <th scope="col" rowspan="2">%</th>
+    </tr>
+    <tr>
+      {% for d in dias %}
+        <td scope="col" >E</td>
+        <td scope="col" >S</td>
+      {% else %}
+        Sin dias de clase
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for i in inscripciones %}
+  <tr>
+    <td>{{i.inscripcion_alumnos.ci}}</td>
+    <td>{{i.inscripcion_alumnos.apellido}}, {{i.inscripcion_alumnos.nombre}}</td>
+    {% for dc in i.diasdeasistencias %}
+      <td>{{dc[0]}}</td>
+      <td>{{dc[1]}}</td>
+    {% else %}
+      <td></td>
+      <td></td>
+    {% endfor %}
+    <td></td>
+  </tr>
+  {% else %}
+  <tr>
+    <td>No hay alumnos inscriptos</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>

@@ -720,13 +720,20 @@ def alumnos():
 @login_required
 def listacompleta(d):
     materia = Materia.query.get(d)
+    return render_template("listacompleta.html",materia=materia)
+
+
+@app.route("/totalista", methods=['POST'])
+@login_required
+def totalista():
+    d = request.form.get('m')
+    materia = Materia.query.get(d)
     inscripciones = db.session.query(Inscripcion)\
     .join(Alumno)\
     .filter(Inscripcion.activo==True)\
     .filter(Inscripcion.materia==materia.id)\
     .order_by(Alumno.apellido.asc())\
     .all()
-    d = []
     dias = db.session.query(Diadeclase)\
     .join(Horario, Materia)\
     .filter(Materia.id==materia.id)\
@@ -736,7 +743,7 @@ def listacompleta(d):
         if dia.diasdeclases.activo and dia.activo:
             dm = fecha_dia_mes(dia.fecha)
             dia.fecha_dia_mes = dm
-            d.append(dia)
+
 
     for i in inscripciones:
         diasdeasistencia = []
@@ -769,8 +776,8 @@ def listacompleta(d):
 
                 diasdeasistencia.append(detdia)
         i.diasdeasistencias = diasdeasistencia
+    return render_template("totalista.html",dias=dias,inscripciones=inscripciones)
 
-    return render_template("listacompleta.html",materia=materia,inscripciones=inscripciones,dias=dias)
 
 @app.route("/lista/<int:d>", methods=['GET'])
 @login_required
