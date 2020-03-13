@@ -14,7 +14,7 @@
   {% if lista.diasdeclases.horariosmateria.docentes.id == current_user.id or current_user.tipo == 1 %}
     {% if lista.valido %}
       <tr>
-      {% if lista.activo %}
+      {% if not lista.activo %}
         <td class="noactivo">{{lista.id}}</td>
         <td class="noactivo">{{lista.fecha}}</td>
         <td class="noactivo">{{lista.diasdeclases.horariosmateria.nombre}}</td>
