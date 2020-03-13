@@ -1,109 +1,112 @@
+
 <div class="panel-group" id="acordeonAdministracion" role="tablist" aria-multiselectable="true">
-<!-- IDEA: INICIO PERIODOS -->
-  <div class="panel panel-default panel-admin">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#periodos" aria-expanded="true" aria-controls="collapseOne">
-          Administracion de Periodos
-        </a>
-      </h4>
-    </div>
-    <div id="periodos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        <input class="form-control form-periodo" type="text" placeholder="Descripcion del Periodo" id="pnombre">
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">
-              Inicio:
-            </span>
-          <input class="form-control form-periodo" type="date" id="pfechad">
-          </div>
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon2">
-              Fin:
-            </span>
-            <input class="form-control form-periodo" type="date" id="pfechah">
-          </div>
-          <button id="btnPeriodo" onclick="addPeriodo()" class="btn btn-primary form-periodo" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo</button>
-          <button type="button" class="btn btn-danger" onclick='pcancelar()'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
-          <hr>
-          <div id="lista-periodos">
-
-          </div>
-      </div>
-    </div>
-  </div>
-<!-- IDEA: FIN PERIODOS -->
-
-<!-- IDEA: INICIO CARRERAS -->
-  <div class="panel panel-default panel-admin">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#carreras" aria-expanded="true" aria-controls="collapseOne">
-          Administracion de Carreras
-        </a>
-      </h4>
-    </div>
-    <div id="carreras" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        <input class="form-control form-carrera" type="text" placeholder="Número de la Carrera" id="cnombre" required>
-        <div class="input-group">
-          <span class="input-group-addon" id="basic-addon3">Coordinador a cargo:</span>
-          <select class="form-control form-carrera" id="ccoordinador">
-            <option value="falta_valor">Elija una opción</option>
-            {% for coords in coord %}
-            <option id="coord{{ coords.id }}" value="{{ coords.id }}">{{ coords.nombre }} {{coords.apellido}}</option>
-            {% else %}
-            <option>No hay coordinadores registrados</option>
-            {% endfor %}
-          </select>
-        </div>
-        <button id="btncarrera" onclick="calta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Carrera Nueva</button>
-        <button type="button" class="btn btn-danger" onclick='ccancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
-        <hr>
-        <div id="lista-carreras">
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- IDEA: FIN CARRERAS -->
-
-<!-- IDEA: INICIO COORDINADORES Y ADMINISTRADORES -->
+{% if current_user.tipo == 1 %}
+  <!-- IDEA: INICIO PERIODOS -->
     <div class="panel panel-default panel-admin">
-      <div class="panel-heading" role="tab" id="headingThree">
+      <div class="panel-heading" role="tab" id="headingOne">
         <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#usuarios" aria-expanded="true" aria-controls="collapseOne">
-            Administracion de Usuarios
+          <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#periodos" aria-expanded="true" aria-controls="collapseOne">
+            Administracion de Periodos
           </a>
         </h4>
       </div>
-      <div id="usuarios" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div id="periodos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
         <div class="panel-body">
-          <div id='infoproceso' class="alert " role="alert" style="display:none">
-          </div>
-          <input class="form-control form-usuario" type="text" placeholder="Nombres"  id="unombre" required>
-          <input class="form-control form-usuario" type="text" placeholder="Apellidos" id="uapellido">
-          <input class="form-control form-usuario" type="number" placeholder="Nro de Cédula" id="uci"  required>
-          <input class="form-control form-usuario" type="email" placeholder="Correo Electrónico" id="uemail" required>
-          <input class="form-control form-usuario" type="text" placeholder="Número de Telefono" id="utelefono" required>
+          <input class="form-control form-periodo" type="text" placeholder="Descripcion del Periodo" id="pnombre">
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">
+                Inicio:
+              </span>
+            <input class="form-control form-periodo" type="date" id="pfechad">
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon2">
+                Fin:
+              </span>
+              <input class="form-control form-periodo" type="date" id="pfechah">
+            </div>
+            <button id="btnPeriodo" onclick="addPeriodo()" class="btn btn-primary form-periodo" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar Periodo Nuevo</button>
+            <button type="button" class="btn btn-danger" onclick='pcancelar()'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
+            <hr>
+            <div id="lista-periodos">
+
+            </div>
+        </div>
+      </div>
+    </div>
+  <!-- IDEA: FIN PERIODOS -->
+
+  <!-- IDEA: INICIO CARRERAS -->
+    <div class="panel panel-default panel-admin">
+      <div class="panel-heading" role="tab" id="headingTwo">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#carreras" aria-expanded="true" aria-controls="collapseOne">
+            Administracion de Carreras
+          </a>
+        </h4>
+      </div>
+      <div id="carreras" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <input class="form-control form-carrera" type="text" placeholder="Número de la Carrera" id="cnombre" required>
           <div class="input-group">
-            <span class="input-group-addon" id="basic-addon3">Tipo de Usuario</span>
-            <select class="form-control form-usuario" id="utipo">
+            <span class="input-group-addon" id="basic-addon3">Coordinador a cargo:</span>
+            <select class="form-control form-carrera" id="ccoordinador">
               <option value="falta_valor">Elija una opción</option>
-              <option id="usuario3" value="3">Profesor</option>
-              <option id="usuario2" value="2">Coordinador</option>
-              <option id="usuario1" value="1">Administrador</option>
+              {% for coords in coord %}
+              <option id="coord{{ coords.id }}" value="{{ coords.id }}">{{ coords.nombre }} {{coords.apellido}}</option>
+              {% else %}
+              <option>No hay coordinadores registrados</option>
+              {% endfor %}
             </select>
           </div>
-          <button id="btnusuario" onclick="ausuario(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Usuario Nuevo</button>
-          <button type="button" class="btn btn-danger" onclick='ucancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
+          <button id="btncarrera" onclick="calta(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Carrera Nueva</button>
+          <button type="button" class="btn btn-danger" onclick='ccancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
           <hr>
-          <div id="lista-usuarios">
+          <div id="lista-carreras">
           </div>
         </div>
       </div>
     </div>
-<!-- IDEA: FIN COORDINADORES Y ADMINISTRADORES  -->
-<!-- IDEA: INICIO DE ADMINISTRACION DE DIAS DE CLASES -->
+  <!-- IDEA: FIN CARRERAS -->
+
+  <!-- IDEA: INICIO COORDINADORES Y ADMINISTRADORES -->
+      <div class="panel panel-default panel-admin">
+        <div class="panel-heading" role="tab" id="headingThree">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#acordeonAdministracion" href="#usuarios" aria-expanded="true" aria-controls="collapseOne">
+              Administracion de Usuarios
+            </a>
+          </h4>
+        </div>
+        <div id="usuarios" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            <div id='infoproceso' class="alert " role="alert" style="display:none">
+            </div>
+            <input class="form-control form-usuario" type="text" placeholder="Nombres"  id="unombre" required>
+            <input class="form-control form-usuario" type="text" placeholder="Apellidos" id="uapellido">
+            <input class="form-control form-usuario" type="number" placeholder="Nro de Cédula" id="uci"  required>
+            <input class="form-control form-usuario" type="email" placeholder="Correo Electrónico" id="uemail" required>
+            <input class="form-control form-usuario" type="text" placeholder="Número de Telefono" id="utelefono" required>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Tipo de Usuario</span>
+              <select class="form-control form-usuario" id="utipo">
+                <option value="falta_valor">Elija una opción</option>
+                <option id="usuario3" value="3">Profesor</option>
+                <option id="usuario2" value="2">Coordinador</option>
+                <option id="usuario1" value="1">Administrador</option>
+              </select>
+            </div>
+            <button id="btnusuario" onclick="ausuario(null)" class="btn btn-primary"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar Usuario Nuevo</button>
+            <button type="button" class="btn btn-danger" onclick='ucancelar()''><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancelar Operación</button>
+            <hr>
+            <div id="lista-usuarios">
+            </div>
+          </div>
+        </div>
+      </div>
+  <!-- IDEA: FIN COORDINADORES Y ADMINISTRADORES  -->
+  <!-- IDEA: INICIO DE ADMINISTRACION DE DIAS DE CLASES -->
+{% endif %}
 <div class="panel panel-default panel-admin">
   <div class="panel-heading" role="tab" id="headingThree">
     <h4 class="panel-title">
@@ -116,6 +119,7 @@
     <div class="panel-body">
 
       <div class="row">
+      {% if current_user.tipo == 1 %}
         <div class="col-lg-6">
           <div class="input-group">
             <input type="text" class="form-control" id="bcodigo" placeholder="Código de Clase">
@@ -124,11 +128,12 @@
             </span>
           </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->
+      {% endif %}
         <div class="col-lg-6">
           <div class="input-group">
             <input type="date" class="form-control" id="bfecha">
             <span class="input-group-btn">
-              <button onclick="bfecha()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar por Fecha</button>
+              <button onclick="bfecha()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar Días por Fecha</button>
             </span>
           </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->

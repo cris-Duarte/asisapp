@@ -11,6 +11,7 @@
   </thead>
   <tbody>
 {% for lista in listas %}
+  {% if lista.diasdeclases.horariosmateria.docentes.id == current_user.id or current_user.tipo == 1 %}
     <tr>
     {% if lista.activo == False %}
       <td class="noactivo">{{lista.id}}</td>
@@ -32,6 +33,7 @@
         {% endif %}
       </td>
     </tr>
+  {% endif %}
 {% else %}
     <tr>
       <td>
