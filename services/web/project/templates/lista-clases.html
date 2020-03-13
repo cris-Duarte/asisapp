@@ -12,33 +12,35 @@
   <tbody>
 {% for lista in listas %}
   {% if lista.diasdeclases.horariosmateria.docentes.id == current_user.id or current_user.tipo == 1 %}
-    <tr>
-    {% if lista.activo == False %}
-      <td class="noactivo">{{lista.id}}</td>
-      <td class="noactivo">{{lista.fecha}}</td>
-      <td class="noactivo">{{lista.diasdeclases.horariosmateria.nombre}}</td>
-      <td class="noactivo">{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
-    {% else %}
-      <td>{{lista.id}}</td>
-      <td>{{lista.fecha}}</td>
-      <td>{{lista.diasdeclases.horariosmateria.nombre}}</td>
-      <td>{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
+    {% if lista.valido %}
+      <tr>
+      {% if lista.activo %}
+        <td class="noactivo">{{lista.id}}</td>
+        <td class="noactivo">{{lista.fecha}}</td>
+        <td class="noactivo">{{lista.diasdeclases.horariosmateria.nombre}}</td>
+        <td class="noactivo">{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
+      {% else %}
+        <td>{{lista.id}}</td>
+        <td>{{lista.fhr}}</td>
+        <td>{{lista.diasdeclases.horariosmateria.nombre}}</td>
+        <td>{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
+      {% endif %}
+        <td>
+          {% if lista.activo == False %}
+          <button type="button" class="btn btn-primary nopaco" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+          {% else %}
+          <a role="button" href="{{ url_for('lista', d=lista.id) }}" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
+          <button type="button" class="btn btn-danger" onclick="desdia({{lista.id}})"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+          {% endif %}
+        </td>
+      </tr>
     {% endif %}
-      <td>
-        {% if lista.activo == False %}
-        <button type="button" class="btn btn-primary nopaco" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
-        {% else %}
-        <a role="button" href="{{ url_for('lista', d=lista.id) }}" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
-        <button type="button" class="btn btn-danger" onclick="desdia({{lista.id}})"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
-        {% endif %}
-      </td>
-    </tr>
   {% endif %}
 {% else %}
     <tr>
       <td>
         <p>
-          No dias de clases
+          Sin dias de clases
         </p>
       </td>
     </tr>

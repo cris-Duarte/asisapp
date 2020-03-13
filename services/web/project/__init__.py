@@ -100,6 +100,7 @@ def listaclases():
         .all()
         for dia in listas:
             dia.fhr = fecha_hr(dia.fecha)
+            dia.valido = fecha_valida(dia.fecha)
         b = 'f'
     if request.form.get('codigo'):
         listas = db.session.query(Materia)\
