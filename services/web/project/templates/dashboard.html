@@ -3,6 +3,7 @@
 {% block scripts %}
 {{super()}}
 <script src="{{url_for('static', filename='script.js')}}"></script>
+<script src="{{url_for('static', filename='script_lista.js')}}"></script>
 <script src="{{url_for('static', filename='jquery.toaster.js')}}"></script>
 <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 
@@ -11,6 +12,7 @@
 {% block styles %}
   {{super()}}
   <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='style_lista.css')}}">
 {% endblock %}
 
 {% block metas %}

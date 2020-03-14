@@ -782,10 +782,13 @@ def totalista():
     return render_template("totalista.html",dias=dias,inscripciones=inscripciones)
 
 
-@app.route("/lista/<int:d>", methods=['GET'])
+@app.route("/lista/<int:d>", methods=['GET','POST'])
 @login_required
 def lista(d):
     s = False
+    if d==0:
+        d = request.form.get('l')
+
     diadeclase = Diadeclase.query.get(d)
     diadeclase.hr = fecha_hr(diadeclase.fecha)
     alumnos = db.session.query(Inscripcion)\
@@ -805,8 +808,15 @@ def lista(d):
             s = True
             a.estadoentrada = acron(asistencia.condicion)
     t = Tiempo()
-    ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
-    return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=t.hora(),s=s)
+    if request.form.get('listanterior'):
+        ahora = True
+        hora = False
+        return render_template('listanterior.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=hora,s=s)
+
+    else:
+        ahora = t.esahora(diadeclase.diasdeclases.desde,diadeclase.diasdeclases.hasta,diadeclase.fecha)
+        hora = t.hora()
+        return render_template('lista.html',dc=diadeclase,alumnos=alumnos, ahora=ahora,hora=hora,s=s)
 
 @app.route("/listar", methods=['POST'])
 @login_required
@@ -817,33 +827,68 @@ def listar():
     tipo = request.form.get('tipo')
     d = Diadeclase.query.get(diadeclase)
     t = Tiempo()
-    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha) or current_user.tipo==1:
-        basis = Asistencia.query\
-        .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
-        .filter(Asistencia.tipo==tipo)
-        asis = basis.first()
-        d = Diadeclase.query.get(diadeclase)
-        if basis.count()==0:
-            asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo=tipo)
-            db.session.add(asistencia)
-            db.session.commit()
+    if t.esahora(d.diasdeclases.desde,d.diasdeclases.hasta,d.fecha) or current_user.tipo==1 or request.form.get('ad'):
+        if (tipo == 'ES'):
+            basis = Asistencia.query\
+            .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))
+            asis = basis.all()
+            d = Diadeclase.query.get(diadeclase)
+            if basis.count()==0:
+                asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Entrada')
+                db.session.add(asistencia)
+                db.session.commit()
+                asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Salida')
+                db.session.add(asistencia)
+                db.session.commit()
+            elif basis.count()==2:
+                asis[0].condicion = condicion
+                asis[1].condicion = condicion
+                db.session.commit()
+            elif basis.count()==1:
+                asis[0].tipo = 'Entrada'
+                asis[0].condicion = condicion
+                db.session.commit()
+                asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo='Salida')
+                db.session.add(asistencia)
+                db.session.commit()
+            a = db.session.query(Alumno,Asistencia)\
+            .filter(Alumno.id==alumno)\
+            .filter(Asistencia.alumno==Alumno.id)\
+            .filter(Asistencia.diadeclase==diadeclase)\
+            .first()
         else:
-            asis.condicion = condicion
-            db.session.commit()
-
-        a = db.session.query(Alumno,Asistencia)\
-        .filter(Alumno.id==alumno)\
-        .filter(Asistencia.alumno==Alumno.id)\
-        .filter(Asistencia.diadeclase==diadeclase)\
-        .filter(Asistencia.tipo==tipo)\
-        .first()
-
-        return jsonify({
-          "nombre": a[0].apellido+", "+a[0].nombre,
-          "condicion": a[1].condicion,
-          "tipo": a[1].tipo,
-          "resultado":"ok"
-          })
+            basis = Asistencia.query\
+            .filter(and_(Asistencia.alumno==alumno,Asistencia.diadeclase==diadeclase))\
+            .filter(Asistencia.tipo==tipo)
+            asis = basis.first()
+            d = Diadeclase.query.get(diadeclase)
+            if basis.count()==0:
+                asistencia = Asistencia(diadeclase=diadeclase,alumno=alumno,hora=t.hora(),condicion=condicion,tipo=tipo)
+                db.session.add(asistencia)
+                db.session.commit()
+            else:
+                asis.condicion = condicion
+                db.session.commit()
+            a = db.session.query(Alumno,Asistencia)\
+            .filter(Alumno.id==alumno)\
+            .filter(Asistencia.alumno==Alumno.id)\
+            .filter(Asistencia.diadeclase==diadeclase)\
+            .filter(Asistencia.tipo==tipo)\
+            .first()
+        if tipo=='ES':
+            return jsonify({
+              "nombre": a[0].apellido+", "+a[0].nombre,
+              "condicion": a[1].condicion,
+              "tipo": "Entrada y Salida",
+              "resultado":"ok"
+              })
+        else:
+            return jsonify({
+              "nombre": a[0].apellido+", "+a[0].nombre,
+              "condicion": a[1].condicion,
+              "tipo": a[1].tipo,
+              "resultado":"ok"
+              })
     else:
         return jsonify({
             "mensaje":"Las clases de "+d.diasdeclases.horariosmateria.nombre+" de los "+d.diasdeclases.dia+" son de "+d.diasdeclases.desde+" a "+d.diasdeclases.hasta+" horas.",

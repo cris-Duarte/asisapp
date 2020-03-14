@@ -1,5 +1,5 @@
 {% if b == 'f' %}
-<table class="table">
+<table class="table table-responsive">
   <thead class="thead-dark">
     <tr>
       <th scope="col">#</th>
@@ -14,7 +14,7 @@
   {% if lista.diasdeclases.horariosmateria.docentes.id == current_user.id or current_user.tipo == 1 %}
     {% if lista.valido %}
       <tr>
-      {% if not lista.activo %}
+      {% if not lista.activo and current_user.tipo == 1 %}
         <td class="noactivo">{{lista.id}}</td>
         <td class="noactivo">{{lista.fecha}}</td>
         <td class="noactivo">{{lista.diasdeclases.horariosmateria.nombre}}</td>
@@ -26,11 +26,15 @@
         <td>{{lista.diasdeclases.horariosmateria.docentes.nombre}} {{lista.diasdeclases.horariosmateria.docentes.apellido}}</td>
       {% endif %}
         <td>
-          {% if lista.activo == False %}
-          <button type="button" class="btn btn-primary nopaco" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+          {% if current_user.tipo == 1 %}
+            {% if lista.activo == False %}
+            <button type="button" class="btn btn-primary nopaco" onclick="habdia({{lista.id}})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+            {% else %}
+            <a role="button" href="{{ url_for('lista', d=lista.id) }}" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
+            <button type="button" class="btn btn-danger" onclick="desdia({{lista.id}})"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+            {% endif %}
           {% else %}
-          <a role="button" href="{{ url_for('lista', d=lista.id) }}" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
-          <button type="button" class="btn btn-danger" onclick="desdia({{lista.id}})"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+            <a role="button" onclick="listanterior({{lista.id}})" target="_blank" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-education" aria-hidden="true"></span></a>
           {% endif %}
         </td>
       </tr>

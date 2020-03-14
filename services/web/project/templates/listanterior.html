@@ -1,0 +1,116 @@
+{% if current_user.is_authenticated %}
+  {% if ahora or current_user.tipo == 1 %}
+
+  <div id="panel-lista" class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Lista de Asistencia - {{ dc.diasdeclases.horariosmateria.nombre }}</h3>
+    </div>
+    <div class="panel-body">
+      <button  type="button" class="btn btn-danger volver" data-target="#modalListanterior" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar</button>
+      <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.carreras.nombre_carrera }}</span></h4>
+      <h4><span class="label label-default">{{ dc.diasdeclases.horariosmateria.cursomateria.descripcion }} {{ dc.diasdeclases.horariosmateria.seccion }}</span></h4>
+      <h4><span class="label label-default">{{ dc.hr }}</span></h4>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon3">Llamar lista para: </span>
+        <select class="form-control" id='asistipo' onchange="estado_inicial(true)">
+          {% if not hora %}
+            <option value="ES">Entrada / Salida</option>
+          {% endif %}
+          <option value="Entrada">Entrada</option>
+          <option value="Salida">Salida</option>
+        </select>
+      </div>
+      <hr>
+      <h3 class="panel-title"><span id="cantidadalumnos" class="label-title label-primary">Alumnos</span></h3>
+      <br>
+      <div id="listado">
+        <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
+        <p class="alumno label label-info label-alumno" style='display:none;'>Inicio de Lista</p>
+      {% for alumno in alumnos %}
+        {% if alumno.estadoentrada %}
+          {% if alumno.estadoentrada == 'P' %}
+            <p class="alumno label label-success label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+          {% elif alumno.estadoentrada == 'A' %}
+            <p class="alumno label label-danger label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+          {% else %}
+            <p class="alumno label label-warning label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+          {% endif %}
+        {% else %}
+          <p class="alumno label label-default label-alumno" data-mat='{{alumno.materia}}' data-id='{{ alumno.inscripcion_alumnos.id }}' style="display:none;">{{ alumno.inscripcion_alumnos.apellido }}, {{ alumno.inscripcion_alumnos.nombre }}</p>
+        {% endif %}
+      {% else %}
+        <p class="label label-warning label-alumno">No hay alumnos registrados</p>
+        <script>
+            sin_alumnos = true;
+            if (!sin_alumnos){
+              estado_inicial(false);
+            }
+        </script>
+      {% endfor %}
+      <p class="alumno label label-info label-alumno" style='display:none;'>Fin de Lista</p>
+      <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
+      <span id="anterior" onclick="atras()"></span>
+      <span id="actual" onclick="detalle()"></span>
+      <span id="siguiente" onclick="siguiente()"></span>
+      </div>
+      <br>
+      <br>
+      <div id="btn-principales" class="btn-group-justified" role="group" aria-label="...">
+        <a role="button" class="btn btn-danger btn-lg" onclick="listar({{dc.id}},'Ausente')">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Ausente</a>
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a role="button" onclick="listar({{dc.id}},'Justificado - Salud')">Justificado - Salud</a></li>
+            <li><a role="button" onclick="listar({{dc.id}},'Justificado - Trabajo')">Justificado - Trabajo</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a role="button" onclick="listar({{dc.id}},'Justificado - Otro')">Justificado - Otro</a></li>
+          </ul>
+
+        </div>
+        <a role="button" class="btn btn-success btn-lg" onclick="listar({{dc.id}},'Presente')">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Presente</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="errorModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Error</h5>
+        </div>
+        <div class="modal-body">
+          <div id="mensajeError">
+
+          </div>
+          <a role="button" class="btn btn-primary" href="{{ url_for('dashboard') }}">
+            <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Volver
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detAlumno" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-lg" data-target="#detAlumno" data-dismiss="modal" name="button">&times</button>
+        <h4>Detalle de Asistencia</h4>
+      </div>
+      <div id="respuestaDetalle" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-danger" onclick="$('#detAlumno').modal('hide');" aria-label="Close"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cerrar Ventana</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% endif %}
+{% endif %}

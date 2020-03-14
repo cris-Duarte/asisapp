@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function() {
   perfil();
 
@@ -856,3 +857,25 @@ var consultadetgral = function () {
   }
 
 };
+
+
+// INICIO LLAMADO DE LISTAS
+
+var listanterior = function (l) {
+  var data = new FormData();
+  data.append('listanterior',true);
+  data.append('l',l);
+  const request = new XMLHttpRequest();
+  request.open('POST','/lista/0');
+  request.onload = () => {
+    document.getElementById('listanterior').innerHTML = request.response;
+    $('#modalListanterior').modal('show');
+    estado_inicial(false);
+  };
+  request.send(data);
+
+  return false;
+};
+
+
+// FIN LLAMADO DE LISTAS

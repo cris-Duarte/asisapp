@@ -96,10 +96,15 @@ var listar = function (idc,condicion) {
   ida = a.firstElementChild.dataset.id;
   const request = new XMLHttpRequest();
   const data = new FormData();
+
   data.append('ida',ida);
   data.append('idc',idc);
   data.append('condicion',condicion);
-  data.append('tipo', t.options[t.selectedIndex].value)
+  t = t.options[t.selectedIndex].value;
+  if (t=="ES"){
+    data.append('ad',true);
+  }
+  data.append('tipo', t);
   request.open('POST', '/listar');
   request.onload = () => {
     const respuesta = JSON.parse(request.responseText);
