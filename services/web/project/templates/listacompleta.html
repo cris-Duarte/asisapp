@@ -64,7 +64,11 @@
       const request = new XMLHttpRequest();
       request.open('POST','/totalista');
       request.onload = () => {
-        t.innerHTML = request.response;
+        const respuesta = JSON.parse(request.responseText);
+        d  = JSON.parse(respuesta.dias);
+        a = JSON.parse(respuesta.asistencias);
+
+
       };
       var data = new FormData();
       data.append('m',{{materia.id}})

@@ -742,20 +742,34 @@ def totalista():
     .filter(Materia.id==materia.id)\
     .order_by(Diadeclase.fecha.asc())\
     .all()
+    jdias = []
+    cd = 0
     for dia in dias:
         if dia.diasdeclases.activo and dia.activo:
             dm = fecha_dia_mes(dia.fecha)
             dia.fecha_dia_mes = dm
-
-
+            jdias.append(str(dm))
+            if fecha_valida(dia.fecha):
+                cd += 1
+    jdias = json.dumps(jdias)
+    jasistencias = []
+    indice = 0
     for i in inscripciones:
         diasdeasistencia = []
+        indice += 1
+        diasdeasistencia.append(indice)
+        diasdeasistencia.append(i.inscripcion_alumnos.ci)
+        diasdeasistencia.append(i.inscripcion_alumnos.apellido+", "+i.inscripcion_alumnos.nombre)
+        cp = 0
         for dia in dias:
             if dia.diasdeclases.activo and dia.activo:
                 detdia = []
                 asis = Asistencia.query\
                 .filter(Asistencia.alumno==i.alumno)\
                 .filter(Asistencia.diadeclase==dia.id)
+                for aux in asis:
+                    if aux.condicion=='Presente':
+                        cp += 1
                 if asis.count()==2:
                     if asis[0].tipo=='Entrada':
                         detdia.append(acron(asis[0].condicion))
@@ -779,8 +793,14 @@ def totalista():
 
                 diasdeasistencia.append(detdia)
         i.diasdeasistencias = diasdeasistencia
-    return render_template("totalista.html",dias=dias,inscripciones=inscripciones)
-
+        jasistencias.append(diasdeasistencia)
+        jasistencias.append(round(cp*50/cd,2))
+    jasistencias = json.dumps(jasistencias)
+    #return render_template("totalista.html",dias=dias,inscripciones=inscripciones,jdias=jdias)
+    return jsonify({
+    'dias':jdias,
+    'asistencias':jasistencias
+    })
 
 @app.route("/lista/<int:d>", methods=['GET','POST'])
 @login_required
