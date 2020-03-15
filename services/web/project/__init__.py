@@ -792,7 +792,7 @@ def totalista():
                         detdia.append(' ')
 
                 diasdeasistencia.append(detdia)
-        diasdeasistencia.append(round(cp*50/cd,2))
+        diasdeasistencia.append(round(cp*50/cd,0))
         i.diasdeasistencias = diasdeasistencia
         jasistencias.append(diasdeasistencia)
     jasistencias = json.dumps(jasistencias)
