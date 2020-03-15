@@ -792,9 +792,9 @@ def totalista():
                         detdia.append(' ')
 
                 diasdeasistencia.append(detdia)
+        diasdeasistencia.append(round(cp*50/cd,2))
         i.diasdeasistencias = diasdeasistencia
         jasistencias.append(diasdeasistencia)
-        jasistencias.append(round(cp*50/cd,2))
     jasistencias = json.dumps(jasistencias)
     #return render_template("totalista.html",dias=dias,inscripciones=inscripciones,jdias=jdias)
     return jsonify({

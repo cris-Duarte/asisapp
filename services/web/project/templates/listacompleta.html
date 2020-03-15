@@ -45,9 +45,15 @@
     </h5>
     <h5 class="col-md-12 h4header">Docente: {{ materia.docentes.nombre }} {{ materia.docentes.apellido }}</h5>
     </div>
-    <div id="totalista">
+    <table>
+      <table class="table table-condensed table-bordered table-striped table-listacompleta">
+        <thead id="tituloTabla" class="thead-dark">
 
-    </div>
+        </thead>
+        <tbody id="cuerpoTabla">
+
+        </tbody>
+    </table>
     <div class="footer">
       <hr>
       <h6 class="h4header">Visión: “Ser una institución científica y tecnológica de impacto nacional e internacional generando oportunidades de desarrollo económico y social”</h6>
@@ -67,8 +73,105 @@
         const respuesta = JSON.parse(request.responseText);
         d  = JSON.parse(respuesta.dias);
         a = JSON.parse(respuesta.asistencias);
+        th = document.getElementById('tituloTabla');
 
+        c1 = document.createElement("tr");
+        th.appendChild(c1);
 
+        ind = document.createElement("th");
+        ind.setAttribute("rowspan",2);
+        t = document.createTextNode("N°");
+        ind.appendChild(t)
+        c1.appendChild(ind);
+
+        ci = document.createElement("th");
+        ci.setAttribute("rowspan",2);
+        t = document.createTextNode("CI");
+        ci.appendChild(t);
+        c1.appendChild(ci);
+
+        an = document.createElement("th");
+        an.setAttribute("rowspan",2);
+        t = document.createTextNode("Apellidos, Nombres");
+        an.appendChild(t);
+        c1.appendChild(an);
+
+        for(var i=0 in d){
+          dia = document.createElement("th");
+          dia.setAttribute("colspan",2);
+          t = document.createTextNode(d[i]);
+          dia.appendChild(t);
+          c1.appendChild(dia);
+        }
+        por = document.createElement("th");
+        por.setAttribute("rowspan",2);
+        t = document.createTextNode("%");
+        por.appendChild(t);
+        c1.appendChild(por);
+
+        c2 = document.createElement("tr");
+        th.appendChild(c2);
+
+        for(var i = 0  in d){
+          dia = document.createElement("th");
+          t = document.createTextNode("E");
+          dia.appendChild(t);
+          c2.appendChild(dia);
+          dia = document.createElement("th");
+          t = document.createTextNode("S");
+          dia.appendChild(t);
+          c2.appendChild(dia);
+        }
+
+        tb = document.getElementById('cuerpoTabla');
+        for (var i = 0 in a) {
+          f = document.createElement("tr");
+          tb.appendChild(f);
+
+          aa = document.createElement("td");
+          t = document.createTextNode(a[i][0]);
+          aa.appendChild(t);
+          f.appendChild(aa);
+
+          aa = document.createElement("td");
+          t = document.createTextNode(a[i][1]);
+          aa.appendChild(t);
+          f.appendChild(aa);
+
+          aa = document.createElement("td");
+          t = document.createTextNode(a[i][2]);
+          aa.appendChild(t);
+          f.appendChild(aa);
+
+          for(var j=3;j < a[i].length - 1;j++) {
+            if(a[i][j]!= " "){
+              aa = document.createElement("td");
+              t = document.createTextNode(a[i][j][0]);
+              aa.appendChild(t);
+              f.appendChild(aa);
+
+              aa = document.createElement("td");
+              t = document.createTextNode(a[i][j][1]);
+              aa.appendChild(t);
+              f.appendChild(aa);
+            } else {
+              aa = document.createElement("td");
+              t = document.createTextNode(" ");
+              aa.appendChild(t);
+              f.appendChild(aa);
+
+              aa = document.createElement("td");
+              t = document.createTextNode(" ");
+              aa.appendChild(t);
+              f.appendChild(aa);
+            }
+          }
+
+          aa = document.createElement("td");
+          t = document.createTextNode(a[i][a[1].length-1]);
+          aa.appendChild(t);
+          f.appendChild(aa);
+        }
       };
       var data = new FormData();
       data.append('m',{{materia.id}})
