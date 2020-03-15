@@ -844,7 +844,7 @@ var consultadetgral = function () {
     request.open('POST', '/consultas');
     request.onload = () => {
       var contenedor = document.createElement('div');
-      contenedor.className = 'col-sm-4 col-md-4';
+      contenedor.className = 'col-sm-6 col-md-6';
       contenedor.innerHTML = request.response;
 
       arbol = document.getElementById('listaconsulta');

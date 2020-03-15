@@ -12,6 +12,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 import string
 import random
+import pygal
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -351,16 +352,24 @@ def consultas():
         g[3] = 0
         g[5] = 0
     else:
-        g[3] = round(g[2]*100/g[1],2)
-        g[5] = round(g[4]*100/g[1],2)
+        g[3] = round(g[2]*100/g[1],0)
+        g[5] = round(g[4]*100/g[1],0)
+
+    graph = pygal.Pie(width=250,height=150, explicit_size=True)
+    p = g[2]+g[4]
+    a = g[1]-g[2]-g[4]
+    graph.add('Presente',p)
+    graph.add('Ausente',a)
+    graph_data = graph.render_data_uri()
+
     carreras = Carrera.query\
     .filter_by(activo=True)\
     .all()
     cursos = Curso.query.all()
     if request.form.get('consulta'):
-        return render_template('detconsultamin.html',g=g)
+        return render_template('detconsultamin.html',g=g,graph_data=graph_data)
     else:
-        return render_template('consultas.html',g=g,carreras=carreras,cursos=cursos)
+        return render_template('consultas.html',g=g,carreras=carreras,cursos=cursos,graph_data=graph_data)
 
 @app.route("/usuario", methods=['POST'])
 @login_required

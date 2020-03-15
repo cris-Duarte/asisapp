@@ -1,61 +1,148 @@
-<div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Filtrar Información por:</h3>
-  </div>
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-lg-3">
-        <input type="date" class="form-control" id="cfecha">
-      </div>
-      <div class="col-lg-2">
-        <select class="form-control" id="ccarrera">
-          <option value="falta">Carrera</option>
-          {% for carrera in carreras %}
-          <option value="{{carrera.id}}">{{carrera.nombre_carrera}}</option>
-          {% else %}
-          <option value="falta">No hay carreras</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-lg-2">
-        <select class="form-control" id="ccurso">
-          <option value="falta">Curso</option>
-          {% for curso in cursos %}
-          <option value="{{curso.id}}">{{curso.descripcion}}</option>
-          {% else %}
-          <option value="falta">No hay cursos</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-lg-1">
-        <select class="form-control" id="cseccion">
-          <option class="form-control" value="falta">Sección</option>
-          <option class="form-control" value="A">A</option>
-          <option class="form-control" value="B">B</option>
-          <option class="form-control" value="C">C</option>
-          <option class="form-control" value="D">D</option>
-        </select>
-      </div>
-      <div class="col-lg-4">
-        <button onclick="consultadetgral()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Consultar</button>
+
+<div class="panel-group" id="acordeonConsultas" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-primary">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#acordeonConsultas" href="#consultaGeneral" aria-expanded="true" aria-controls="collapseOne">
+          Consulta General
+        </a>
+      </h4>
+    </div>
+    <div id="consultaGeneral" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Filtrar Consultas por:</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-3">
+                <input type="date" class="form-control" id="cfecha">
+              </div>
+              <div class="col-lg-2">
+                <select class="form-control" id="ccarrera">
+                  <option value="falta">Carrera</option>
+                  {% for carrera in carreras %}
+                  <option value="{{carrera.id}}">{{carrera.nombre_carrera}}</option>
+                  {% else %}
+                  <option value="falta">No hay carreras</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-lg-2">
+                <select class="form-control" id="ccurso">
+                  <option value="falta">Curso</option>
+                  {% for curso in cursos %}
+                  <option value="{{curso.id}}">{{curso.descripcion}}</option>
+                  {% else %}
+                  <option value="falta">No hay cursos</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-lg-1">
+                <select class="form-control" id="cseccion">
+                  <option class="form-control" value="falta">Sección</option>
+                  <option class="form-control" value="A">A</option>
+                  <option class="form-control" value="B">B</option>
+                  <option class="form-control" value="C">C</option>
+                  <option class="form-control" value="D">D</option>
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <button onclick="consultadetgral()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Consultar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="listaconsulta" class="row">
+          <div class="col-sm-6 col-md-6">
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                <h3 class="panel-title">Hoy</h3>
+              </div>
+              <div class="panel-body">
+                <div class="col-sm-6 col-md-6">
+                  <table class="table">
+                    <tr><td>Nro de Clases  </td><td><span class="label label-primary">{{g[0]}}</span></td></tr>
+                    <tr><td>Nro de Alumnos  </td><td><span class="label label-primary">{{g[1]}}</span></td></tr>
+                    <tr><td>Presentes Entrada  </td><td><span class="label label-primary">{{g[2]}}</span> - <span class="label label-primary">{{g[3]}} %</span></td></tr>
+                    <tr><td>Presentes Salida  </td><td><span class="label label-primary">{{g[4]}}</span> - <span class="label label-primary">{{g[5]}} %</span></td></tr>
+                  </table>
+                </div>
+                <div class="container col-sm-6 col-md-6">
+               <embed type="image/svg+xml" src={{graph_data|safe}} style='max-width:250px'/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div id="listaconsulta" class="row">
-  <div class="col-sm-4 col-md-4">
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <h3 class="panel-title">Hoy</h3>
-      </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#acordeonConsultas" href="#consultaIntervalo" aria-expanded="true" aria-controls="collapseOne">
+          Consulta por intervalos
+        </a>
+      </h4>
+    </div>
+    <div id="consultaIntervalo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
-        <table class="table">
-          <tr><td>Nro de Clases  </td><td><span class="label label-primary">{{g[0]}}</span></td></tr>
-          <tr><td>Nro de Alumnos  </td><td><span class="label label-primary">{{g[1]}}</span></td></tr>
-          <tr><td>Presentes Entrada  </td><td><span class="label label-primary">{{g[2]}}</span> - <span class="label label-primary">{{g[3]}} %</span></td></tr>
-          <tr><td>Presentes Salida  </td><td><span class="label label-primary">{{g[4]}}</span> - <span class="label label-primary">{{g[5]}} %</span></td></tr>
-        </table>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Filtrar Consultas por:</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">Desde</span>
+                  <input class="form-control" type="date" name="" value="" id="cdesde">
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">Hasta</span>
+                  <input class="form-control" type="date" name="" value="" id="cdesde">
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <select class="form-control" id="ccarrera">
+                  <option value="falta">Carrera</option>
+                  {% for carrera in carreras %}
+                  <option value="{{carrera.id}}">{{carrera.nombre_carrera}}</option>
+                  {% else %}
+                  <option value="falta">No hay carreras</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-lg-1">
+                <select class="form-control" id="ccurso">
+                  <option value="falta">Curso</option>
+                  {% for curso in cursos %}
+                  <option value="{{curso.id}}">{{curso.descripcion}}</option>
+                  {% else %}
+                  <option value="falta">No hay cursos</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-lg-2">
+                <select class="form-control" id="cseccion">
+                  <option class="form-control" value="falta">Sección</option>
+                  <option class="form-control" value="A">A</option>
+                  <option class="form-control" value="B">B</option>
+                  <option class="form-control" value="C">C</option>
+                  <option class="form-control" value="D">D</option>
+                </select>
+              </div>
+              <div class="col-lg-1">
+                <button onclick="consultadetgral()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
