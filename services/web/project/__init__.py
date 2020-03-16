@@ -357,7 +357,7 @@ def consultas():
 
     graph = pygal.Pie(width=250,height=150, explicit_size=True)
     p = g[2]+g[4]
-    a = g[1]-g[2]-g[4]
+    a = (2*g[1])-g[2]-g[4]
     graph.add('Presente',p)
     graph.add('Ausente',a)
     graph_data = graph.render_data_uri()
