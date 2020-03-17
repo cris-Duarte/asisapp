@@ -300,6 +300,35 @@ def perfil():
 
     return render_template("perfil.html",clase_hoy=clase_hoy,clase_semana=clase_semana,ahora=t.fecha(),hora=t.hora())
 
+@app.route("/consultaintervalo", methods=['POST'])
+@login_required
+def consultaintervalo():
+    dt = datetime.strptime(request.form.get('cdesde'),"%Y-%m-%d")
+    inicial = dt
+    ht = datetime.strptime(request.form.get('chasta'),"%Y-%m-%d")
+    if ht > dt:
+        lineax = []
+        valores = []
+        while(dt<=ht):
+            if(dt.isoweekday()<6):
+                lineax.append(fecha_dia_mes(str(dt)))
+                vd = db.session.query(Asistencia)\
+                .join(Diadeclase)\
+                .filter(Diadeclase.fecha==str(dt))\
+                .filter(Asistencia.condicion=='Presente')\
+                .count()
+                valores.append(vd)
+            dt = dt + timedelta(days=1)
+
+        graph = pygal.Line(height=400)
+        graph.title = 'Presencia desde '+fecha_hr(str(inicial))+" hasta "+fecha_hr(str(ht))
+        graph.x_labels = lineax
+        graph.add('General',  valores)
+        graph_data = graph.render_data_uri()
+        return render_template('consultaintervalo.html',graph_data=graph_data)
+    else:
+        return render_template('consultaintervalo.html',mensaje="Intervalo invalido")
+
 @app.route("/consultas", methods=['POST'])
 @login_required
 def consultas():

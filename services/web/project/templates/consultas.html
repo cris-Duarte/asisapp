@@ -19,6 +19,7 @@
               <div class="col-lg-3">
                 <input type="date" class="form-control" id="cfecha">
               </div>
+
               <div class="col-lg-2">
                 <select class="form-control" id="ccarrera">
                   <option value="falta">Carrera</option>
@@ -96,6 +97,65 @@
           </div>
           <div class="panel-body">
             <div class="row">
+              <div class="col-lg-12">
+                <div class="panel-group" id="acordeonConsultasEspecificas" role="tablist" aria-multiselectable="true">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                      <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#acordeonConsultasEspecificas" href="#consultaEspecifica" aria-expanded="true" aria-controls="collapseOne">
+                          Filtros Específicos
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="consultaEspecifica" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                      <div class="panel-body">
+
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <h4><span class="label label-primary">Carreras</span></h4>
+                            {% for carrera in carreras %}
+                            <div class="checkbox form-control">
+                              <label><input class="ccarreras" type="checkbox" value="{{carrera.id}}">{{carrera.nombre_carrera}}</label>
+                            </div>
+                            {% else %}
+                              <label>No hay carreras</label>
+                            {% endfor %}
+                          </div>
+
+                          <div class="col-lg-3">
+                            <h4><span class="label label-primary">Cursos</span></h4>
+                            {% for curso in cursos %}
+                            <div class="checkbox form-control">
+                              <label><input class="ccursos" type="checkbox" value="{{curso.id}}">{{curso.descripcion}}</label>
+                            </div>
+                            {% else %}
+                              <label>No hay cursos</label>
+                            {% endfor %}
+                          </div>
+
+                          <div class="col-lg-2">
+                            <h4><span class="label label-primary">Sección</span></h4>
+                            <div class="checkbox form-control">
+                              <label><input class="csecciones" type="checkbox" value="A">A</label>
+                            </div>
+                            <div class="checkbox form-control">
+                              <label><input class="csecciones" type="checkbox" value="B">B</label>
+                            </div>
+                            <div class="checkbox form-control">
+                              <label><input class="csecciones" type="checkbox" value="C">C</label>
+                            </div>
+                            <div class="checkbox form-control">
+                              <label><input class="csecciones" type="checkbox" value="D">D</label>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
               <div class="col-lg-6">
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon3">Desde</span>
@@ -108,47 +168,13 @@
                   <input class="form-control" type="date" name="" value="" id="chasta">
                 </div>
               </div>
-              <div class="col-lg-4">
-                <h4><span class="label label-primary">Carreras</span></h4>
-                {% for carrera in carreras %}
-                <div class="checkbox form-control">
-                  <label><input class="ccarreras" type="checkbox" value="{{carrera.id}}">{{carrera.nombre_carrera}}</label>
-                </div>
-                {% else %}
-                  <label>No hay carreras</label>
-                {% endfor %}
-              </div>
-
-              <div class="col-lg-3">
-                <h4><span class="label label-primary">Cursos</span></h4>
-                {% for curso in cursos %}
-                <div class="checkbox form-control">
-                  <label><input class="ccursos" type="checkbox" value="{{curso.id}}">{{curso.descripcion}}</label>
-                </div>
-                {% else %}
-                  <label>No hay cursos</label>
-                {% endfor %}
-              </div>
-
-              <div class="col-lg-2">
-                <h4><span class="label label-primary">Sección</span></h4>
-                <div class="checkbox form-control">
-                  <label><input class="csecciones" type="checkbox" value="A">A</label>
-                </div>
-                <div class="checkbox form-control">
-                  <label><input class="csecciones" type="checkbox" value="B">B</label>
-                </div>
-                <div class="checkbox form-control">
-                  <label><input class="csecciones" type="checkbox" value="C">C</label>
-                </div>
-                <div class="checkbox form-control">
-                  <label><input class="csecciones" type="checkbox" value="D">D</label>
-                </div>
-              </div>
-
+              <hr>
               <div class="col-lg-12">
-                <button onclick="consultadetgral()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Consultar Información</button>
+                <button onclick="consultaIntervalo()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Consultar Información</button>
               </div>
+            </div>
+            <div id="listaintervalos" class="row">
+
             </div>
           </div>
         </div>

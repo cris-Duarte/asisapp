@@ -813,6 +813,38 @@ var consultaDetallada = function (alumno,materia) {
   return false;
 };
 // FIN CONSULTA DETALLADA DE ASISTENCIA
+// CONSULTA POR INTERVALOS DE FECHAS
+
+var consultaIntervalo = function () {
+  desde = document.getElementById('cdesde').value;
+  hasta = document.getElementById('chasta').value;
+  if (desde != '' && hasta != ''){
+    const request = new XMLHttpRequest();
+    const data = new FormData();;
+    data.append('cdesde',desde);
+    data.append('chasta',hasta);
+
+    request.open('POST', '/consultaintervalo');
+    request.onload = () => {
+      var contenedor = document.createElement('div');
+      contenedor.className = 'col-sm-12 col-md-12';
+      contenedor.innerHTML = request.response;
+
+      arbol = document.getElementById('listaintervalos');
+      arbol.insertBefore(contenedor, arbol.firstChild);
+    };
+    request.send(data);
+    return false;
+
+  } else {
+    start('danger','Ingrese un intervalo de fecha');
+  }
+
+};
+
+
+// FIN DE CONSULTA POR INTERVALOS DE FECHA
+
 
 // CONSULTA GENERAL
 var consultadetgral = function () {
