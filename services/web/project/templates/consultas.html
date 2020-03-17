@@ -84,7 +84,7 @@
     <div class="panel-heading" role="tab" id="headingOne">
       <h4 class="panel-title">
         <a role="button" data-toggle="collapse" data-parent="#acordeonConsultas" href="#consultaIntervalo" aria-expanded="true" aria-controls="collapseOne">
-          Consulta por intervalos
+          Consulta por intervalos de Fecha
         </a>
       </h4>
     </div>
@@ -96,49 +96,58 @@
           </div>
           <div class="panel-body">
             <div class="row">
-              <div class="col-lg-3">
+              <div class="col-lg-6">
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon3">Desde</span>
                   <input class="form-control" type="date" name="" value="" id="cdesde">
                 </div>
               </div>
-              <div class="col-lg-3">
+              <div class="col-lg-6">
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon3">Hasta</span>
-                  <input class="form-control" type="date" name="" value="" id="cdesde">
+                  <input class="form-control" type="date" name="" value="" id="chasta">
                 </div>
               </div>
+              <div class="col-lg-4">
+                <h4><span class="label label-primary">Carreras</span></h4>
+                {% for carrera in carreras %}
+                <div class="checkbox form-control">
+                  <label><input class="ccarreras" type="checkbox" value="{{carrera.id}}">{{carrera.nombre_carrera}}</label>
+                </div>
+                {% else %}
+                  <label>No hay carreras</label>
+                {% endfor %}
+              </div>
+
+              <div class="col-lg-3">
+                <h4><span class="label label-primary">Cursos</span></h4>
+                {% for curso in cursos %}
+                <div class="checkbox form-control">
+                  <label><input class="ccursos" type="checkbox" value="{{curso.id}}">{{curso.descripcion}}</label>
+                </div>
+                {% else %}
+                  <label>No hay cursos</label>
+                {% endfor %}
+              </div>
+
               <div class="col-lg-2">
-                <select class="form-control" id="ccarrera">
-                  <option value="falta">Carrera</option>
-                  {% for carrera in carreras %}
-                  <option value="{{carrera.id}}">{{carrera.nombre_carrera}}</option>
-                  {% else %}
-                  <option value="falta">No hay carreras</option>
-                  {% endfor %}
-                </select>
+                <h4><span class="label label-primary">Sección</span></h4>
+                <div class="checkbox form-control">
+                  <label><input class="csecciones" type="checkbox" value="A">A</label>
+                </div>
+                <div class="checkbox form-control">
+                  <label><input class="csecciones" type="checkbox" value="B">B</label>
+                </div>
+                <div class="checkbox form-control">
+                  <label><input class="csecciones" type="checkbox" value="C">C</label>
+                </div>
+                <div class="checkbox form-control">
+                  <label><input class="csecciones" type="checkbox" value="D">D</label>
+                </div>
               </div>
-              <div class="col-lg-1">
-                <select class="form-control" id="ccurso">
-                  <option value="falta">Curso</option>
-                  {% for curso in cursos %}
-                  <option value="{{curso.id}}">{{curso.descripcion}}</option>
-                  {% else %}
-                  <option value="falta">No hay cursos</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-lg-2">
-                <select class="form-control" id="cseccion">
-                  <option class="form-control" value="falta">Sección</option>
-                  <option class="form-control" value="A">A</option>
-                  <option class="form-control" value="B">B</option>
-                  <option class="form-control" value="C">C</option>
-                  <option class="form-control" value="D">D</option>
-                </select>
-              </div>
-              <div class="col-lg-1">
-                <button onclick="consultadetgral()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+
+              <div class="col-lg-12">
+                <button onclick="consultadetgral()" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Consultar Información</button>
               </div>
             </div>
           </div>

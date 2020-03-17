@@ -704,7 +704,7 @@ def alumnos():
                 db.session.commit()
                 return jsonify({
                     "clase":'alert-success',
-                    "mensaje": "Bien hecho "+a.nombre+' '+a.apellido+'!!, te has registrado a '+m.nombre
+                    "mensaje": a.nombre+' '+a.apellido+' se ha registrado a '+m.nombre
                     })
 
         else:
