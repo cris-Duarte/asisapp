@@ -53,8 +53,8 @@
       <h3 class="panel-title"><span id="cantidadalumnos" class="label-title label-primary">Alumnos</span></h3>
       <br>
       <div id="listado">
-        <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
-        <p class="alumno label label-info label-alumno" style='display:none;'>Inicio de Lista</p>
+        <p class="alumno label label-info label-alumno" style='opacity:0; display:none;' data-id='null'>...</p>
+        <p class="alumno label label-info label-alumno" style='display:none;' data-id='null'>Inicio de Lista</p>
       {% for alumno in alumnos %}
         {% if alumno.estadoentrada %}
           {% if alumno.estadoentrada == 'P' %}
@@ -73,8 +73,8 @@
             sin_alumnos = true;
         </script>
       {% endfor %}
-      <p class="alumno label label-info label-alumno" style='display:none;'>Fin de Lista</p>
-      <p class="alumno label label-info label-alumno" style='opacity:0; display:none;'>...</p>
+      <p class="alumno label label-info label-alumno" style='display:none;' data-id='null'>Fin de Lista</p>
+      <p class="alumno label label-info label-alumno" style='opacity:0; display:none;' data-id='null'>...</p>
       <span id="anterior" onclick="atras()"></span>
       <span id="actual" onclick="detalle()"></span>
       <span id="siguiente" onclick="siguiente()"></span>

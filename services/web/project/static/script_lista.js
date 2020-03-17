@@ -135,20 +135,23 @@ var listar = function (idc,condicion) {
 
 // CONSULTA DETALLADA DE ASISTENCIA
 var detalle = function () {
+
   a = document.getElementById('actual');
   alumno = a.firstElementChild.dataset.id;
   materia = a.firstElementChild.dataset.mat;
-  const request = new XMLHttpRequest();
-  const data = new FormData();
-  data.append('ida',alumno);
-  data.append('materia',materia);
-  request.open('POST', '/detalleasistencia');
-  request.onload = () => {
-    document.getElementById('respuestaDetalle').innerHTML = request.response;
-    $('#detAlumno').modal('show');
-  };
-  request.send(data);
+  if (alumno != 'null'){
+    const request = new XMLHttpRequest();
+    const data = new FormData();
+    data.append('ida',alumno);
+    data.append('materia',materia);
+    request.open('POST', '/detalleasistencia');
+    request.onload = () => {
+      document.getElementById('respuestaDetalle').innerHTML = request.response;
+      $('#detAlumno').modal('show');
+    };
+    request.send(data);
 
-  return false;
+    return false;
+  }
 };
 // FIN CONSULTA DETALLADA DE ASISTENCIA
