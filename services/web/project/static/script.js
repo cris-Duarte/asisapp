@@ -815,6 +815,7 @@ var consultaDetallada = function (alumno,materia) {
 // FIN CONSULTA DETALLADA DE ASISTENCIA
 // CONSULTA POR INTERVALOS DE FECHAS
 
+
 var consultaIntervalo = function () {
   desde = document.getElementById('cdesde').value;
   hasta = document.getElementById('chasta').value;
@@ -849,7 +850,7 @@ var consultaIntervalo = function () {
       }
     }
     if (cuconteo > 1 && caconteo > 1){
-      start('danger','Eliga una sola carrera');
+      start('danger','Elija una sola carrera o elija un solo curso');
     } else {
       request.open('POST', '/consultaintervalo');
       request.onload = () => {

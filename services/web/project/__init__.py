@@ -312,13 +312,49 @@ def consultaintervalo():
         graph.x_labels = g.lx()
         general = True
         ca = Carrera.query.all()
+        cacount = 0
         for c in ca:
             if request.form.get("carrera"+str(c.id)):
+                caid = c.id
                 general = False
-                graph.add(c.nombre_carrera, g.ly(c.id))
+                cacount += 1
+        cu = Curso.query.all()
+        cucount = 0
+        for cr in cu:
+            if request.form.get("curso"+str(cr.id)):
+                crid = cr.id
+                general = False
+                cucount += 1
+
+        if cucount > 1 and cacount == 1:
+            for cr in cu:
+                if request.form.get("curso"+str(cr.id)):
+                    graph.add(cr.descripcion, g.ly(caid,cr.id))
+            caux2 = Carrera.query.get(caid)
+            graph.title = 'Presencia: '+caux2.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+
+        if cucount == 1 and cacount > 1:
+            for c in ca:
+                if request.form.get("carrera"+str(c.id)):
+                    graph.add(c.nombre_carrera, g.ly(c.id,crid))
+            caux2 = Curso.query.get(crid)
+            graph.title = 'Presencia: '+caux2.descripcion+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+
+        if cucount == 0 and cacount > 0:
+            for c in ca:
+                if request.form.get("carrera"+str(c.id)):
+                    graph.add(c.nombre_carrera, g.ly(c.id,False))
+            graph.title = 'Presencia General de Carreras: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+
+        if cucount > 0 and cacount == 0:
+            for cr in cu:
+                if request.form.get("curso"+str(cr.id)):
+                    graph.add(cr.descripcion, g.ly(False,cr.id))
+            graph.title = 'Presencia General de Cursos: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
         if general:
-            graph.add("General", g.ly(0))
+            graph.add("General", g.ly(0,False))
+            graph.title = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
 
         graph_data = graph.render_data_uri()
         return render_template('consultaintervalo.html',graph_data=graph_data)
@@ -1115,11 +1151,11 @@ class Grafico():
             d = d + timedelta(days=1)
         return l
 
-    def ly(self,valor):
+    def ly(self,valor,valor2):
         valores = []
         dt = self.desde
         ht = self.hasta
-        if valor == 0:
+        if valor == 0 and valor!=False:
             while(dt<=ht):
                 if(dt.isoweekday()<6):
                     vd = db.session.query(Asistencia)\
@@ -1132,18 +1168,44 @@ class Grafico():
             return valores
 
         else:
-            while(dt<=ht):
-                if(dt.isoweekday()<6):
-                    vd = db.session.query(Asistencia)\
-                    .join(Diadeclase, Horario, Materia, Carrera)\
-                    .filter(Diadeclase.fecha==str(dt))\
-                    .filter(Asistencia.condicion=='Presente')\
-                    .filter(Carrera.id==valor)\
-                    .count()
-                    valores.append(vd)
-                dt = dt + timedelta(days=1)
-            return valores
-
+            if valor!=False and valor>0:
+                if valor2!=False and valor2>0:
+                    while(dt<=ht):
+                        if(dt.isoweekday()<6):
+                            vd = db.session.query(Asistencia)\
+                            .join(Diadeclase, Horario, Materia)\
+                            .filter(Diadeclase.fecha==str(dt))\
+                            .filter(Asistencia.condicion=='Presente')\
+                            .filter(Materia.carrera==valor)\
+                            .filter(Materia.curso==valor2)\
+                            .count()
+                            valores.append(vd)
+                        dt = dt + timedelta(days=1)
+                    return valores
+                else:
+                    while(dt<=ht):
+                        if(dt.isoweekday()<6):
+                            vd = db.session.query(Asistencia)\
+                            .join(Diadeclase, Horario, Materia, Carrera)\
+                            .filter(Diadeclase.fecha==str(dt))\
+                            .filter(Asistencia.condicion=='Presente')\
+                            .filter(Materia.carrera==valor)\
+                            .count()
+                            valores.append(vd)
+                        dt = dt + timedelta(days=1)
+                    return valores
+            else:
+                while(dt<=ht):
+                    if(dt.isoweekday()<6):
+                        vd = db.session.query(Asistencia)\
+                        .join(Diadeclase, Horario, Materia)\
+                        .filter(Diadeclase.fecha==str(dt))\
+                        .filter(Asistencia.condicion=='Presente')\
+                        .filter(Materia.curso==valor2)\
+                        .count()
+                        valores.append(vd)
+                    dt = dt + timedelta(days=1)
+                return valores
 
 class Tiempo():
     def __init__(self):
