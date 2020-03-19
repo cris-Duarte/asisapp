@@ -353,7 +353,7 @@ def consultaintervalo():
             graph.title = 'Presencia General de Cursos: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
         if general:
-            graph.add("General", g.ly(0,False))
+            graph.add("General", g.ly('g',False))
             graph.title = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
 
         graph_data = graph.render_data_uri()
@@ -1155,7 +1155,7 @@ class Grafico():
         valores = []
         dt = self.desde
         ht = self.hasta
-        if valor==0 and valor!=False:
+        if valor=='g':
             while(dt<=ht):
                 if(dt.isoweekday()<6):
                     vd = db.session.query(Asistencia)\
