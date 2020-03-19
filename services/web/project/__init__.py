@@ -304,26 +304,22 @@ def perfil():
 @login_required
 def consultaintervalo():
     dt = datetime.strptime(request.form.get('cdesde'),"%Y-%m-%d")
-    inicial = dt
     ht = datetime.strptime(request.form.get('chasta'),"%Y-%m-%d")
     if ht > dt:
-        lineax = []
-        valores = []
-        while(dt<=ht):
-            if(dt.isoweekday()<6):
-                lineax.append(fecha_dia_mes(str(dt)))
-                vd = db.session.query(Asistencia)\
-                .join(Diadeclase)\
-                .filter(Diadeclase.fecha==str(dt))\
-                .filter(Asistencia.condicion=='Presente')\
-                .count()
-                valores.append(vd)
-            dt = dt + timedelta(days=1)
-
         graph = pygal.Line(height=400)
-        graph.title = 'Presencia desde '+fecha_hr(str(inicial))+" hasta "+fecha_hr(str(ht))
-        graph.x_labels = lineax
-        graph.add('General',  valores)
+        graph.title = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
+        g = Grafico(dt,ht)
+        graph.x_labels = g.lx()
+        general = True
+        ca = Carrera.query.all()
+        for c in ca:
+            if request.form.get("carrera"+str(c.id)):
+                general = False
+                graph.add(c.nombre_carrera, g.ly(c.id))
+
+        if general:
+            graph.add("General", g.ly(0))
+
         graph_data = graph.render_data_uri()
         return render_template('consultaintervalo.html',graph_data=graph_data)
     else:
@@ -1047,7 +1043,6 @@ def fecha_dia_mes(fecha):
     resultado = "{}/{}".format(dia, mes)
     return resultado
 
-
 def fecha_hr(fecha):
     f = datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
     meses = ("Enero", "Febrero", "Marzo", "Abri", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
@@ -1103,6 +1098,52 @@ def calcularasistencia(a,tc,m):
     .count()
     resultado = round((alumno*50)/tc,2)
     return resultado
+
+
+class Grafico():
+    def __init__(self,d,h):
+        self.desde = d
+        self.hasta = h
+
+    def lx(self):
+        l = []
+        d = self.desde
+        h = self.hasta
+        while(d<=h):
+            if(d.isoweekday()<6):
+                l.append(fecha_dia_mes(str(d)))
+            d = d + timedelta(days=1)
+        return l
+
+    def ly(self,valor):
+        valores = []
+        dt = self.desde
+        ht = self.hasta
+        if valor == 0:
+            while(dt<=ht):
+                if(dt.isoweekday()<6):
+                    vd = db.session.query(Asistencia)\
+                    .join(Diadeclase)\
+                    .filter(Diadeclase.fecha==str(dt))\
+                    .filter(Asistencia.condicion=='Presente')\
+                    .count()
+                    valores.append(vd)
+                dt = dt + timedelta(days=1)
+            return valores
+
+        else:
+            while(dt<=ht):
+                if(dt.isoweekday()<6):
+                    vd = db.session.query(Asistencia)\
+                    .join(Diadeclase, Horario, Materia, Carrera)\
+                    .filter(Diadeclase.fecha==str(dt))\
+                    .filter(Asistencia.condicion=='Presente')\
+                    .filter(Carrera.id==valor)\
+                    .count()
+                    valores.append(vd)
+                dt = dt + timedelta(days=1)
+            return valores
+
 
 class Tiempo():
     def __init__(self):

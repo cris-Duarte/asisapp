@@ -824,18 +824,45 @@ var consultaIntervalo = function () {
     data.append('cdesde',desde);
     data.append('chasta',hasta);
 
-    request.open('POST', '/consultaintervalo');
-    request.onload = () => {
-      var contenedor = document.createElement('div');
-      contenedor.className = 'col-sm-12 col-md-12';
-      contenedor.innerHTML = request.response;
+    caCampos = document.querySelectorAll(".ccarreras");
+    caconteo = 0;
+    for (i = 0; i < caCampos.length; i++ ){
+      if (caCampos[i].checked){
+        data.append("carrera"+caCampos[i].value,caCampos[i].value);
+        caconteo++;
+      }
+    }
 
-      arbol = document.getElementById('listaintervalos');
-      arbol.insertBefore(contenedor, arbol.firstChild);
-    };
-    request.send(data);
-    return false;
+    cuCampos = document.querySelectorAll(".ccursos");
+    cuconteo = 0;
+    for (i = 0; i < cuCampos.length; i++ ){
+      if (cuCampos[i].checked){
+        data.append("curso"+cuCampos[i].value,cuCampos[i].value);
+        cuconteo++;
+      }
+    }
 
+    cCampos = document.querySelectorAll(".csecciones");
+    for (i = 0; i < cCampos.length; i++ ){
+      if (cCampos[i].checked){
+        data.append("seccion"+cCampos[i].value,cCampos[i].value)
+      }
+    }
+    if (cuconteo > 1 && caconteo > 1){
+      start('danger','Eliga una sola carrera');
+    } else {
+      request.open('POST', '/consultaintervalo');
+      request.onload = () => {
+        var contenedor = document.createElement('div');
+        contenedor.className = 'col-sm-12 col-md-12';
+        contenedor.innerHTML = request.response;
+
+        arbol = document.getElementById('listaintervalos');
+        arbol.insertBefore(contenedor, arbol.firstChild);
+      };
+      request.send(data);
+      return false;
+    }
   } else {
     start('danger','Ingrese un intervalo de fecha');
   }
