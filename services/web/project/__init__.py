@@ -1155,7 +1155,7 @@ class Grafico():
         valores = []
         dt = self.desde
         ht = self.hasta
-        if valor==0:
+        if valor==0 and valor!=False:
             while(dt<=ht):
                 if(dt.isoweekday()<6):
                     vd = db.session.query(Asistencia)\
