@@ -222,7 +222,7 @@ svg {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #9a9898;;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -234,13 +234,13 @@ svg {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: #ffff00;;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #000000;
 }
 
 input:focus + .slider {
@@ -256,6 +256,7 @@ input:checked + .slider:before {
 /* Rounded sliders */
 .slider.round {
   border-radius: 14px;
+  background-color: #bdb9b9;
 }
 
 .slider.round:before {
