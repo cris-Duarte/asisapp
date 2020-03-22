@@ -1210,7 +1210,7 @@ class Grafico():
 class Tiempo():
     def __init__(self):
         fecha_sistema = datetime.now()
-        retraso = timedelta(hours=3)
+        retraso = timedelta(hours=4)
         self.date = fecha_sistema - retraso
     def paso10min(self,h):
         ha = datetime.strptime(h, "%H:%M")
