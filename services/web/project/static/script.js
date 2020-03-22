@@ -825,6 +825,11 @@ var consultaIntervalo = function () {
     data.append('cdesde',desde);
     data.append('chasta',hasta);
 
+    porcentaje = document.getElementById('consultaporcentaje').value;
+    if (!porcentaje){
+      data.append('porcentaje',porcentaje);
+    }
+
     caCampos = document.querySelectorAll(".ccarreras");
     caconteo = 0;
     for (i = 0; i < caCampos.length; i++ ){
@@ -843,6 +848,7 @@ var consultaIntervalo = function () {
       }
     }
 
+
     cCampos = document.querySelectorAll(".csecciones");
     for (i = 0; i < cCampos.length; i++ ){
       if (cCampos[i].checked){
@@ -852,17 +858,36 @@ var consultaIntervalo = function () {
     if (cuconteo > 1 && caconteo > 1){
       start('danger','Elija una sola carrera o elija un solo curso');
     } else {
-      request.open('POST', '/consultaintervalo');
-      request.onload = () => {
-        var contenedor = document.createElement('div');
-        contenedor.className = 'col-sm-12 col-md-12';
-        contenedor.innerHTML = request.response;
+      if (document.getElementById('consultadetmaterias').checked){
+        if (cuconteo == 1 && caconteo == 1){
+          data.append('consultadetmaterias',true);
+          request.open('POST', '/consultaintervalo');
+          request.onload = () => {
+            var contenedor = document.createElement('div');
+            contenedor.className = 'col-sm-12 col-md-12';
+            contenedor.innerHTML = request.response;
 
-        arbol = document.getElementById('listaintervalos');
-        arbol.insertBefore(contenedor, arbol.firstChild);
-      };
-      request.send(data);
-      return false;
+            arbol = document.getElementById('listaintervalos');
+            arbol.insertBefore(contenedor, arbol.firstChild);
+          };
+          request.send(data);
+          return false;
+        } else {
+          start('danger', 'Si desea el detalle por materia, elija solo una materia y solo un curso');
+        }
+      } else {
+        request.open('POST', '/consultaintervalo');
+        request.onload = () => {
+          var contenedor = document.createElement('div');
+          contenedor.className = 'col-sm-12 col-md-12';
+          contenedor.innerHTML = request.response;
+
+          arbol = document.getElementById('listaintervalos');
+          arbol.insertBefore(contenedor, arbol.firstChild);
+        };
+        request.send(data);
+        return false;
+      }
     }
   } else {
     start('danger','Ingrese un intervalo de fecha');
