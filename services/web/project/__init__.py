@@ -327,36 +327,57 @@ def consultaintervalo():
                 crid = cr.id
                 general = False
                 cucount += 1
+        if cucount==1 and cacount==1:
+            ca = Carrera.query.get(caid)
+            cu = Curso.query.get(crid)
+            if request.form.get('consultadetmaterias'):
+                graph = pygal.Bar(height=400)
+                graph.x_labels = g.lx()
+                titulo = 'Presencia: '+cu.descripcion+' - '+ca.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+                mcon = Materia.query\
+                .filter(Materia.carrera==caid)\
+                .filter(Materia.curso==crid)\
+                .all()
+                for m in mcon:
+                    cd = db.session.query(Diadeclase)\
+                    .join(Horario, Materia)\
+                    .filter(Materia.id == m.id)\
+                    .count()
+                    if cd > 0:
+                        graph.add(m.nombre, g.lym(m.id))
+            else:
+                graph.add(cr.descripcion, g.ly(caid,crid))
+                titulo = 'Presencia: '+cu.descripcion+' - '+ca.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+        else:
+            if cucount > 1 and cacount == 1:
+                for cr in cu:
+                    if request.form.get("curso"+str(cr.id)):
+                        graph.add(cr.descripcion, g.ly(caid,cr.id))
+                caux2 = Carrera.query.get(caid)
+                titulo = 'Presencia: '+caux2.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
-        if cucount > 1 and cacount == 1:
-            for cr in cu:
-                if request.form.get("curso"+str(cr.id)):
-                    graph.add(cr.descripcion, g.ly(caid,cr.id))
-            caux2 = Carrera.query.get(caid)
-            titulo = 'Presencia: '+caux2.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            if cucount == 1 and cacount > 1:
+                for c in ca:
+                    if request.form.get("carrera"+str(c.id)):
+                        graph.add(c.nombre_carrera, g.ly(c.id,crid))
+                caux2 = Curso.query.get(crid)
+                titulo = 'Presencia: '+caux2.descripcion+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
-        if cucount == 1 and cacount > 1:
-            for c in ca:
-                if request.form.get("carrera"+str(c.id)):
-                    graph.add(c.nombre_carrera, g.ly(c.id,crid))
-            caux2 = Curso.query.get(crid)
-            titulo = 'Presencia: '+caux2.descripcion+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            if cucount == 0 and cacount > 0:
+                for c in ca:
+                    if request.form.get("carrera"+str(c.id)):
+                        graph.add(c.nombre_carrera, g.ly(c.id,False))
+                titulo = 'Presencia General de Carreras: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
-        if cucount == 0 and cacount > 0:
-            for c in ca:
-                if request.form.get("carrera"+str(c.id)):
-                    graph.add(c.nombre_carrera, g.ly(c.id,False))
-            titulo = 'Presencia General de Carreras: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            if cucount > 0 and cacount == 0:
+                for cr in cu:
+                    if request.form.get("curso"+str(cr.id)):
+                        graph.add(cr.descripcion, g.ly(False,cr.id))
+                titulo = 'Presencia General de Cursos: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
-        if cucount > 0 and cacount == 0:
-            for cr in cu:
-                if request.form.get("curso"+str(cr.id)):
-                    graph.add(cr.descripcion, g.ly(False,cr.id))
-            titulo = 'Presencia General de Cursos: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
-
-        if general:
-            graph.add("General", g.ly('g',False))
-            titulo = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
+            if general:
+                graph.add("General", g.ly('g',False))
+                titulo = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
         if request.form.get('porcentaje'):
             graph.title = "( % ) "+titulo
         else:
@@ -1156,6 +1177,36 @@ class Grafico():
                 l.append(fecha_dia_mes(str(d)))
             d = d + timedelta(days=1)
         return l
+    def lym(self,m):
+        valores = []
+        dt = self.desde
+        ht = self.hasta
+        while(dt<=ht):
+            if(dt.isoweekday()<6):
+                vd = db.session.query(Asistencia)\
+                .join(Diadeclase, Horario, Materia)\
+                .filter(Diadeclase.fecha==str(dt))\
+                .filter(Asistencia.condicion=='Presente')\
+                .filter(Materia.id==m)\
+                .count()
+                if self.p:
+                    ins = db.session.query(Inscripcion)\
+                    .join(Materia, Horario, Diadeclase)\
+                    .filter(Diadeclase.fecha==str(dt))\
+                    .filter(Materia.id==m)\
+                    .count()
+                    if ins>0 and vd>0:
+                        r = round(vd*50/ins,2)
+                        valores.append(r)
+                    else:
+                        valores.append(None)
+                else:
+                    if vd>0:
+                        valores.append(vd)
+                    else:
+                        valores.append(None)
+            dt = dt + timedelta(days=1)
+        return valores
 
     def ly(self,valor,valor2):
         valores = []
