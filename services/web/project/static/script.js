@@ -825,9 +825,9 @@ var consultaIntervalo = function () {
     data.append('cdesde',desde);
     data.append('chasta',hasta);
 
-    porcentaje = document.getElementById('consultaporcentaje').value;
-    if (!porcentaje){
-      data.append('porcentaje',porcentaje);
+    porcentaje = document.getElementById('consultaporcentaje').checked;
+    if (porcentaje){
+      data.append('porcentaje',true);
     }
 
     caCampos = document.querySelectorAll(".ccarreras");

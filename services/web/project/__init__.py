@@ -307,8 +307,10 @@ def consultaintervalo():
     ht = datetime.strptime(request.form.get('chasta'),"%Y-%m-%d")
     if ht > dt:
         graph = pygal.Line(height=400)
-        graph.title = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
-        g = Grafico(dt,ht)
+        if request.form.get('porcentaje'):
+            g = Grafico(dt,ht,True)
+        else:
+            g = Grafico(dt,ht,False)
         graph.x_labels = g.lx()
         general = True
         ca = Carrera.query.all()
@@ -331,31 +333,34 @@ def consultaintervalo():
                 if request.form.get("curso"+str(cr.id)):
                     graph.add(cr.descripcion, g.ly(caid,cr.id))
             caux2 = Carrera.query.get(caid)
-            graph.title = 'Presencia: '+caux2.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            titulo = 'Presencia: '+caux2.nombre_carrera+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
         if cucount == 1 and cacount > 1:
             for c in ca:
                 if request.form.get("carrera"+str(c.id)):
                     graph.add(c.nombre_carrera, g.ly(c.id,crid))
             caux2 = Curso.query.get(crid)
-            graph.title = 'Presencia: '+caux2.descripcion+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            titulo = 'Presencia: '+caux2.descripcion+', del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
         if cucount == 0 and cacount > 0:
             for c in ca:
                 if request.form.get("carrera"+str(c.id)):
                     graph.add(c.nombre_carrera, g.ly(c.id,False))
-            graph.title = 'Presencia General de Carreras: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            titulo = 'Presencia General de Carreras: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
         if cucount > 0 and cacount == 0:
             for cr in cu:
                 if request.form.get("curso"+str(cr.id)):
                     graph.add(cr.descripcion, g.ly(False,cr.id))
-            graph.title = 'Presencia General de Cursos: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
+            titulo = 'Presencia General de Cursos: del '+fecha_hr(str(dt))+" al "+fecha_hr(str(ht))
 
         if general:
             graph.add("General", g.ly('g',False))
-            graph.title = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
-
+            titulo = 'Presencia desde '+fecha_hr(str(dt))+" hasta "+fecha_hr(str(ht))
+        if request.form.get('porcentaje'):
+            graph.title = "( % ) "+titulo
+        else:
+            graph.title = "Cant. "+titulo
         graph_data = graph.render_data_uri()
         return render_template('consultaintervalo.html',graph_data=graph_data)
     else:
@@ -1137,9 +1142,10 @@ def calcularasistencia(a,tc,m):
 
 
 class Grafico():
-    def __init__(self,d,h):
+    def __init__(self,d,h,p):
         self.desde = d
         self.hasta = h
+        self.p = p
 
     def lx(self):
         l = []
@@ -1163,7 +1169,18 @@ class Grafico():
                     .filter(Diadeclase.fecha==str(dt))\
                     .filter(Asistencia.condicion=='Presente')\
                     .count()
-                    valores.append(vd)
+                    if self.p:
+                        ins = db.session.query(Inscripcion)\
+                        .join(Materia, Horario, Diadeclase)\
+                        .filter(Diadeclase.fecha==str(dt))\
+                        .count()
+                        if ins>0:
+                            r = round(vd*50/ins,2)
+                            valores.append(r)
+                        else:
+                            valores.append(0)
+                    else:
+                        valores.append(vd)
                 dt = dt + timedelta(days=1)
             return valores
 
@@ -1179,7 +1196,20 @@ class Grafico():
                             .filter(Materia.carrera==valor)\
                             .filter(Materia.curso==valor2)\
                             .count()
-                            valores.append(vd)
+                            if self.p:
+                                ins = db.session.query(Inscripcion)\
+                                .join(Materia, Horario, Diadeclase)\
+                                .filter(Diadeclase.fecha==str(dt))\
+                                .filter(Materia.carrera==valor)\
+                                .filter(Materia.curso==valor2)\
+                                .count()
+                                if ins>0:
+                                    r = round(vd*50/ins,2)
+                                    valores.append(r)
+                                else:
+                                    valores.append(0)
+                            else:
+                                valores.append(vd)
                         dt = dt + timedelta(days=1)
                     return valores
                 else:
@@ -1191,7 +1221,19 @@ class Grafico():
                             .filter(Asistencia.condicion=='Presente')\
                             .filter(Materia.carrera==valor)\
                             .count()
-                            valores.append(vd)
+                            if self.p:
+                                ins = db.session.query(Inscripcion)\
+                                .join(Materia, Horario, Diadeclase)\
+                                .filter(Diadeclase.fecha==str(dt))\
+                                .filter(Materia.carrera==valor)\
+                                .count()
+                                if ins>0:
+                                    r = round(vd*50/ins,2)
+                                    valores.append(r)
+                                else:
+                                    valores.append(0)
+                            else:
+                                valores.append(vd)
                         dt = dt + timedelta(days=1)
                     return valores
             else:
@@ -1203,7 +1245,19 @@ class Grafico():
                         .filter(Asistencia.condicion=='Presente')\
                         .filter(Materia.curso==valor2)\
                         .count()
-                        valores.append(vd)
+                        if self.p:
+                            ins = db.session.query(Inscripcion)\
+                            .join(Materia, Horario, Diadeclase)\
+                            .filter(Diadeclase.fecha==str(dt))\
+                            .filter(Materia.curso==valor2)\
+                            .count()
+                            if ins>0:
+                                r = round(vd*50/ins,2)
+                                valores.append(r)
+                            else:
+                                valores.append(0)
+                        else:
+                            valores.append(vd)
                     dt = dt + timedelta(days=1)
                 return valores
 
